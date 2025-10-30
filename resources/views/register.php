@@ -24,7 +24,7 @@
                 <!-- Input Nama -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
-                    <input type="text" id="name" name="nama" required 
+                    <input type="text" id="name" name="name" required 
                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
 

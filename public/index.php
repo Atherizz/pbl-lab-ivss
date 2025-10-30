@@ -4,7 +4,7 @@ use App\Http\Middleware\AuthMiddleware;
 session_start();
 
 define('BASE_PATH', dirname(__DIR__));
-define('BASE_URL', '/mini-mvc/public');
+define('BASE_URL', '/pbl-lab-ivss/public');
 
 require BASE_PATH . '/vendor/autoload.php';
 
@@ -12,7 +12,7 @@ $routes = require BASE_PATH . '/routes/web.php';
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
 
-$base_path = '/mini-mvc/public';
+$base_path = '/pbl-lab-ivss/public';
 
 if (strpos($request_uri, $base_path) === 0) {
     $request_uri = substr($request_uri, strlen($base_path));

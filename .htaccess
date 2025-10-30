@@ -2,7 +2,7 @@
     RewriteEngine On
     
     # Tentukan base path untuk folder public
-    RewriteBase /mini-mvc/public/
+    RewriteBase /pbl-lab-ivss/public/
 
     # Jika file atau folder yang diminta tidak ada...
     RewriteCond %{REQUEST_FILENAME} !-f

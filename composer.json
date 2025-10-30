@@ -1,5 +1,5 @@
 {
-    "name": "atherizz/mini-mvc",
+    "name": "atherizz/pbl-lab-ivss",
     "description": "A lightweight, framework-less PHP MVC template.",
     "autoload": {
         "psr-4": {

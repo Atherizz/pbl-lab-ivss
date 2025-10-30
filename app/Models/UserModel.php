@@ -28,7 +28,7 @@ class UserModel extends Model {
     }
 
     public function createUser($data) {
-        $query = $this->db->prepare("INSERT INTO users (nama, email, password, role) VALUES (:nama, :email, :password, :role)");
-        return $query->execute(['nama' => $data['nama'], 'email' => $data['email'], 'password' => $data['password'], 'role' => 'user']);
+        $query = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)");
+        return $query->execute(['name' => $data['name'], 'email' => $data['email'], 'password' => $data['password'], 'role' => 'user']);
     }
 }
