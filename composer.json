@@ -1,0 +1,12 @@
+{
+    "name": "atherizz/mini-mvc",
+    "description": "A lightweight, framework-less PHP MVC template.",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/helpers.php"
+        ]
+    }
+}   
