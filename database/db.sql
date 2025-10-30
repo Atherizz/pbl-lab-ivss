@@ -29,7 +29,6 @@ CREATE TABLE equipment (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT NULL,
-    image_url TEXT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'available'
         CHECK (status IN ('available', 'in_use', 'maintenance', 'broken'))
 );
