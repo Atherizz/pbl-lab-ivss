@@ -1,14 +1,16 @@
 <?php 
-$header = 'Add New News'; 
+$pageTitle = 'Create News';
+$activeMenu = 'news';
 ?>
 
+<?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">News Details</h2>
 
-                <form action="<?= BASE_URL ?? '.' ?>/admin/news" method="POST">
+                <form action="<?= BASE_URL ?? '.' ?>/admin-berita/news" method="POST">
                     <div class="space-y-6">
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700">
@@ -42,7 +44,7 @@ $header = 'Add New News';
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="<?= BASE_URL ?? '.' ?>/news" 
+                        <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news" 
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                            Cancel
                         </a>

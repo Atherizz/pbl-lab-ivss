@@ -53,8 +53,19 @@ class AuthController extends Controller
                     'name' => $user['name'],
                     'role' => $user['role']
                 ];
-                $this->redirect('/admin/dashboard');
-                exit;
+
+                if ($_SESSION['user']['role'] == 'admin_lab') {
+                    $this->redirect('/admin-lab/dashboard');
+                    exit;
+                } else if ($_SESSION['user']['role'] == 'admin_berita') {
+                    $this->redirect('/admin-berita/dashboard');
+                    exit;
+                } else {
+                    $this->redirect('/mahasiswa/dashboard');
+                    exit;
+                }
+
+
             } else { 
                 $_SESSION['error'] = 'Email atau password salah';
                 $this->redirect('/login');

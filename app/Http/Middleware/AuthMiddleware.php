@@ -36,7 +36,7 @@ Class AuthMiddleware {
         }
     } 
     public function requireAdminNews() {
-        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_news') {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_berita') {
             header('Location: ' . BASE_URL . '/');;
             exit;
         }
