@@ -1,5 +1,4 @@
 <?php
-// Pastikan session sudah dimulai (sebaiknya di index.php atau awal script)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

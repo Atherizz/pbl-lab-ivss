@@ -1,4 +1,9 @@
-<?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
+<?php 
+$pageTitle = 'Equipment Management';
+$activeMenu = 'equipment';
+?>
+
+<?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
 
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -33,7 +38,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <?php foreach($data as $row) : ?>
+                            <?php foreach($equipments as $row) : ?>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     <?=$row['id'] ?>

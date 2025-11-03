@@ -15,7 +15,8 @@ class EquipmentController extends Controller
     public function index()
     {
         $equipments = $this->model->getAllEquipments();
-        view('admin.equipments.index', $equipments);
+        view('admin.equipments.index', [
+        'equipments' => $equipments]);
     }
     public function create()
     {
@@ -51,7 +52,7 @@ class EquipmentController extends Controller
     public function edit($id)
     {
         $equipment = $this->model->getById($id);
-        view('admin.equipments.edit', $equipment);
+        view('admin.equipments.edit', ['equipment' => $equipment]);
     }
 
     public function update($id)

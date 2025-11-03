@@ -50,7 +50,7 @@ class AuthController extends Controller
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = [
                     'id' => $user['id'],
-                    'email' => $user['email'],
+                    'name' => $user['name'],
                     'role' => $user['role']
                 ];
                 $this->redirect('/equipment');

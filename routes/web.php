@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 return [
     'GET' => [
@@ -10,7 +11,9 @@ return [
         '/equipment/{id}/edit' => ['controller' => EquipmentController::class, 'action' => 'edit', 'middleware' => 'auth'],
         '/equipment/create' => ['controller' => EquipmentController::class, 'action' => 'create', 'middleware' => 'auth'],
         '/equipment' => ['controller' => EquipmentController::class, 'action' => 'index', 'middleware' => 'auth'],
+        '/dashboard' => ['controller' => DashboardController::class, 'action' => 'index', 'middleware' => 'auth'],
         '/' => ['view' => 'home', 'middleware' => 'guest'],
+        
     ],
     'POST' => [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],
