@@ -57,7 +57,7 @@ class NewsController extends Controller
             ];
 
             $this->model->createNews($data);
-            $this->redirect('/admin/news');
+            $this->redirect('/admin-berita/news');
         }
     }
 
@@ -86,7 +86,7 @@ class NewsController extends Controller
             ];
             
             $this->model->updateNews($id, $data);
-            $this->redirect('/admin/news');
+            $this->redirect('/admin-berita/news');
         }
     }
 
@@ -94,7 +94,7 @@ class NewsController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $this->model->deleteNews($id);
-            $this->redirect('/admin/news');
+            $this->redirect('/admin-berita/news');
         }
     }
 }
