@@ -30,7 +30,7 @@ class NewsController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $title = trim($_POST['title'] ?? '');
             $content = trim($_POST['content'] ?? '');
-            $authorId = $_POST['author_id'] ?? null; 
+            $authorId = $_SESSION['user']['id'];
             
             $errors = [];
 
@@ -57,7 +57,7 @@ class NewsController extends Controller
             ];
 
             $this->model->createNews($data);
-            $this->redirect('/news');
+            $this->redirect('/admin/news');
         }
     }
 
@@ -86,7 +86,7 @@ class NewsController extends Controller
             ];
             
             $this->model->updateNews($id, $data);
-            $this->redirect('/news');
+            $this->redirect('/admin/news');
         }
     }
 
@@ -94,7 +94,7 @@ class NewsController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $this->model->deleteNews($id);
-            $this->redirect('/news');
+            $this->redirect('/admin/news');
         }
     }
 }
