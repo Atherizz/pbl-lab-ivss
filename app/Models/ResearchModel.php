@@ -12,8 +12,7 @@ class ResearchModel extends Model
     public function getByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table} 
-                WHERE primary_investigator_id = :userId 
-                ORDER BY created_at DESC";
+                WHERE primary_investigator_id = :userId";
         $query = $this->db->prepare($sql);
         $query->execute(['userId' => $userId]);
         return $query->fetchAll(PDO::FETCH_ASSOC);

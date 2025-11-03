@@ -19,6 +19,10 @@ return [
         '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
         '/admin-berita/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_berita', 'middleware' => 'auth'],
         '/mahasiswa/dashboard' => ['controller' => DashboardController::class, 'action' => 'mahasiswa', 'middleware' => 'auth'],
+        '/mahasiswa/research' => ['controller' => ResearchController::class, 'action' => 'index', 'middleware' => 'auth'],
+        '/mahasiswa/research/create' => ['controller' => ResearchController::class, 'action' => 'create', 'middleware' => 'auth'],
+        '/mahasiswa/research/{id}/edit' => ['controller' => ResearchController::class, 'action' => 'edit', 'middleware' => 'auth'],
+
         '/' => ['view' => 'home', 'middleware' => 'guest'],
     ],
     'POST' => [
@@ -31,6 +35,9 @@ return [
         '/admin-berita/news/{id}/delete' => ['controller' => NewsController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
         '/admin-berita/news/{id}' => ['controller' => NewsController::class, 'action' => 'update', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'store', 'middleware' => 'admin_berita'],
+        '/mahasiswa/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
+        '/mahasiswa/research/{id}' => ['controller' => ResearchController::class, 'action' => 'update', 'middleware' => 'auth'], 
+        '/mahasiswa/research/{id}/delete' => ['controller' => ResearchController::class, 'action' => 'destroy', 'middleware'=>'auth'],
     ],
 ];
 ?>

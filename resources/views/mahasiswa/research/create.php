@@ -8,7 +8,7 @@ $header = 'Propose New Research Project';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Research Proposal Details</h2>
 
-                <form action="<?= BASE_URL ?? '.' ?>/research" method="POST">
+                <form action="<?= BASE_URL ?? '.' ?>/mahasiswa/research" method="POST">
                     <div class="space-y-6">
                         
                         <div>
