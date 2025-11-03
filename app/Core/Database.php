@@ -10,7 +10,7 @@ class Database {
     private $port = '5432';          
     private $db_name = 'db_ivss';   
     private $username = 'postgres';     
-    private $password = '0806';      
+    private $password = '12345678';      
 
     private static $conn = null; 
 
