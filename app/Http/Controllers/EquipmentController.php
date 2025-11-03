@@ -15,12 +15,12 @@ class EquipmentController extends Controller
     public function index()
     {
         $equipments = $this->model->getAllEquipments();
-        view('admin.equipments.index', [
+        view('admin_lab.equipments.index', [
         'equipments' => $equipments]);
     }
     public function create()
     {
-        view('admin.equipments.create');
+        view('admin_lab.equipments.create');
     }
     public function store()
     {
@@ -40,7 +40,7 @@ class EquipmentController extends Controller
             }
 
             if (!empty($errors)) {
-                view('equipment/create', ['errors' => $errors]);
+                view('admin_lab.equipments.create', ['errors' => $errors]);
                 return;
             }
 
@@ -52,7 +52,7 @@ class EquipmentController extends Controller
     public function edit($id)
     {
         $equipment = $this->model->getById($id);
-        view('admin.equipments.edit', ['equipment' => $equipment]);
+        view('admin_lab.equipments.edit', ['equipment' => $equipment]);
     }
 
     public function update($id)
@@ -62,7 +62,7 @@ class EquipmentController extends Controller
             if (empty($_POST['name']) || empty($_POST['status'])) {
                 $errors = ['Name and Status are required.'];
                 $equipment = $this->model->getById($id);
-                view('admin.equipments.edit', ['errors' => $errors, 'equipment' => $equipment]);
+                view('admin_lab.equipments.edit', ['errors' => $errors, 'equipment' => $equipment]);
                 return;
             }
 
@@ -71,7 +71,6 @@ class EquipmentController extends Controller
             $this->redirect('/admin/equipment');
         }
     }
-
 
     public function destroy($id)
     {

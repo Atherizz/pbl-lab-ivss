@@ -29,8 +29,21 @@ Class AuthMiddleware {
         return null;
     }
     
-    public function requireAdmin() {
-        if (!self::isLoggedIn() || $_SESSION['user_role'] !== 'admin') {
+    public function requireAdminLab() {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_lab') {
+            header('Location: ' . BASE_URL . '/');;
+            exit;
+        }
+    } 
+    public function requireAdminNews() {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_news') {
+            header('Location: ' . BASE_URL . '/');;
+            exit;
+        }
+    } 
+
+    public function requireMahasiswa() {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_news') {
             header('Location: ' . BASE_URL . '/');;
             exit;
         }

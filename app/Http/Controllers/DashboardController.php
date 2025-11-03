@@ -14,8 +14,7 @@ class DashboardController extends Controller
     }
     public function index()
     {
-        // $equipments = $this->model->getAllEquipments();
-        view('admin.index', []);
+        view('admin_lab.index', []);
     }
     
 }

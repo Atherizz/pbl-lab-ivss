@@ -61,8 +61,8 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
 
             if ($routeInfo['middleware'] === 'auth') {
                 $auth->requireLogin(); 
-            } elseif ($routeInfo['middleware'] === 'admin') {
-                $auth->requireAdmin(); 
+            } elseif ($routeInfo['middleware'] === 'admin_lab') {
+                $auth->requireAdminLab(); 
             }
         }
 

@@ -17,12 +17,12 @@ class NewsController extends Controller
     public function index()
     {
         $news = $this->model->getAllNews();
-        view('admin.news.index', ['news' => $news]);
+        view('admin_news.news.index', ['news' => $news]);
     }
 
     public function create()
     {
-        view('admin.news.create');
+        view('admin_news.news.create');
     }
 
     public function store()
@@ -45,7 +45,7 @@ class NewsController extends Controller
             }
 
             if (!empty($errors)) {
-                view('admin.news.create', ['errors' => $errors, 'old_data' => $_POST]);
+                view('admin_news.news.create', ['errors' => $errors, 'old_data' => $_POST]);
                 return;
             }
             $data = [
@@ -64,7 +64,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $news = $this->model->getById($id);
-        view('admin.news.edit', ['news' => $news]);
+        view('admin_news.news.edit', ['news' => $news]);
     }
 
     public function update($id)
@@ -74,7 +74,7 @@ class NewsController extends Controller
             if (empty($_POST['title']) || empty($_POST['content'])) {
                 $errors = ['Title and Content are required.'];
                 $news = $this->model->getById($id);
-                view('admin.news.edit', ['errors' => $errors, 'news' => $news]);
+                view('admin_news.news.edit', ['errors' => $errors, 'news' => $news]);
                 return;
             }
 
