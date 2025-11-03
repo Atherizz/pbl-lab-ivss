@@ -4,9 +4,13 @@ use App\Http\Middleware\AuthMiddleware;
 session_start();
 
 define('BASE_PATH', dirname(__DIR__));
+require BASE_PATH . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
+$dotenv->load();
+
 define('BASE_URL', '/pbl-lab-ivss/public');
 
-require BASE_PATH . '/vendor/autoload.php';
 
 $routes = require BASE_PATH . '/routes/web.php';
 

@@ -15,7 +15,8 @@ class EquipmentController extends Controller
     public function index()
     {
         $equipments = $this->model->getAllEquipments();
-        view('admin.equipments.index', $equipments);
+        view('admin.equipments.index', [
+        'equipments' => $equipments]);
     }
     public function create()
     {
@@ -44,14 +45,14 @@ class EquipmentController extends Controller
             }
 
             $this->model->createEquipment($_POST);
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 
     public function edit($id)
     {
         $equipment = $this->model->getById($id);
-        view('admin.equipments.edit', $equipment);
+        view('admin.equipments.edit', ['equipment' => $equipment]);
     }
 
     public function update($id)
@@ -67,7 +68,7 @@ class EquipmentController extends Controller
 
             $this->model->updateEquipment($id, $_POST);
 
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 
@@ -76,7 +77,7 @@ class EquipmentController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $this->model->deleteEquipment($id);
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 }

@@ -8,7 +8,7 @@ $header = 'Edit Equipment';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Edit Equipment</h2>
 
-                <form action="<?= (BASE_URL ?? '.') . '/equipment/' . urlencode($data['id']) ?>" method="POST">
+                <form action="<?= (BASE_URL ?? '.') . '/admin/equipment/' . urlencode($equipment['id']) ?>" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <div class="space-y-6">
                         <div>
@@ -20,7 +20,7 @@ $header = 'Edit Equipment';
                                 id="name"
                                 name="name"
                                 required
-                                value="<?= htmlspecialchars($data['name'] ?? '', ENT_QUOTES) ?>"
+                                value="<?= htmlspecialchars($equipment['name'] ?? '', ENT_QUOTES) ?>"
                                 class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
 
@@ -44,7 +44,7 @@ $header = 'Edit Equipment';
                                 name="status"
                                 required
                                 class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <?php $current = $data['status'] ?? ''; ?>
+                                <?php $current = $equipment['status'] ?? ''; ?>
                                 <option value="available"   <?= $current === 'available'   ? 'selected' : '' ?>>Available</option>
                                 <option value="in_use"      <?= $current === 'in_use'      ? 'selected' : '' ?>>In Use</option>
                                 <option value="maintenance" <?= $current === 'maintenance' ? 'selected' : '' ?>>Maintenance</option>

@@ -33,6 +33,17 @@ CREATE TABLE equipment (
         CHECK (status IN ('available', 'in_use', 'maintenance', 'broken'))
 );
 
+CREATE TABLE equipment_bookings (
+    id BIGSERIAL PRIMARY KEY,
+    equipment_id BIGINT NOT NULL REFERENCES equipment(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    start_date TIMESTAMPTZ NOT NULL,
+    end_date TIMESTAMPTZ NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
+        CHECK (status IN ('pending_approval', 'approved', 'rejected', 'returned')),
+    notes TEXT NULL
+);
+
 CREATE INDEX idx_equipment_status ON equipment(status);
 
 CREATE TABLE research_projects (
@@ -41,7 +52,10 @@ CREATE TABLE research_projects (
     description TEXT NOT NULL,
     start_date DATE NULL,
     end_date DATE NULL,
-    publication_url TEXT NULL
+    publication_url TEXT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'proposal'
+        CHECK (status IN ('proposal', 'pending_approval', 'active', 'completed', 'rejected')),
+    primary_investigator_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE research_user (

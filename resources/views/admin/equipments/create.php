@@ -8,7 +8,7 @@ $header = 'Add New Equipment';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Equipment Details</h2>
 
-                <form action="<?= BASE_URL ?? '.' ?>/equipment" method="POST">
+                <form action="<?= BASE_URL ?? '.' ?>/admin/equipment" method="POST">
                     <div class="space-y-6">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">
