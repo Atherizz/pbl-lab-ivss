@@ -26,7 +26,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             
                             <!-- Tampilkan nama user dari session -->
-                            <div><?= htmlspecialchars($_SESSION['user']['nama'] ?? 'User') ?></div> 
+                            <div><?= htmlspecialchars($_SESSION['user']['name'] ?? 'User') ?></div> 
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -52,7 +52,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                 Profile
                             </a>
 
-                            <a href="<?= BASE_URL ?? '.' ?>/equipment" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="<?= BASE_URL ?? '.' ?>/admin/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Dashboard
                             </a>
 

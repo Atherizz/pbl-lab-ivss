@@ -45,7 +45,7 @@ class EquipmentController extends Controller
             }
 
             $this->model->createEquipment($_POST);
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 
@@ -68,7 +68,7 @@ class EquipmentController extends Controller
 
             $this->model->updateEquipment($id, $_POST);
 
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 
@@ -77,7 +77,7 @@ class EquipmentController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $this->model->deleteEquipment($id);
-            $this->redirect('/equipment');
+            $this->redirect('/admin/equipment');
         }
     }
 }

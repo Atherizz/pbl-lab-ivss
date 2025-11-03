@@ -36,48 +36,56 @@ if (!isset($_SESSION['user'])) {
 
         <!-- Navigation Menu -->
         <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            <a href="<?= BASE_URL ?? '.' ?>/dashboard" 
+            <a href="<?= BASE_URL ?? '.' ?>/admin/dashboard" 
                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                 <i class="fas fa-th-large w-5 text-center"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
 
-            <a href="<?= BASE_URL ?? '.' ?>/equipment" 
+            <a href="<?= BASE_URL ?? '.' ?>/admin/equipment" 
                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                 <i class="fas fa-desktop w-5 text-center"></i>
                 <span class="font-medium">Equipment</span>
             </a>
 
-            <a href="<?= BASE_URL ?? '.' ?>/publication" 
+            <a href="<?= BASE_URL ?? '.' ?>/admin/publication" 
                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                 <i class="fas fa-book w-5 text-center"></i>
                 <span class="font-medium">Publikasi</span>
             </a>
 
-            <a href="<?= BASE_URL ?? '.' ?>/anggota" 
+            <a href="<?= BASE_URL ?? '.' ?>/admin/anggota" 
                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                 <i class="fas fa-users w-5 text-center"></i>
                 <span class="font-medium">Anggota</span>
             </a>
 
+            <!-- Divider -->
             <div class="my-4 border-t border-blue-500"></div>
 
+            <!-- Approval Section -->
             <div class="px-4 py-2">
-                <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">General</span>
+                <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Approval</span>
             </div>
 
-            <a href="<?= BASE_URL ?? '.' ?>/settings" 
-               class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 hover:bg-white/10">
-                <i class="fas fa-cog w-5 text-center"></i>
-                <span class="font-medium">Settings</span>
+            <a href="<?= BASE_URL ?? '.' ?>/admin/approval/anggota" 
+               class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                <i class="fas fa-user-check w-5 text-center"></i>
+                <span class="font-medium">Pendaftaran Anggota</span>
             </a>
 
-            <a href="<?= BASE_URL ?? '.' ?>/profile" 
-               class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 hover:bg-white/10">
-                <i class="fas fa-user w-5 text-center"></i>
-                <span class="font-medium">Profile</span>
+            <a href="<?= BASE_URL ?? '.' ?>/admin/approval/publikasi" 
+               class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                <i class="fas fa-file-alt w-5 text-center"></i>
+                <span class="font-medium">Publikasi Penelitian</span>
             </a>
-        </nav>
+
+            <a href="<?= BASE_URL ?? '.' ?>/admin/approval/peminjaman" 
+               class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                <i class="fas fa-hand-holding w-5 text-center"></i>
+                <span class="font-medium">Peminjaman Barang</span>
+            </a>
+
 
         <!-- User Profile Section -->
         <div class="border-t border-blue-500 p-4">
@@ -101,15 +109,10 @@ if (!isset($_SESSION['user'])) {
                      x-transition
                      class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-xl overflow-hidden"
                      style="display: none;">
-                    <a href="<?= BASE_URL ?? '.' ?>/profile" 
+                    <a href="<?= BASE_URL ?? '.' ?>/admin/profile" 
                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-gray-400"></i>
                         My Profile
-                    </a>
-                    <a href="<?= BASE_URL ?? '.' ?>/settings" 
-                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100">
-                        <i class="fas fa-cog mr-2 text-gray-400"></i>
-                        Settings
                     </a>
                     <form method="POST" action="<?= BASE_URL ?? '.' ?>/logout">
                         <button type="submit" 

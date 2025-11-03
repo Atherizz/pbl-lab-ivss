@@ -8,7 +8,7 @@ $header = 'Edit Equipment';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Edit Equipment</h2>
 
-                <form action="<?= (BASE_URL ?? '.') . '/equipment/' . urlencode($equipment['id']) ?>" method="POST">
+                <form action="<?= (BASE_URL ?? '.') . '/admin/equipment/' . urlencode($equipment['id']) ?>" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <div class="space-y-6">
                         <div>
