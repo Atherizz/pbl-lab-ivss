@@ -6,16 +6,23 @@ use PDOException;
 
 class Database {
 
-    private $host = 'localhost';     
-    private $port = '5432';          
-    private $db_name = 'db_ivss';   
-    private $username = 'postgres';     
-    private $password = '0806';      
+    private $host;
+    private $port;
+    private $db_name;
+    private $username;
+    private $password;
 
     private static $conn = null; 
 
-    public function getConnection() {
+    public function __construct() {
+        $this->host     = $_ENV['DB_HOST'];
+        $this->port     = $_ENV['DB_PORT'];
+        $this->db_name  = $_ENV['DB_NAME'];
+        $this->username = $_ENV['DB_USERNAME'];
+        $this->password = $_ENV['DB_PASSWORD'];
+    }
 
+    public function getConnection() {
         self::$conn = null; 
         
         $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
