@@ -1,10 +1,8 @@
 <?php 
-$header = 'My Research Projects'; 
+$pageTitle = 'Riset Mahasiswa';
+$activeMenu = 'riset-saya';
 
-$researchList = $researchList ?? [
-    ['id' => 1, 'title' => 'Deteksi Objek Real-time dengan YOLOv8', 'description' => '...', 'status' => 'active', 'start_date' => '2025-03-01', 'publication_url' => null],
-    ['id' => 2, 'title' => 'Proposal Segmentasi Semantik untuk Citra Medis', 'description' => '...', 'status' => 'proposal', 'start_date' => null, 'publication_url' => null],
-];
+require BASE_PATH . '/resources/views/layouts/dashboard.php';
 
 $status_classes = [
     'proposal' => 'bg-gray-100 text-gray-800',

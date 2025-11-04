@@ -129,19 +129,19 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                     <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Riset</span>
                 </div>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/riset" 
+                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-flask w-5 text-center"></i>
                     <span class="font-medium">Riset Saya</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/riset/ajukan" 
+                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research/ajukan" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-plus-circle w-5 text-center"></i>
                     <span class="font-medium">Ajukan Riset Baru</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/riset/direktori" 
+                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research/direktori" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder-open w-5 text-center"></i>
                     <span class="font-medium">Direktori Riset Lab</span>
@@ -175,7 +175,6 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
 
         </nav>
 
-        <!-- User Profile Section -->
         <div class="border-t border-blue-500 p-4">
             <div x-data="{ dropdownOpen: false }" class="relative">
                 <button @click="dropdownOpen = !dropdownOpen" 
