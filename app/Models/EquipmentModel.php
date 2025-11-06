@@ -7,6 +7,14 @@ use PDO;
 
 class EquipmentModel extends Model
 {
+    protected $table = 'equipment';
+    
+    public function getAllEquipmentNameId()
+    {
+        $query = $this->db->prepare("SELECT id, name FROM {$this->table} ORDER BY name ASC");
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function getAllEquipments()
     {

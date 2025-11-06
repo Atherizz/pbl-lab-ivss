@@ -159,14 +159,14 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                     <span class="font-medium">Katalog Peralatan</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/peminjaman" 
+                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings"
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'peminjaman-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-history w-5 text-center"></i>
                     <span class="font-medium">Peminjaman Saya</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/ajukan" 
-                   class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings/create"
+                   class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'bookings') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-hand-holding w-5 text-center"></i>
                     <span class="font-medium">Ajukan Peminjaman</span>
                 </a>

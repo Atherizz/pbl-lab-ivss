@@ -43,7 +43,7 @@ Class AuthMiddleware {
     } 
 
     public function requireMahasiswa() {
-        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_news') {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'mahasiswa') {
             header('Location: ' . BASE_URL . '/');;
             exit;
         }
