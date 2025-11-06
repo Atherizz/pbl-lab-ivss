@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ResearchController;
+use App\Http\Controllers\EquipmentBookingController;
 
 return [
     'GET' => [
@@ -22,7 +23,9 @@ return [
         '/mahasiswa/research' => ['controller' => ResearchController::class, 'action' => 'index', 'middleware' => 'auth'],
         '/mahasiswa/research/create' => ['controller' => ResearchController::class, 'action' => 'create', 'middleware' => 'auth'],
         '/mahasiswa/research/{id}/edit' => ['controller' => ResearchController::class, 'action' => 'edit', 'middleware' => 'auth'],
-
+        '/mahasiswa/equipment/bookings/create' => ['controller' => EquipmentBookingController::class, 'action' => 'create', 'middleware' => 'mahasiswa'],
+        '/mahasiswa/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'index', 'middleware' => 'mahasiswa'],
+        '/mahasiswa/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],
         '/' => ['view' => 'home', 'middleware' => 'guest'],
     ],
     'POST' => [
@@ -38,6 +41,8 @@ return [
         '/mahasiswa/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
         '/mahasiswa/research/{id}' => ['controller' => ResearchController::class, 'action' => 'update', 'middleware' => 'auth'], 
         '/mahasiswa/research/{id}/delete' => ['controller' => ResearchController::class, 'action' => 'destroy', 'middleware'=>'auth'],
+        '/mahasiswa/equipment/bookings/{id}/delete' => ['controller' => EquipmentBookingController::class, 'action' => 'destroy', 'middleware' => 'mahasiswa'],
+        '/mahasiswa/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'store', 'middleware' => 'mahasiswa'],
     ],
 ];
 ?>

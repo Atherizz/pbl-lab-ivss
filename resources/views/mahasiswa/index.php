@@ -75,7 +75,7 @@ $activeMenu = 'dashboard';
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Status Peminjaman Saya</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/peminjaman" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <!-- Peminjaman Aktif -->
@@ -124,7 +124,7 @@ $activeMenu = 'dashboard';
 
                         <!-- No Equipment -->
                         <div class="p-6 text-center">
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/ajukan'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
                                     class="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
                                 <i class="fas fa-plus-circle"></i>
                                 Ajukan Peminjaman Baru
@@ -144,7 +144,7 @@ $activeMenu = 'dashboard';
                                 <i class="fas fa-flask"></i>
                                 <span class="font-medium text-sm">Ajukan Riset Baru</span>
                             </button>
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/ajukan'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
                                     class="w-full flex items-center gap-3 px-4 py-3 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition-colors">
                                 <i class="fas fa-hand-holding"></i>
                                 <span class="font-medium text-sm">Pinjam Peralatan</span>
