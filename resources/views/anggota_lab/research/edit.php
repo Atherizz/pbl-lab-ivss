@@ -1,6 +1,6 @@
 <?php 
 
-$header = 'Edit Mahasiswa Project: ' . htmlspecialchars($research['title'] ?? '...'); 
+$header = 'Edit Anggota Lab Project: ' . htmlspecialchars($research['title'] ?? '...'); 
 ?>
 
 <div class="py-12">
@@ -20,7 +20,7 @@ $header = 'Edit Mahasiswa Project: ' . htmlspecialchars($research['title'] ?? '.
                     </div>
                 <?php endif; ?> 
 
-                <form action="<?= (BASE_URL ?? '.') . '/mahasiswa/research' . urlencode($research['id'] ?? '') ?>" method="POST">
+                <form action="<?= (BASE_URL ?? '.') . '/anggota-lab/research' . urlencode($research['id'] ?? '') ?>" method="POST">
                     <input type="hidden" name="_method" value="PUT"> 
                     
                     <div class="space-y-6">
@@ -61,7 +61,7 @@ $header = 'Edit Mahasiswa Project: ' . htmlspecialchars($research['title'] ?? '.
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research" 
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research" 
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                            Cancel
                         </a>

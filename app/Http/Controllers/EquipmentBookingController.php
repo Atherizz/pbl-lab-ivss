@@ -19,20 +19,20 @@ class EquipmentBookingController extends Controller
     public function index()
     {
         $bookings = $this->model->getAllBookings();
-        view('mahasiswa.equipment.bookings.index', ['bookings' => $bookings]);
+        view('anggota_lab.equipment.bookings.index', ['bookings' => $bookings]);
     }
 
         public function katalog()
     {
         $equipments = $this->equipmentModel->getAllEquipments();
-        view('mahasiswa.equipment.bookings.katalog', [
+        view('anggota_lab.equipment.bookings.katalog', [
         'equipments' => $equipments]);
     }
 
     public function create() {
     $equipmentList = $this->equipmentModel->getAllEquipmentNameId();
     
-    view('mahasiswa.equipment.bookings.create', [
+    view('anggota_lab.equipment.bookings.create', [
         'equipment_list' => $equipmentList
     ]);
     }
@@ -63,7 +63,7 @@ class EquipmentBookingController extends Controller
             }
 
             if (!empty($errors)) {
-                view('mahasiswa.equipment.bookings.create', ['errors' => $errors, 'old_data' => $_POST]);
+                view('anggota_lab.equipment.bookings.create', ['errors' => $errors, 'old_data' => $_POST]);
                 return;
             }
             
@@ -76,7 +76,7 @@ class EquipmentBookingController extends Controller
             ];
 
             $this->model->createBooking($data);
-            $this->redirect('/mahasiswa/equipment/bookings'); 
+            $this->redirect('/anggota-lab/equipment/bookings'); 
         }
     }
 
@@ -90,7 +90,7 @@ class EquipmentBookingController extends Controller
             }
             
             $this->model->updateBookingStatus($id, $status);
-            $this->redirect('/mahasiswa/equipment/bookings');
+            $this->redirect('/anggota-lab/equipment/bookings');
         }
     }
 
@@ -98,7 +98,7 @@ class EquipmentBookingController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $this->model->deleteBooking($id);
-            $this->redirect('/mahasiswa/equipment/bookings');
+            $this->redirect('/anggota-lab/equipment/bookings');
         }
     }
 }
