@@ -25,7 +25,7 @@ class ResearchController extends Controller
         // Gunakan model yang sudah diinisiasi
         $researchList = $this->model->getByUserId($userId); // Diubah
 
-        view('mahasiswa.research.index', [
+        view('anggota_lab.research.index', [
             'researchList' => $researchList
         ]);
     }
@@ -33,7 +33,7 @@ class ResearchController extends Controller
     public function create()
     {
 
-        view('mahasiswa.research.create', [
+        view('anggota_lab.research.create', [
             'header' => 'Propose New Research Project',
             'old' => [], 
             'errors' => [] 
@@ -50,7 +50,7 @@ class ResearchController extends Controller
             $errors = $this->validateProposal($data); 
 
             if (!empty($errors)) {
-                view('mahasiswa.research.create', [
+                view('anggota_lab.research.create', [
                     'header' => 'Propose New Research Project',
                     'errors' => $errors,
                     'old' => $data 
@@ -70,10 +70,10 @@ class ResearchController extends Controller
 
             $this->model->create($researchData); 
 
-            $this->redirect('/mahasiswa/research');
+            $this->redirect('/anggota-lab/research');
         
         } else {
-             $this->redirect('/mahasiswa/research/create');
+             $this->redirect('/anggota-lab/research/create');
              return;
         }
     }
@@ -90,11 +90,11 @@ class ResearchController extends Controller
 
         if (!$this->canUserManageProposal($research, $userId)) { // Menggunakan method private
             // Langsung redirect (tanpa flash message)
-            $this->redirect('/mahasiswa/research');
+            $this->redirect('/anggota-lab/research');
             return; // Hentikan eksekusi
         }
 
-        view('mahasiswa.research.edit', [
+        view('anggota_lab.research.edit', [
             'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
             'research' => $research,
             'old' => [], // Kirim array kosong
@@ -119,7 +119,7 @@ class ResearchController extends Controller
                 // --- LOGIKA ERROR BARU ---
                 // Jika validasi gagal, kita perlu ambil data $research lagi untuk me-render form
                 $research = $this->model->getById($id); 
-                view('mahasiswa.research.edit', [
+                view('anggota_lab.research.edit', [
                     'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
                     'research' => $research, //
                     'errors' => $errors,     
@@ -132,7 +132,7 @@ class ResearchController extends Controller
             $research = $this->model->getById($id); 
 
             if (!$this->canUserManageProposal($research, $userId)) { // Menggunakan method private
-                $this->redirect('/mahasiswa/research');
+                $this->redirect('/anggota-lab/research');
                 return;
             }
 
@@ -143,10 +143,10 @@ class ResearchController extends Controller
             ];
 
             $this->model->update($id, $updateData); // Diubah
-            $this->redirect('/mahasiswa/research');
+            $this->redirect('/anggota-lab/research');
         
         } else {
-            $this->redirect('/mahasiswa/research');
+            $this->redirect('/anggota-lab/research');
             return;
         }
     }
@@ -160,15 +160,15 @@ class ResearchController extends Controller
             $research = $this->model->getById($id); 
 
             if (!$this->canUserManageProposal($research, $userId)) { 
-                $this->redirect('/mahasiswa/research');
+                $this->redirect('/anggota-lab/research');
                 return;
             }
 
             $this->model->delete($id); // Diubah
-            $this->redirect('/mahasiswa/research');
+            $this->redirect('/anggota-lab/research');
         
         } else {
-             $this->redirect('/mahasiswa/research');
+             $this->redirect('/anggota-lab/research');
              return;
         }
     }

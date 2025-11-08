@@ -10,7 +10,7 @@ $activeMenu = 'bookings';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Booking Details</h2>
 
-                <form action="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings" method="POST">
+                <form action="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings" method="POST">
                     <div class="space-y-6">
 
                         <div>
@@ -65,7 +65,7 @@ $activeMenu = 'bookings';
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="<?= BASE_URL ?? '.' ?> /mahasiswa/equipment/bookings" 
+                        <a href="<?= BASE_URL ?? '.' ?> /anggota-lab/equipment/bookings" 
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             Cancel
                         </a>

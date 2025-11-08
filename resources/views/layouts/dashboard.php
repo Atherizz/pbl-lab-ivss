@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-$userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
+$userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 ?>
 
 <div class="flex min-h-screen bg-gray-50" x-data="{ sidebarOpen: true }">
@@ -36,7 +36,7 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                         echo match($userRole) {
                             'admin_lab' => 'Admin Dashboard',
                             'admin_berita' => 'News Admin',
-                            'mahasiswa' => 'Mahasiswa Dashboard',
+                            'anggota_lab' => 'Anggota Lab Dashboard',
                             default => 'Dashboard'
                         };
                         ?>
@@ -114,10 +114,10 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                     <span class="font-medium">News</span>
                 </a>
 
-            <!-- MENU UNTUK MAHASISWA -->
+            <!-- MENU UNTUK ANGGOTA LAB -->
             <?php else: ?>
                 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/dashboard" 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dashboard" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-home w-5 text-center"></i>
                     <span class="font-medium">Dashboard</span>
@@ -129,19 +129,19 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                     <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Riset</span>
                 </div>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research" 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-flask w-5 text-center"></i>
                     <span class="font-medium">Riset Saya</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research/ajukan" 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/ajukan" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-plus-circle w-5 text-center"></i>
                     <span class="font-medium">Ajukan Riset Baru</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/research/direktori" 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder-open w-5 text-center"></i>
                     <span class="font-medium">Direktori Riset Lab</span>
@@ -153,19 +153,19 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                     <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Peralatan</span>
                 </div>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/katalog" 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'katalog-equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-th-list w-5 text-center"></i>
                     <span class="font-medium">Katalog Peralatan</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings"
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings"
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'peminjaman-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-history w-5 text-center"></i>
                     <span class="font-medium">Peminjaman Saya</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings/create"
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/create"
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'bookings') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-hand-holding w-5 text-center"></i>
                     <span class="font-medium">Ajukan Peminjaman</span>
@@ -190,7 +190,7 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                                 echo match($userRole) {
                                     'admin_lab' => 'Admin Lab',
                                     'admin_news' => 'Admin News',
-                                    'mahasiswa' => 'Mahasiswa',
+                                    'anggota_lab' => 'Anggota Lab',
                                     default => 'User'
                                 };
                                 ?>
@@ -205,7 +205,7 @@ $userRole = $_SESSION['user']['role'] ?? 'mahasiswa';
                      x-transition
                      class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-xl overflow-hidden"
                      style="display: none;">
-                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'mahasiswa' ? '/mahasiswa' : '/admin' ?>/profile" 
+                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin' ?>/profile" 
                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-gray-400"></i>
                         My Profile

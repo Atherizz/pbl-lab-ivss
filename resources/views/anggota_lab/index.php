@@ -11,7 +11,7 @@ $activeMenu = 'dashboard';
             <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 mb-6 text-white shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-2xl font-bold mb-2">Selamat Datang, <?= htmlspecialchars($_SESSION['user']['nama'] ?? 'Mahasiswa') ?>! 👋</h2>
+                        <h2 class="text-2xl font-bold mb-2">Selamat Datang, <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Anggota Lab') ?>! 👋</h2>
                         <p class="text-blue-100">Kelola riset dan peminjaman peralatan lab Anda.</p>
                     </div>
                     <div class="hidden md:block">
@@ -75,7 +75,7 @@ $activeMenu = 'dashboard';
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Status Peminjaman Saya</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <!-- Peminjaman Aktif -->
@@ -124,7 +124,7 @@ $activeMenu = 'dashboard';
 
                         <!-- No Equipment -->
                         <div class="p-6 text-center">
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings'" 
                                     class="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
                                 <i class="fas fa-plus-circle"></i>
                                 Ajukan Peminjaman Baru
@@ -139,17 +139,17 @@ $activeMenu = 'dashboard';
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                         <div class="space-y-3">
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/riset/ajukan'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/riset/ajukan'" 
                                     class="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
                                 <i class="fas fa-flask"></i>
                                 <span class="font-medium text-sm">Ajukan Riset Baru</span>
                             </button>
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings'" 
                                     class="w-full flex items-center gap-3 px-4 py-3 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition-colors">
                                 <i class="fas fa-hand-holding"></i>
                                 <span class="font-medium text-sm">Pinjam Peralatan</span>
                             </button>
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/katalog'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog'" 
                                     class="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors">
                                 <i class="fas fa-th-list"></i>
                                 <span class="font-medium text-sm">Lihat Katalog</span>
@@ -187,7 +187,7 @@ $activeMenu = 'dashboard';
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Riset Aktif Saya</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/riset" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/riset" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <div class="p-6 hover:bg-gray-50 transition-colors">
