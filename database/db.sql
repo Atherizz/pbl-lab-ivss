@@ -17,8 +17,6 @@ CREATE TABLE user_profiles (
     user_id BIGINT PRIMARY KEY,
     profile_image_url TEXT NULL,
     research_focus TEXT NULL,
-    bio TEXT NULL,
-    phone_number VARCHAR(50) NULL,
     CONSTRAINT fk_user
         FOREIGN KEY(user_id) 
         REFERENCES users(id)
@@ -68,17 +66,7 @@ CREATE TABLE news (
     published_at TIMESTAMPTZ NULL
 );
 
-CREATE TABLE registration_requests (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE, 
-    password VARCHAR(255) NOT NULL, 
-    supervisor_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL, 
-    approval_letter_url TEXT NULL, 
-    status VARCHAR(50) NOT NULL DEFAULT 'pending_admin_approval'
-        CHECK (status IN ('pending_admin_approval', 'rejected')),
-    rejection_reason TEXT NULL 
-);
+
 
 -- MIGRATION 2
 
@@ -132,3 +120,75 @@ VALUES (
     'anggota_lab', 
     'active'
 );
+
+
+-- MIGRATION 3
+
+-- UBAH ROLE USER
+ALTER TABLE users
+DROP CONSTRAINT users_role_check;
+
+ALTER TABLE users
+ADD CONSTRAINT users_role_check
+  CHECK (role IN ('admin_lab', 'admin_berita', 'anggota_lab', 'mahasiswa'));
+
+INSERT INTO users (name, email, password, role, account_status) 
+VALUES (
+    'mahasiswa', 
+    'mahasiswa@gmail.com', 
+    '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 
+    'mahasiswa', 
+    'active'
+);
+
+-- MIGRATION 4
+
+CREATE TABLE registration_requests (
+    id BIGSERIAL PRIMARY KEY,
+    nim VARCHAR(20) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL, 
+    registration_purpose TEXT
+    dospem_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL, 
+    status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
+        CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head'));,
+    rejection_reason TEXT NULL 
+);
+
+truncate users cascade;
+
+ALTER TABLE users
+    DROP COLUMN email,
+    DROP COLUMN supervisor_id;
+
+-- 2️⃣ Tambah kolom baru sesuai struktur baru
+ALTER TABLE users
+    ADD COLUMN reg_number VARCHAR(20),
+    ADD COLUMN dospem_id BIGINT NULL;
+    ADD COLUMN profile_image_url TEXT,
+    ADD COLUMN research_focus TEXT;
+
+-- 3️⃣ Tambah foreign key self-reference ke dospem_id
+ALTER TABLE users
+    ADD CONSTRAINT fk_users_dospem
+    FOREIGN KEY (dospem_id) REFERENCES users(id) ON DELETE SET NULL;
+
+-- 4️⃣ Buat ulang index untuk validasi dan performa
+CREATE UNIQUE INDEX uq_users_reg_number ON users(reg_number);
+CREATE INDEX idx_users_role ON users(role);
+
+
+-- Dummy data untuk setiap role (PostgreSQL)
+INSERT INTO users (name, reg_number, password, role, account_status)
+VALUES
+-- 👨‍🔧 Admin Lab (NIP)
+('Rizky Adi Pratama', '140001', '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 'admin_lab', 'active'),
+
+-- 📰 Admin Berita (NIP)
+('Siti Lestari', '140002', '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 'admin_berita', 'active'),
+
+-- 👥 Anggota Lab (NIP)
+('Budi Santoso', '140003', '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 'anggota_lab', 'active'),
+
+-- 🎓 Mahasiswa (NIM)
+('Savero Athallah', '2441720001', '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 'mahasiswa', 'active');

@@ -11,8 +11,12 @@ class ResearchModel extends Model
 
     public function getByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} 
-                WHERE primary_investigator_id = :userId";
+
+        $sql = "SELECT r.*, u.name as dospem_name
+                FROM {$this->table} r
+                LEFT JOIN users u ON r.dospem_id = u.id
+                WHERE r.user_id = :userId
+                ORDER BY r.id DESC"; 
         $query = $this->db->prepare($sql);
         $query->execute(['userId' => $userId]);
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -27,28 +31,30 @@ class ResearchModel extends Model
 
     public function create($data)
     {
-        $sql = "INSERT INTO {$this->table} 
-                    (title, description, publication_url, status, primary_investigator_id) 
-                VALUES 
-                    (:title, :description, :publication_url, :status, :primary_investigator_id)";
+        $sql = "INSERT INTO {$this->table}
+                    (title, description, publication_url, status, user_id, dospem_id)
+                VALUES
+                    (:title, :description, :publication_url, :status, :user_id, :dospem_id)";
         $query = $this->db->prepare($sql);
-        
+
         return $query->execute([
             'title' => $data['title'],
             'description' => $data['description'],
             'publication_url' => $data['publication_url'],
             'status' => $data['status'],
-            'primary_investigator_id' => $data['primary_investigator_id']
+            'user_id' => $data['user_id'],
+            'dospem_id' => $data['dospem_id']
         ]);
     }
 
 
     public function update($id, $data)
     {
-        $sql = "UPDATE {$this->table} SET 
-                    title = :title, 
-                    description = :description, 
-                    publication_url = :publication_url 
+        $sql = "UPDATE {$this->table} SET
+                    title = :title,
+                    description = :description,
+                    publication_url = :publication_url,
+                    dospem_id = :dospem_id
                 WHERE id = :id";
         $query = $this->db->prepare($sql);
 
@@ -56,7 +62,8 @@ class ResearchModel extends Model
             'id' => $id,
             'title' => $data['title'],
             'description' => $data['description'],
-            'publication_url' => $data['publication_url']
+            'publication_url' => $data['publication_url'],
+            'dospem_id' => $data['dospem_id'] 
         ]);
     }
 

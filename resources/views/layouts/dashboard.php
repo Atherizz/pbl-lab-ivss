@@ -191,6 +191,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                                     'admin_lab' => 'Admin Lab',
                                     'admin_news' => 'Admin News',
                                     'anggota_lab' => 'Anggota Lab',
+                                    'mahasiswa' => 'Mahasiswa Lab',
                                     default => 'User'
                                 };
                                 ?>

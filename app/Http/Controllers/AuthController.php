@@ -2,15 +2,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+
 class AuthController extends Controller
 {
-
     private $userModel;
+    private $registrationRequestModel;
+
     public function __construct()
     {
         parent::__construct();
         $this->userModel = $this->model('UserModel');
+        $this->registrationRequestModel = $this->model('RegistrationRequestModel');
     }
+    
     public function showRegistrationForm()
     {
         view('register');
@@ -25,27 +29,71 @@ class AuthController extends Controller
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-            $user = $this->userModel->getByEmail($_POST);
-            if ($user) {
-                $_SESSION['error'] = 'Email sudah digunakan';
+            // Validasi input
+            $nim = trim($_POST['nim'] ?? '');
+            $name = trim($_POST['name'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+            $dospem_id = trim($_POST['dospem_id'] ?? '');
+            $registration_purpose = trim($_POST['registration_purpose'] ?? '');
+            
+            // Validasi sederhana
+            if (empty($nim) || empty($name) || empty($email) || empty($password) || empty($dospem_id) || empty($registration_purpose)) {
+                $_SESSION['error'] = 'Semua field harus diisi';
                 $this->redirect('/register');
                 exit;
-            } else {
-                $data = $_POST;
-                $hashedPassword = password_hash($data['password'],PASSWORD_BCRYPT); 
-                $data['password'] = $hashedPassword;
-                $this->userModel->createUser($data);
+            }
+            
+            // Validasi panjang registration_purpose
+            if (strlen($registration_purpose) < 50) {
+                $_SESSION['error'] = 'Tujuan pendaftaran minimal 50 karakter';
+                $this->redirect('/register');
+                exit;
+            }
+            
+            // Cek apakah email atau NIM sudah terdaftar
+            try {
+                $existingNim = $this->registrationRequestModel->getByNim($nim);
+                
+                if ($existingNim) {
+                    $_SESSION['error'] = 'NIM atau Email sudah terdaftar';
+                    $this->redirect('/register');
+                    exit;
+                }
+                
+                // Hash password
+                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+                
+                // Insert ke registration_requests menggunakan model
+                $data = [
+                    'nim' => $nim,
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => $hashedPassword,
+                    'dospem_id' => $dospem_id,
+                    'registration_purpose' => $registration_purpose
+                ];
+                
+                // $this->registrationRequestModel->createRequest($data);
+                
+                $_SESSION['success'] = 'Pendaftaran berhasil! Silakan tunggu persetujuan dari Dosen Pembimbing.';
                 $this->redirect('/login');
+                
+            } catch (\Exception $e) {
+                $_SESSION['error'] = 'Terjadi kesalahan saat pendaftaran: ' . $e->getMessage();
+                $this->redirect('/register');
+                exit;
             }
         }
     }
+    
     public function login()
     {
         if (isset($_POST['submit'])) {
-            $email = $_POST['email'];
+            $regNumber = $_POST['reg_number'];
             $password = $_POST['password'];
 
-            $user = $this->userModel->getByEmail($email);
+            $user = $this->userModel->getByRegNumber($regNumber);
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = [
@@ -67,7 +115,7 @@ class AuthController extends Controller
 
 
             } else { 
-                $_SESSION['error'] = 'Email atau password salah';
+                $_SESSION['error'] = 'NIM/NIP atau password salah';
                 $this->redirect('/login');
                 exit;
             }
