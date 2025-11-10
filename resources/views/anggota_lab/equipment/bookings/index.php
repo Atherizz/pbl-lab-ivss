@@ -57,7 +57,7 @@ $activeMenu = 'peminjaman-saya';
                                         <p class="text-xs text-gray-500 mt-1">ID: <?= htmlspecialchars($row['equipment_id']) ?></p>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        <?= htmlspecialchars($row['user_username'] ?? 'N/A') ?>
+                                        <?= htmlspecialchars($row['user_name'] ?? 'N/A') ?>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <div class="text-xs text-gray-600">Start: <?= date('d M Y, H:i', strtotime($row['start_date'])) ?></div>
