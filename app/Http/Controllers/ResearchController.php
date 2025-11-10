@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\ResearchModel; 
+use App\Models\ResearchModel;
+use App\Models\UserModel; 
 
 class ResearchController extends Controller
 {
-    private $model; 
+    private $model;
+    private $userModel; // Tambahkan properti untuk UserModel
 
     public function __construct()
     {
-        parent::__construct(); 
-        $this->model = $this->model('ResearchModel'); 
+        parent::__construct();
+        $this->model = $this->model('ResearchModel');
+        $this->userModel = $this->model('UserModel'); 
     }
 
     public function index()
@@ -22,8 +25,7 @@ class ResearchController extends Controller
             $this->redirect('/login');
         }
 
-        // Gunakan model yang sudah diinisiasi
-        $researchList = $this->model->getByUserId($userId); // Diubah
+        $researchList = $this->model->getByUserId($userId);
 
         view('anggota_lab.research.index', [
             'researchList' => $researchList
@@ -32,106 +34,97 @@ class ResearchController extends Controller
 
     public function create()
     {
+        $dospemList = $this->userModel->getSupervisors();
 
         view('anggota_lab.research.create', [
-            'header' => 'Propose New Research Project',
-            'old' => [], 
-            'errors' => [] 
+            'header' => 'Ajukan Riset Baru', 
+            'dospemList' => $dospemList, 
+            'old' => [],
+            'errors' => []
         ]);
     }
 
     public function store()
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
-            $errors = $this->validateProposal($data); 
+            $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {
+         
+                $dospemList = $this->userModel->getSupervisors();
+
                 view('anggota_lab.research.create', [
-                    'header' => 'Propose New Research Project',
+                    'header' => 'Ajukan Riset Baru',
+                    'dospemList' => $dospemList,
                     'errors' => $errors,
-                    'old' => $data 
+                    'old' => $data
                 ]);
-                return; 
-    
+                return;
             }
 
- 
             $researchData = [
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'publication_url' => $data['publication_url'] ?? null,
-                'primary_investigator_id' => $userId,
-                'status' => 'proposal' 
+                'dospem_id' => $data['dospem_id'], 
+                'user_id' => $userId, 
+                'status' => 'pending_approval' 
             ];
 
-            $this->model->create($researchData); 
-
+            $this->model->create($researchData);
             $this->redirect('/anggota-lab/research');
-        
         } else {
-             $this->redirect('/anggota-lab/research/create');
-             return;
+            $this->redirect('/anggota-lab/research/create');
+            return;
         }
     }
 
-
-    /**
-     * Menampilkan form untuk mengedit proposal riset.
-     * (Handler untuk GET /research/{id}/edit)
-     */
     public function edit($id)
     {
-        $research = $this->model->getById($id); // Diubah
+        $research = $this->model->getById($id);
         $userId = $_SESSION['user']['id'] ?? null;
+        $dospemList = $this->userModel->getSupervisors(); 
 
-        if (!$this->canUserManageProposal($research, $userId)) { // Menggunakan method private
-            // Langsung redirect (tanpa flash message)
+        if (!$this->canUserManageProposal($research, $userId)) {
             $this->redirect('/anggota-lab/research');
-            return; // Hentikan eksekusi
+            return;
         }
 
         view('anggota_lab.research.edit', [
             'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
             'research' => $research,
-            'old' => [], // Kirim array kosong
-            'errors' => [] // Kirim array kosong
+            'dospemList' => $dospemList, 
+            'old' => $research,
+            'errors' => []
         ]);
     }
 
-    /**
-     * Mengupdate proposal riset di database.
-     * (Handler untuk POST /research/{id} dengan _method=PUT)
-     */
     public function update($id)
     {
-        // Style check disamakan
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_method'] ?? '') === 'PUT') {
-
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
-            $errors = $this->validateProposal($data); // Menggunakan method private
+            $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {
-                // --- LOGIKA ERROR BARU ---
-                // Jika validasi gagal, kita perlu ambil data $research lagi untuk me-render form
-                $research = $this->model->getById($id); 
+                $research = $this->model->getById($id);
+                $dospemList = $this->userModel->getSupervisors(); 
+
                 view('anggota_lab.research.edit', [
                     'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
-                    'research' => $research, //
-                    'errors' => $errors,     
-                    'old' => $data          
+                    'research' => $research,
+                    'dospemList' => $dospemList,
+                    'errors' => $errors,
+                    'old' => $data
                 ]);
-                return; 
-
+                return;
             }
 
-            $research = $this->model->getById($id); 
+            $research = $this->model->getById($id);
 
-            if (!$this->canUserManageProposal($research, $userId)) { // Menggunakan method private
+            if (!$this->canUserManageProposal($research, $userId)) {
                 $this->redirect('/anggota-lab/research');
                 return;
             }
@@ -140,11 +133,11 @@ class ResearchController extends Controller
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'publication_url' => $data['publication_url'] ?? null,
+                'dospem_id' => $data['dospem_id'] 
             ];
 
-            $this->model->update($id, $updateData); // Diubah
+            $this->model->update($id, $updateData);
             $this->redirect('/anggota-lab/research');
-        
         } else {
             $this->redirect('/anggota-lab/research');
             return;
@@ -153,23 +146,20 @@ class ResearchController extends Controller
 
     public function destroy($id)
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
-
             $userId = $_SESSION['user']['id'] ?? null;
-            $research = $this->model->getById($id); 
+            $research = $this->model->getById($id);
 
-            if (!$this->canUserManageProposal($research, $userId)) { 
+            if (!$this->canUserManageProposal($research, $userId)) {
                 $this->redirect('/anggota-lab/research');
                 return;
             }
 
-            $this->model->delete($id); // Diubah
+            $this->model->delete($id);
             $this->redirect('/anggota-lab/research');
-        
         } else {
-             $this->redirect('/anggota-lab/research');
-             return;
+            $this->redirect('/anggota-lab/research');
+            return;
         }
     }
 
@@ -182,6 +172,10 @@ class ResearchController extends Controller
         if (empty(trim($data['description'] ?? ''))) {
             $errors['description'] = 'Description / Abstract is required.';
         }
+        // Validasi dospem_id
+        if (empty(trim($data['dospem_id'] ?? ''))) {
+            $errors['dospem_id'] = 'Supervisor (Dosen Pembimbing) is required.';
+        }
         return $errors;
     }
 
@@ -190,10 +184,12 @@ class ResearchController extends Controller
         if (!$research) {
             return false;
         }
-        if ($research['primary_investigator_id'] != $userId) {
+    
+        if ($research['user_id'] != $userId) {
             return false;
         }
-        if ($research['status'] !== 'proposal') {
+       
+        if ($research['status'] !== 'pending_approval') {
             return false;
         }
         return true;
