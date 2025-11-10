@@ -11,23 +11,24 @@ class UserModel extends Model {
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getByEmail($email) {
-        $query = $this->db->prepare("SELECT * FROM users WHERE email = :email");
-        $query->execute(['email' => $email]);
+    public function getByRegNumber($regNumber) {
+        $query = $this->db->prepare("SELECT * FROM users WHERE reg_number = :reg_number");
+        $query->execute(['reg_number' => $regNumber]);
         $result = $query->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
 
     public function checkCredential($user) {
         $password = $user['password'];
-        $result = $this->getByEmail($user);
+        $result = $this->getByRegNumber($user['reg_number']);
         if ($result && password_verify($password, $result['password'])) {
             return $result;
         } 
         return false;
     }
+    
     public function createUser($data) {
-        $query = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)");
-        return $query->execute(['name' => $data['name'], 'email' => $data['email'], 'password' => $data['password'], 'role' => 'user']);
+        $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'user']);
     }
 }

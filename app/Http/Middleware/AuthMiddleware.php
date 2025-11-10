@@ -49,4 +49,11 @@ Class AuthMiddleware {
         }
     }
 
+        public function requireMahasiswa() {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'mahasiswa') {
+            header('Location: ' . BASE_URL . '/login');
+            exit;
+        }
+    }
+
 }
