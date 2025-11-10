@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ResearchModel;
-use App\Models\UserModel; 
+use App\Models\UserModel;
 
 class ResearchController extends Controller
 {
@@ -15,7 +15,7 @@ class ResearchController extends Controller
     {
         parent::__construct();
         $this->model = $this->model('ResearchModel');
-        $this->userModel = $this->model('UserModel'); 
+        $this->userModel = $this->model('UserModel');
     }
 
     public function index()
@@ -37,8 +37,7 @@ class ResearchController extends Controller
         $dospemList = $this->userModel->getSupervisors();
 
         view('anggota_lab.research.create', [
-            'header' => 'Ajukan Riset Baru', 
-            'dospemList' => $dospemList, 
+            'dospemList' => $dospemList,
             'old' => [],
             'errors' => []
         ]);
@@ -49,10 +48,11 @@ class ResearchController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
+            // AMBIL ROLE USER DARI SESSION
+            $userRole = $_SESSION['user']['role'] ?? null;
             $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {
-         
                 $dospemList = $this->userModel->getSupervisors();
 
                 view('anggota_lab.research.create', [
@@ -64,13 +64,18 @@ class ResearchController extends Controller
                 return;
             }
 
+            // --- LOGIKA STATUS AWAL BARU ---
+            // Asumsi: 'anggota_lab' adalah mahasiswa.
+            // Role lain (admin_lab, dll) adalah non-mahasiswa.
+            $initialStatus = ($userRole === 'anggota_lab') ? 'pending_approval' : 'approved_by_dospem';
+
             $researchData = [
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'publication_url' => $data['publication_url'] ?? null,
-                'dospem_id' => $data['dospem_id'], 
-                'user_id' => $userId, 
-                'status' => 'pending_approval' 
+                'dospem_id' => $data['dospem_id'],
+                'user_id' => $userId,
+                'status' => $initialStatus // Diubah dari 'pending_approval'
             ];
 
             $this->model->create($researchData);
@@ -85,7 +90,7 @@ class ResearchController extends Controller
     {
         $research = $this->model->getById($id);
         $userId = $_SESSION['user']['id'] ?? null;
-        $dospemList = $this->userModel->getSupervisors(); 
+        $dospemList = $this->userModel->getSupervisors();
 
         if (!$this->canUserManageProposal($research, $userId)) {
             $this->redirect('/anggota-lab/research');
@@ -95,7 +100,7 @@ class ResearchController extends Controller
         view('anggota_lab.research.edit', [
             'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
             'research' => $research,
-            'dospemList' => $dospemList, 
+            'dospemList' => $dospemList,
             'old' => $research,
             'errors' => []
         ]);
@@ -110,7 +115,7 @@ class ResearchController extends Controller
 
             if (!empty($errors)) {
                 $research = $this->model->getById($id);
-                $dospemList = $this->userModel->getSupervisors(); 
+                $dospemList = $this->userModel->getSupervisors();
 
                 view('anggota_lab.research.edit', [
                     'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
@@ -133,7 +138,7 @@ class ResearchController extends Controller
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'publication_url' => $data['publication_url'] ?? null,
-                'dospem_id' => $data['dospem_id'] 
+                'dospem_id' => $data['dospem_id']
             ];
 
             $this->model->update($id, $updateData);
@@ -184,12 +189,14 @@ class ResearchController extends Controller
         if (!$research) {
             return false;
         }
-    
+
         if ($research['user_id'] != $userId) {
             return false;
         }
-       
-        if ($research['status'] !== 'pending_approval') {
+
+        // Hanya bisa diedit jika statusnya 'pending_approval' ATAU 'rejected'
+        // (Kita tambahkan 'rejected' agar bisa diperbaiki dan diajukan ulang)
+        if (!in_array($research['status'], ['pending_approval', 'rejected'])) {
             return false;
         }
         return true;
