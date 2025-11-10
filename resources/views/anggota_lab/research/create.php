@@ -1,15 +1,16 @@
 <?php
-// $header di-set oleh controller
-// $dospemList di-set oleh controller
-// $old di-set oleh controller
-// $errors di-set oleh controller
+$pageTitle = 'Ajukan Riset';
+$activeMenu = 'ajukan-riset';
+
+// Diasumsikan BASE_PATH sudah didefinisikan di file index.php utama
+require BASE_PATH . '/resources/views/layouts/dashboard.php';
+
 ?>
 
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-6"><?= htmlspecialchars($header) ?></h2>
 
                 <?php if (isset($errors) && !empty($errors)): ?>
                     <div class="mb-6 p-4 bg-red-100 text-red-700 border border-red-300 rounded">
