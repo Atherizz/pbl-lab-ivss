@@ -89,7 +89,7 @@ CREATE TABLE datasets (
   description TEXT NULL,           
   urls JSONB NOT NULL DEFAULT '[]',   
   file_url TEXT NOT NULL, 
-  tags TEXT[] NULL, -- Tag sederhana, mis: {'vision','YOLO','dataset-wajah'}
+  tags TEXT[] NULL -- Tag sederhana, mis: {'vision','YOLO','dataset-wajah'}
 );
 
 -- HAPUS ISI TABLE PENELITIAN TERLEBIH DAHULU

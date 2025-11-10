@@ -69,11 +69,7 @@ $equipmentId = $selectedEquipment['id'] ?? null;
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-<<<<<<< HEAD:resources/views/mahasiswa/equipment/bookings/create.php
-                        <a href="<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings/katalog" 
-=======
-                        <a href="<?= BASE_URL ?? '.' ?> /anggota-lab/equipment/bookings" 
->>>>>>> aab78ecade04a3a31c9dd673e99b81c132860611:resources/views/anggota_lab/equipment/bookings/create.php
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/katalog" 
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             Cancel
                         </a>
