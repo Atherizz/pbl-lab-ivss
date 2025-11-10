@@ -124,7 +124,7 @@ $activeMenu = 'dashboard';
 
                         <!-- No Equipment -->
                         <div class="p-6 text-center">
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/katalog'" 
                                     class="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
                                 <i class="fas fa-plus-circle"></i>
                                 Ajukan Peminjaman Baru
@@ -144,7 +144,7 @@ $activeMenu = 'dashboard';
                                 <i class="fas fa-flask"></i>
                                 <span class="font-medium text-sm">Ajukan Riset Baru</span>
                             </button>
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/bookings'" 
+                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/mahasiswa/equipment/katalog'" 
                                     class="w-full flex items-center gap-3 px-4 py-3 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition-colors">
                                 <i class="fas fa-hand-holding"></i>
                                 <span class="font-medium text-sm">Pinjam Peralatan</span>
