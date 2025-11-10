@@ -10,7 +10,17 @@ $activeMenu = 'news';
             <div class="p-6 bg-white border-b border-gray-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6">Edit News</h2>
 
-                <form action="<?= (BASE_URL ?? '.') . '/admin-berita/news/' . urlencode($news['id']) ?>" method="POST">
+                <?php if (isset($errors) && !empty($errors)): ?>
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
+                        <ul class="list-disc list-inside">
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <form action="<?= (BASE_URL ?? '.') . '/admin-berita/news/' . urlencode($news['id']) ?>" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_method" value="PUT">
                     <div class="space-y-6">
                         <div>
@@ -39,17 +49,35 @@ $activeMenu = 'news';
                         </div>
 
                         <div>
-                            <label for="image_url" class="block text-sm font-medium text-gray-700">
-                                Image URL
+                            <label for="image_file" class="block text-sm font-medium text-gray-700">
+                                News Image
                             </label>
-                            <input
-                                type="url"
-                                id="image_url"
-                                name="image_url"
-                                value="<?= htmlspecialchars($news['image_url'] ?? '', ENT_QUOTES) ?>"
-                                placeholder="https://example.com/image.jpg"
-                                class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2">
-                            <p class="mt-1 text-sm text-gray-500">Optional: Enter the URL of the news image</p>
+                            
+                            <!-- Tampilkan gambar saat ini jika ada -->
+                            <?php if (!empty($news['image_url'])) : ?>
+                                <div class="mt-2 mb-3">
+                                    <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                                    <img src="<?= BASE_URL . '/' . htmlspecialchars($news['image_url']) ?>" alt="Current image" class="h-32 w-auto rounded-md border border-gray-300">
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-11.828-11.828L28 28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="image_file" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <span>Upload a new file</span>
+                                            <input id="image_file" name="image_file" type="file" class="sr-only" accept="image/*">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">
+                                        PNG, JPG, GIF up to 5MB (optional - leave empty to keep current image)
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
                         <div>

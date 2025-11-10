@@ -54,11 +54,9 @@
                     <select id="dospem_id" name="dospem_id" required
                             class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">-- Pilih Dosen Pembimbing --</option>
-                        <option value="1">Dr. Ahmad Fauzi, S.Kom., M.T.</option>
-                        <option value="2">Prof. Siti Nurhaliza, S.T., Ph.D.</option>
-                        <option value="3">Dr. Budi Santoso, S.Kom., M.Sc.</option>
-                        <option value="4">Ir. Rina Wati, M.Kom.</option>
-                        <option value="5">Dr. Eng. Joko Widodo, S.T., M.T.</option>
+                        <?php foreach ($dospem as $row) : ?>
+                        <option value=<?=$row['id'] ?>><?= $row['name'] ?></option>
+                        <?php endforeach; ?>
                     </select>
                     <p class="mt-1 text-xs text-gray-500">Pilih dosen pembimbing Anda</p>
                 </div>
