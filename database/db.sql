@@ -132,3 +132,23 @@ VALUES (
     'anggota_lab', 
     'active'
 );
+
+
+-- MIGRATION 3
+
+-- UBAH ROLE USER
+ALTER TABLE users
+DROP CONSTRAINT users_role_check;
+
+ALTER TABLE users
+ADD CONSTRAINT users_role_check
+  CHECK (role IN ('admin_lab', 'admin_berita', 'anggota_lab', 'mahasiswa'));
+
+INSERT INTO users (name, email, password, role, account_status) 
+VALUES (
+    'mahasiswa', 
+    'mahasiswa@gmail.com', 
+    '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 
+    'mahasiswa', 
+    'active'
+);

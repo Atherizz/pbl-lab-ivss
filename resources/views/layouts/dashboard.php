@@ -115,7 +115,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 </a>
 
             <!-- MENU UNTUK ANGGOTA LAB -->
-            <?php else: ?>
+            <?php elseif ($userRole === 'anggota_lab' ||  $userRole === 'mahasiswa'): ?>
                 
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dashboard" 
                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
@@ -149,6 +149,8 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
                 <div class="my-4 border-t border-blue-500"></div>
 
+                <?php if ($userRole === 'mahasiswa'): ?>
+
                 <div class="px-4 py-2">
                     <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Peralatan</span>
                 </div>
@@ -170,6 +172,18 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <i class="fas fa-hand-holding w-5 text-center"></i>
                     <span class="font-medium">Ajukan Peminjaman</span>
                 </a>
+
+                 <?php elseif ($userRole === 'anggota_lab'): ?>
+
+                 <div class="px-4 py-2">
+                    <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Approval</span>
+                </div>
+                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/anggota" 
+                   class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-user-check w-5 text-center"></i>
+                    <span class="font-medium">Pengajuan Dospem</span>
+                </a>
+                <?php endif; ?>
 
             <?php endif; ?>
 
