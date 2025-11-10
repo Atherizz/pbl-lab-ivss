@@ -15,22 +15,9 @@ class UserModel extends Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Mengambil semua user dengan role 'admin_lab' (Dosen Pembimbing)
-     */
-    public function getSupervisors()
-    {
-        // Asumsi 'admin_lab' adalah Dosen Pembimbing
-        $sql = "SELECT id, name FROM users WHERE role = 'admin_lab' ORDER BY name";
-        $query = $this->db->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function getByEmail($email)
-    {
-        $query = $this->db->prepare("SELECT * FROM users WHERE email = :email");
-        $query->execute(['email' => $email]);
+    public function getByRegNumber($regNumber) {
+        $query = $this->db->prepare("SELECT * FROM users WHERE reg_number = :reg_number");
+        $query->execute(['reg_number' => $regNumber]);
         $result = $query->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
@@ -38,22 +25,15 @@ class UserModel extends Model
     public function checkCredential($user)
     {
         $password = $user['password'];
-        $result = $this->getByEmail($user); // getByEmail sudah mengambil dari $user['email']
+        $result = $this->getByRegNumber($user['reg_number']);
         if ($result && password_verify($password, $result['password'])) {
             return $result;
         }
         return false;
     }
-    public function createUser($data)
-    {
-        $query = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)");
-        // Perbaiki: 'role' harus dari $data atau default yang sesuai
-        $role = $data['role'] ?? 'anggota_lab'; // Sesuaikan default jika perlu
-        return $query->execute([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'role' => $role // Menggunakan role dari data atau default
-        ]);
+`    
+    public function createUser($data) {
+        $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'user']);
     }
 }

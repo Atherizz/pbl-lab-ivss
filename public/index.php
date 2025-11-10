@@ -67,6 +67,8 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
                 $auth->requireAdminNews();
             } elseif ($routeInfo['middleware'] === 'anggota_lab') {
                 $auth->requireAnggotaLab();
+            } elseif ($routeInfo['middleware'] === 'mahasiswa') {
+                $auth->requireMahasiswa();
             }
         }
 

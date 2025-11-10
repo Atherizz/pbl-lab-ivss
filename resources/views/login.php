@@ -9,16 +9,28 @@
 
             <form action="<?= BASE_URL ?? '.' ?>/login" method="POST">
                 
+                <!-- Success Message -->
+                <?php if (isset($_SESSION['success'])): ?>
+                <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                    <i class="fas fa-check-circle mr-1"></i>
+                    <?= $_SESSION['success']; ?>
+                    <?php unset($_SESSION['success']); ?>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Error Message -->
                 <?php if (isset($_SESSION['error'])): ?>
                 <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
                     <?= $_SESSION['error']; ?>
                     <?php unset($_SESSION['error']); ?>
                 </div>
                 <?php endif; ?>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-                    <input type="email" id="email" name="email" required 
+                    <label for="reg_number" class="block text-sm font-medium text-gray-700">NIM / NIP:</label>
+                    <input type="text" id="reg_number" name="reg_number" required 
+                           placeholder="Masukkan NIM / NIP"
                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
 
