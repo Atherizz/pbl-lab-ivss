@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Models;
 
 use App\Models\Model;
 use PDO;
-class UserModel extends Model {
 
-    public function getAllUsers() {
+class UserModel extends Model
+{
+
+    public function getAllUsers()
+    {
         $query = $this->db->prepare("SELECT * FROM users");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -18,15 +22,16 @@ class UserModel extends Model {
         return $result;
     }
 
-    public function checkCredential($user) {
+    public function checkCredential($user)
+    {
         $password = $user['password'];
         $result = $this->getByRegNumber($user['reg_number']);
         if ($result && password_verify($password, $result['password'])) {
             return $result;
-        } 
+        }
         return false;
     }
-    
+`    
     public function createUser($data) {
         $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
         return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'user']);
