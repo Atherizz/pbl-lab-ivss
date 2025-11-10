@@ -9,6 +9,27 @@ $activeMenu = 'news';
     
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
+                <!-- NOTIFICATION ALERTS -->
+                <?php if (isset($_SESSION['success'])) : ?>
+                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
+                        <span class="block sm:inline"><?= htmlspecialchars($_SESSION['success']) ?></span>
+                        <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])) : ?>
+                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
+                        <span class="block sm:inline"><?= htmlspecialchars($_SESSION['error']) ?></span>
+                        <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold text-gray-700">Manage News</h2>
                     <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news/create"
@@ -26,6 +47,9 @@ $activeMenu = 'news';
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Title
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Image
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Author
@@ -51,23 +75,32 @@ $activeMenu = 'news';
                                             <?= htmlspecialchars(substr($row['content'], 0, 100)) ?><?= strlen($row['content']) > 100 ? '...' : '' ?>
                                         </p>
                                     </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <?php if (!empty($row['image_url'])) : ?>
+                                            <img src="<?= htmlspecialchars($row['image_url']) ?>" alt="<?= htmlspecialchars($row['title']) ?>" class="h-16 w-16 object-cover rounded">
+                                        <?php else : ?>
+                                            <div class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center">
+                                                <i class="fas fa-image text-gray-400 text-xl"></i>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        <?= htmlspecialchars($row['author_id']) ?>
+                                        <?= htmlspecialchars($row['author_username'] ?? $row['author_id'] ?? 'Unknown') ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                         <?= date('d M Y, H:i', strtotime($row['published_at'])) ?>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
                                         <a href="<?= (BASE_URL ?? '.') . '/admin-berita/news/' . $row['id'] . '/edit' ?>" 
-                                            class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                            class="text-indigo-600 hover:text-indigo-900 transition" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>  
-                                        <form action="<?= (BASE_URL ?? '.') . '/admin-berita/news/' . $row['id'] . '/delete' ?>"  method="POST" class="inline">
+                                        <form action="<?= (BASE_URL ?? '.') . '/admin-berita/news/' . $row['id'] . '/delete' ?>" method="POST" class="inline">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button type="submit" 
-                                                    class="text-red-600 hover:text-red-900" 
+                                                    class="text-red-600 hover:text-red-900 transition" 
                                                     title="Delete"
-                                                    onclick="return confirm('Are you sure you want to delete this news: <?= htmlspecialchars($row['title'], ENT_QUOTES) ?>?');">
+                                                    onclick="return confirm('Are you sure you want to delete this news: &quot;<?= htmlspecialchars($row['title'], ENT_QUOTES) ?>&quot;? This action cannot be undone.');">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -76,7 +109,7 @@ $activeMenu = 'news';
                                 <?php endforeach ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="6" class="px-6 py-8 whitespace-nowrap text-sm text-gray-500 text-center">
                                         No news found.
                                     </td>
                                 </tr>
@@ -84,16 +117,57 @@ $activeMenu = 'news';
                         </tbody>
                     </table>
                 </div>
-                 <div class="mt-4">
+
+                <!-- PAGINATION - DINAMIS -->
+                <?php if ($totalPages > 1) : ?>
+                <div class="mt-6">
                     <nav class="flex justify-between items-center text-sm text-gray-500">
-                        <span>Showing <?= !empty($news) ? '1 to ' . count($news) . ' of ' . count($news) : '0' ?> entries</span>
+                        <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
                         <div class="flex space-x-1">
-                            <button class="px-3 py-1 border rounded-md" disabled>Previous</button>
-                            <button class="px-3 py-1 border rounded-md bg-blue-600 text-white">1</button>
-                            <button class="px-3 py-1 border rounded-md">Next</button>
+                            <!-- TOMBOL PREVIOUS -->
+                            <?php if ($currentPage > 1) : ?>
+                                <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news?page=<?= $currentPage - 1 ?>" 
+                                   class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                    <i class="fas fa-chevron-left mr-1"></i> Previous
+                                </a>
+                            <?php else : ?>
+                                <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
+                                    <i class="fas fa-chevron-left mr-1"></i> Previous
+                                </button>
+                            <?php endif; ?>
+
+                            <!-- NOMOR HALAMAN -->
+                            <div class="flex space-x-1">
+                                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                                    <?php if ($i == $currentPage) : ?>
+                                        <button class="px-3 py-2 border rounded-md bg-blue-600 text-white font-semibold">
+                                            <?= $i ?>
+                                        </button>
+                                    <?php else : ?>
+                                        <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news?page=<?= $i ?>" 
+                                           class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                            <?= $i ?>
+                                        </a>
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+                            </div>
+
+                            <!-- TOMBOL NEXT -->
+                            <?php if ($currentPage < $totalPages) : ?>
+                                <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news?page=<?= $currentPage + 1 ?>" 
+                                   class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                    Next <i class="fas fa-chevron-right ml-1"></i>
+                                </a>
+                            <?php else : ?>
+                                <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
+                                    Next <i class="fas fa-chevron-right ml-1"></i>
+                                </button>
+                            <?php endif; ?>
                         </div>
                     </nav>
-                 </div>
+                </div>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>
