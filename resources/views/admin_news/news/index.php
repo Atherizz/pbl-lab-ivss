@@ -31,7 +31,12 @@ $activeMenu = 'news';
                 <?php endif; ?>
 
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-700">Manage News</h2>
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-700">Manage News</h2>
+                        <?php if (isset($totalItems) && $totalItems > 0) : ?>
+                            <p class="text-sm text-gray-500 mt-1">Total: <?= $totalItems ?> news article<?= $totalItems > 1 ? 's' : '' ?></p>
+                        <?php endif; ?>
+                    </div>
                     <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news/create"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         <i class="fas fa-plus mr-2"></i> Add News
@@ -77,7 +82,7 @@ $activeMenu = 'news';
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <?php if (!empty($row['image_url'])) : ?>
-                                            <img src="<?= htmlspecialchars($row['image_url']) ?>" alt="<?= htmlspecialchars($row['title']) ?>" class="h-16 w-16 object-cover rounded">
+                                            <img src="<?= BASE_URL . '/' . htmlspecialchars($row['image_url']) ?>" alt="<?= htmlspecialchars($row['title']) ?>" class="h-16 w-16 object-cover rounded">
                                         <?php else : ?>
                                             <div class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center">
                                                 <i class="fas fa-image text-gray-400 text-xl"></i>
@@ -110,7 +115,9 @@ $activeMenu = 'news';
                             <?php else : ?>
                                 <tr>
                                     <td colspan="6" class="px-6 py-8 whitespace-nowrap text-sm text-gray-500 text-center">
-                                        No news found.
+                                        <i class="fas fa-newspaper text-gray-300 text-4xl mb-2"></i>
+                                        <p class="text-gray-600 font-medium">No news found.</p>
+                                        <p class="text-xs text-gray-400 mt-1">Start by creating your first news article.</p>
                                     </td>
                                 </tr>
                             <?php endif; ?>
@@ -119,7 +126,7 @@ $activeMenu = 'news';
                 </div>
 
                 <!-- PAGINATION - DINAMIS -->
-                <?php if ($totalPages > 1) : ?>
+                <?php if (isset($totalPages) && $totalPages > 1) : ?>
                 <div class="mt-6">
                     <nav class="flex justify-between items-center text-sm text-gray-500">
                         <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
@@ -138,7 +145,29 @@ $activeMenu = 'news';
 
                             <!-- NOMOR HALAMAN -->
                             <div class="flex space-x-1">
-                                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                                <?php 
+                                // Tampilkan maksimal 7 nomor halaman
+                                $maxPages = 7;
+                                $startPage = max(1, $currentPage - floor($maxPages / 2));
+                                $endPage = min($totalPages, $startPage + $maxPages - 1);
+                                
+                                // Adjust jika mendekati akhir
+                                if ($endPage - $startPage < $maxPages - 1) {
+                                    $startPage = max(1, $endPage - $maxPages + 1);
+                                }
+                                
+                                // Tampilkan halaman pertama jika tidak termasuk dalam range
+                                if ($startPage > 1) : ?>
+                                    <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news?page=1" 
+                                       class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                        1
+                                    </a>
+                                    <?php if ($startPage > 2) : ?>
+                                        <span class="px-3 py-2">...</span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                
+                                <?php for ($i = $startPage; $i <= $endPage; $i++) : ?>
                                     <?php if ($i == $currentPage) : ?>
                                         <button class="px-3 py-2 border rounded-md bg-blue-600 text-white font-semibold">
                                             <?= $i ?>
@@ -150,6 +179,18 @@ $activeMenu = 'news';
                                         </a>
                                     <?php endif; ?>
                                 <?php endfor; ?>
+                                
+                                <?php 
+                                // Tampilkan halaman terakhir jika tidak termasuk dalam range
+                                if ($endPage < $totalPages) : ?>
+                                    <?php if ($endPage < $totalPages - 1) : ?>
+                                        <span class="px-3 py-2">...</span>
+                                    <?php endif; ?>
+                                    <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news?page=<?= $totalPages ?>" 
+                                       class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                        <?= $totalPages ?>
+                                    </a>
+                                <?php endif; ?>
                             </div>
 
                             <!-- TOMBOL NEXT -->

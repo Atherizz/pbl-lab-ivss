@@ -11,7 +11,7 @@ $activeMenu = 'dashboard';
             <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 mb-6 text-white shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-2xl font-bold mb-2">Welcome back, <?= htmlspecialchars($_SESSION['user']['nama'] ?? 'Admin') ?>! 👋</h2>
+                        <h2 class="text-2xl font-bold mb-2">Welcome back, <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Admin') ?>! 👋</h2>
                         <p class="text-blue-100">Manage and publish lab news & updates.</p>
                     </div>
                     <div class="hidden md:block">

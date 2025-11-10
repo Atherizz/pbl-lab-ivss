@@ -8,14 +8,14 @@ class NewsController extends Controller
 {
     private $model;
     private $uploadDir;
-    private $itemsPerPage = 10;
+    private $itemsPerPage = 5;
     public $error = '';
 
     public function __construct()
     {
         parent::__construct();
         $this->model = $this->model('NewsModel');
-        $this->uploadDir = '/pbl-lab-ivss/public/uploads/news/';
+        $this->uploadDir = __DIR__ . '/../../../public/uploads/news/';
         
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
@@ -24,7 +24,6 @@ class NewsController extends Controller
 
     public function uploadImage($fileInputName = 'image_file')
     {
-        // Cek apakah file ada
         if (!isset($_FILES[$fileInputName]) || $_FILES[$fileInputName]['error'] === UPLOAD_ERR_NO_FILE) {
             $this->error = "No file selected!";
             return false;
@@ -90,49 +89,43 @@ class NewsController extends Controller
         return true;
     }
 
-        public function index()
+    public function index()
     {
-        $news = $this->model->getAllNews();
-        view('admin_news.news.index', ['news' => $news]);
+        // Ambil halaman dari query string
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = $page < 1 ? 1 : $page;
+
+        // Ambil semua news
+        $allNews = $this->model->getAllNews();
+        $totalItems = count($allNews);
+        
+        // Hitung total halaman
+        $totalPages = ceil($totalItems / $this->itemsPerPage);
+        
+        // Pastikan halaman valid
+        if ($page > $totalPages && $totalPages > 0) {
+            $page = $totalPages;
+        }
+
+        // Hitung offset
+        $offset = ($page - 1) * $this->itemsPerPage;
+        
+        // Ambil news untuk halaman saat ini
+        $news = array_slice($allNews, $offset, $this->itemsPerPage);
+
+        // Data untuk view
+        $paginationData = [
+            'news'         => $news,
+            'currentPage'  => $page,
+            'totalPages'   => $totalPages,
+            'totalItems'   => $totalItems,
+            'itemsPerPage' => $this->itemsPerPage,
+            'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
+            'endItem'      => min($offset + $this->itemsPerPage, $totalItems)
+        ];
+
+        view('admin_news.news.index', $paginationData);
     }
-
-    // public function index()
-    // {
-    //     // Ambil halaman dari query string
-    //     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    //     $page = $page < 1 ? 1 : $page;
-
-    //     // Ambil semua news
-    //     $allNews = $this->model->getAllNews();
-    //     $totalItems = count($allNews);
-        
-    //     // Hitung total halaman
-    //     $totalPages = ceil($totalItems / $this->itemsPerPage);
-        
-    //     // Pastikan halaman valid
-    //     if ($page > $totalPages && $totalPages > 0) {
-    //         $page = $totalPages;
-    //     }
-
-    //     // Hitung offset
-    //     $offset = ($page - 1) * $this->itemsPerPage;
-        
-    //     // Ambil news untuk halaman saat ini
-    //     $news = array_slice($allNews, $offset, $this->itemsPerPage);
-
-    //     // Data untuk view
-    //     $paginationData = [
-    //         'news'         => $news,
-    //         'currentPage'  => $page,
-    //         'totalPages'   => $totalPages,
-    //         'totalItems'   => $totalItems,
-    //         'itemsPerPage' => $this->itemsPerPage,
-    //         'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
-    //         'endItem'      => min($offset + $this->itemsPerPage, $totalItems)
-    //     ];
-
-    //     view('admin_news.news.index', $paginationData);
-    // }
 
     public function create()
     {
@@ -180,7 +173,7 @@ class NewsController extends Controller
             $data = [
                 'title'        => $title,
                 'content'      => $content,
-                'image_url'    => '/public/uploads/news/' . $imageFileName,
+                'image_url'    => 'uploads/news/' . $imageFileName,
                 'author_id'    => $authorId,
                 'published_at' => date('Y-m-d H:i:s') 
             ];
@@ -227,7 +220,7 @@ class NewsController extends Controller
                     $this->deleteImage($oldFileName);
                 }
 
-                $imageUrl = '/public/uploads/news/' . $newImageFileName;
+                $imageUrl = 'uploads/news/' . $newImageFileName;
             }
 
             $data = [

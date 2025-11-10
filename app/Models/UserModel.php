@@ -15,6 +15,12 @@ class UserModel extends Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllAnggotaLab()
+    {
+        $query = $this->db->prepare("SELECT * FROM users where role = :role");
+        $query->execute(['role' => 'anggota_lab']);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getByRegNumber($regNumber) {
         $query = $this->db->prepare("SELECT * FROM users WHERE reg_number = :reg_number");
         $query->execute(['reg_number' => $regNumber]);
@@ -31,7 +37,7 @@ class UserModel extends Model
         }
         return false;
     }
-`    
+
     public function createUser($data) {
         $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
         return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'user']);

@@ -189,7 +189,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                                 <?php 
                                 echo match($userRole) {
                                     'admin_lab' => 'Admin Lab',
-                                    'admin_news' => 'Admin News',
+                                    'admin_berita' => 'Admin Berita',
                                     'anggota_lab' => 'Anggota Lab',
                                     'mahasiswa' => 'Mahasiswa Lab',
                                     default => 'User'

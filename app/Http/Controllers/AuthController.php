@@ -17,7 +17,10 @@ class AuthController extends Controller
     
     public function showRegistrationForm()
     {
-        view('register');
+        $dospem = $this->userModel->getAllAnggotaLab();
+
+        view('register', [
+        'dospem' => $dospem]);
     }
 
     public function showLoginForm()
@@ -32,13 +35,12 @@ class AuthController extends Controller
             // Validasi input
             $nim = trim($_POST['nim'] ?? '');
             $name = trim($_POST['name'] ?? '');
-            $email = trim($_POST['email'] ?? '');
             $password = trim($_POST['password'] ?? '');
             $dospem_id = trim($_POST['dospem_id'] ?? '');
             $registration_purpose = trim($_POST['registration_purpose'] ?? '');
             
             // Validasi sederhana
-            if (empty($nim) || empty($name) || empty($email) || empty($password) || empty($dospem_id) || empty($registration_purpose)) {
+            if (empty($nim) || empty($name) || empty($password) || empty($dospem_id) || empty($registration_purpose)) {
                 $_SESSION['error'] = 'Semua field harus diisi';
                 $this->redirect('/register');
                 exit;
@@ -68,13 +70,12 @@ class AuthController extends Controller
                 $data = [
                     'nim' => $nim,
                     'name' => $name,
-                    'email' => $email,
                     'password' => $hashedPassword,
                     'dospem_id' => $dospem_id,
                     'registration_purpose' => $registration_purpose
                 ];
                 
-                // $this->registrationRequestModel->createRequest($data);
+                $this->registrationRequestModel->createRequest($data);
                 
                 $_SESSION['success'] = 'Pendaftaran berhasil! Silakan tunggu persetujuan dari Dosen Pembimbing.';
                 $this->redirect('/login');

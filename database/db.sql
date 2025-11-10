@@ -145,13 +145,13 @@ VALUES (
 
 CREATE TABLE registration_requests (
     id BIGSERIAL PRIMARY KEY,
-    nim VARCHAR(20) NOT NULL
+    nim VARCHAR(20) NOT null,
     name VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL, 
-    registration_purpose TEXT
+    registration_purpose TEXT,
     dospem_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL, 
     status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
-        CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head'));,
+        CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head')),
     rejection_reason TEXT NULL 
 );
 
