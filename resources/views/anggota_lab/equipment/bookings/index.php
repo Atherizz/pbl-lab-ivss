@@ -70,7 +70,7 @@ $activeMenu = 'peminjaman-saya';
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                         
-                                        <form action="<?= (BASE_URL ?? '.') . '/mahasiswa/equipment/bookings/' . $row['id'] . '/delete' ?>" method="POST" class="inline">
+                                        <form action="<?= (BASE_URL ?? '.') . '/anggota-lab/equipment/bookings/' . $row['id'] . '/delete' ?>" method="POST" class="inline">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button type="submit" 
                                                     class="text-red-600 hover:text-red-900" 

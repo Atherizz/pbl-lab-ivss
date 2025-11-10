@@ -61,7 +61,7 @@ class AuthController extends Controller
                     $this->redirect('/admin-berita/dashboard');
                     exit;
                 } else {
-                    $this->redirect('/mahasiswa/dashboard');
+                    $this->redirect('/anggota-lab/dashboard');
                     exit;
                 }
 

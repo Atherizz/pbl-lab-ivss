@@ -22,8 +22,8 @@ class DashboardController extends Controller
         view('admin_news.index', []);
     }
 
-    public function mahasiswa()
+    public function anggota_lab()
     {
-        view('mahasiswa.index', []);
+        view('anggota_lab.index', []);
     }
 }

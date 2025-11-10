@@ -53,17 +53,11 @@ CREATE TABLE research_projects (
     start_date DATE NULL,
     end_date DATE NULL,
     publication_url TEXT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'proposal'
-        CHECK (status IN ('proposal', 'pending_approval', 'active', 'completed', 'rejected')),
+    status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
+        CHECK (status IN ('pending_approval', 'pending_approval', 'active', 'completed', 'rejected')),
     primary_investigator_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL
 );
 
-CREATE TABLE research_user (
-    id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    research_project_id BIGINT NOT NULL REFERENCES research_projects(id) ON DELETE CASCADE,
-    UNIQUE(user_id, research_project_id) 
-);
 
 CREATE TABLE news (
     id BIGSERIAL PRIMARY KEY,
@@ -84,4 +78,57 @@ CREATE TABLE registration_requests (
     status VARCHAR(50) NOT NULL DEFAULT 'pending_admin_approval'
         CHECK (status IN ('pending_admin_approval', 'rejected')),
     rejection_reason TEXT NULL 
+);
+
+-- MIGRATION 2
+
+-- BUAT TABLE DATASETS
+CREATE TABLE datasets (
+  id BIGSERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NULL,           
+  urls JSONB NOT NULL DEFAULT '[]',   
+  file_url TEXT NOT NULL, 
+  tags TEXT[] NULL, -- Tag sederhana, mis: {'vision','YOLO','dataset-wajah'}
+);
+
+-- HAPUS ISI TABLE PENELITIAN TERLEBIH DAHULU
+truncate research_projects cascade;
+
+
+-- UBAH STRUKUTR TABLE PENELITIAN
+ALTER TABLE research_projects
+RENAME COLUMN primary_investigator_id TO user_id;
+
+ALTER TABLE research_projects
+ADD COLUMN dospem_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL;
+
+ALTER TABLE research_projects
+DROP CONSTRAINT research_projects_status_check;
+
+ALTER TABLE research_projects
+ALTER COLUMN status SET DEFAULT 'pending_approval',
+ADD CONSTRAINT research_projects_status_check
+    CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head', 'completed', 'rejected'));
+
+-- HAPUS DULU USER DENGAN ROLE MAHASISWA
+delete from users where email = 'savero@gmail.com';
+
+
+-- UBAH ROLE USER
+ALTER TABLE users
+DROP CONSTRAINT users_role_check;
+
+ALTER TABLE users
+ADD CONSTRAINT users_role_check
+  CHECK (role IN ('admin_lab', 'admin_berita', 'anggota_lab'));
+
+-- BUAT USER LAGI
+INSERT INTO users (name, email, password, role, account_status) 
+VALUES (
+    'Savero', 
+    'savero@gmail.com', 
+    '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 
+    'anggota_lab', 
+    'active'
 );

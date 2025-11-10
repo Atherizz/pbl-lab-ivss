@@ -37,16 +37,16 @@ Class AuthMiddleware {
     } 
     public function requireAdminNews() {
         if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_berita') {
-            header('Location: ' . BASE_URL . '/');;
+            header('Location: ' . BASE_URL . '/login');
             exit;
         }
     } 
 
-    public function requireMahasiswa() {
-        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'mahasiswa') {
-            header('Location: ' . BASE_URL . '/');;
+    public function requireAnggotaLab() {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'anggota_lab') {
+            header('Location: ' . BASE_URL . '/login');
             exit;
         }
-    } 
+    }
 
 }
