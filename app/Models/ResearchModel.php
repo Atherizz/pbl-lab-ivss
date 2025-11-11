@@ -47,9 +47,28 @@ class ResearchModel extends Model
         ]);
     }
 
+    /**
+     * Update status research
+     * @param int $id
+     * @param string $status
+     * @return bool
+     */
+    public function updateStatus($id, $status)
+    {
+
+        $sql = "UPDATE {$this->table} SET status = :status WHERE id = :id";
+        $query = $this->db->prepare($sql);
+        return $query->execute([
+            'id' => $id,
+            'status' => $status
+        ]);
+    }
+
 
     public function update($id, $data)
     {
+        if (!isset($id, $data)) return false;
+        
         $sql = "UPDATE {$this->table} SET
                     title = :title,
                     description = :description,
@@ -69,6 +88,8 @@ class ResearchModel extends Model
 
     public function delete($id)
     {
+        if (!isset($id)) return false;
+        
         $sql = "DELETE FROM {$this->table} WHERE id = :id";
         $query = $this->db->prepare($sql);
         return $query->execute(['id' => $id]);
