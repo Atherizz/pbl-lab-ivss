@@ -38,6 +38,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                             <?php endif; ?>
                         </div>
                         
+                        <?php if ($_SESSION['user']['role'] === 'mahasiswa'): ?>
                         <div>
                             <label for="dospem_id" class="block text-sm font-medium text-gray-700">
                                 Supervisor (Dosen Pembimbing) <span class="text-red-500">*</span>
@@ -57,7 +58,8 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                                 <p class="mt-1 text-xs text-red-600"><?= htmlspecialchars($errors['dospem_id']) ?></p>
                             <?php endif; ?>
                         </div>
-
+                        <?php endif; ?>
+                        
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700">
                                 Description / Abstract <span class="text-red-500">*</span>

@@ -34,13 +34,25 @@ class ResearchController extends Controller
 
     public function create()
     {
-        $dospemList = $this->userModel->getSupervisors();
+        $data = [];
+        $userRole = $_SESSION['user']['role'] ?? null;
 
-        view('anggota_lab.research.create', [
+        $dospemList = $this->userModel->getAllAnggotaLab();
+
+        if ($userRole === 'mahasiswa') {
+            $data = [
             'dospemList' => $dospemList,
             'old' => [],
             'errors' => []
-        ]);
+            ];
+        } else {
+            $data = [
+            'old' => [],
+            'errors' => []
+            ];
+        }
+
+        view('anggota_lab.research.create', $data);
     }
 
     public function store()
@@ -53,7 +65,7 @@ class ResearchController extends Controller
             $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {
-                $dospemList = $this->userModel->getSupervisors();
+                $dospemList = $this->userModel->getAllAnggotaLab();
 
                 view('anggota_lab.research.create', [
                     'header' => 'Ajukan Riset Baru',
@@ -64,10 +76,7 @@ class ResearchController extends Controller
                 return;
             }
 
-            // --- LOGIKA STATUS AWAL BARU ---
-            // Asumsi: 'anggota_lab' adalah mahasiswa.
-            // Role lain (admin_lab, dll) adalah non-mahasiswa.
-            $initialStatus = ($userRole === 'anggota_lab') ? 'pending_approval' : 'approved_by_dospem';
+            $initialStatus = ($userRole === 'mahasiswa') ? 'pending_approval' : 'approved_by_dospem';
 
             $researchData = [
                 'title' => $data['title'],
@@ -75,7 +84,7 @@ class ResearchController extends Controller
                 'publication_url' => $data['publication_url'] ?? null,
                 'dospem_id' => $data['dospem_id'],
                 'user_id' => $userId,
-                'status' => $initialStatus // Diubah dari 'pending_approval'
+                'status' => $initialStatus 
             ];
 
             $this->model->create($researchData);
@@ -90,7 +99,7 @@ class ResearchController extends Controller
     {
         $research = $this->model->getById($id);
         $userId = $_SESSION['user']['id'] ?? null;
-        $dospemList = $this->userModel->getSupervisors();
+        $dospemList = $this->userModel->getAllAnggotaLab();
 
         if (!$this->canUserManageProposal($research, $userId)) {
             $this->redirect('/anggota-lab/research');
@@ -115,7 +124,7 @@ class ResearchController extends Controller
 
             if (!empty($errors)) {
                 $research = $this->model->getById($id);
-                $dospemList = $this->userModel->getSupervisors();
+                $dospemList = $this->userModel->getAllAnggotaLab();
 
                 view('anggota_lab.research.edit', [
                     'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
@@ -177,10 +186,7 @@ class ResearchController extends Controller
         if (empty(trim($data['description'] ?? ''))) {
             $errors['description'] = 'Description / Abstract is required.';
         }
-        // Validasi dospem_id
-        if (empty(trim($data['dospem_id'] ?? ''))) {
-            $errors['dospem_id'] = 'Supervisor (Dosen Pembimbing) is required.';
-        }
+
         return $errors;
     }
 
