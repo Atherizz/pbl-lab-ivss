@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -14,15 +15,17 @@ return [
         '/admin-lab/equipment/{id}/edit' => ['controller' => EquipmentController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/create' => ['controller' => EquipmentController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
+        '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
+        '/admin-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalAdminView', 'middleware' => 'admin_lab'],
         '/admin-berita/news/{id}/edit' => ['controller' => NewsController::class, 'action' => 'edit', 'middleware' => 'admin_berita'],
         '/admin-berita/news/create' => ['controller' => NewsController::class, 'action' => 'create', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'index', 'middleware' => 'admin_berita'],
-        '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
         '/admin-berita/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_berita', 'middleware' => 'auth'],
         '/anggota-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'anggota_lab', 'middleware' => 'auth'],
         '/anggota-lab/research' => ['controller' => ResearchController::class, 'action' => 'index', 'middleware' => 'auth'],
         '/anggota-lab/research/create' => ['controller' => ResearchController::class, 'action' => 'create', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}/edit' => ['controller' => ResearchController::class, 'action' => 'edit', 'middleware' => 'auth'],
+        '/anggota-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalDospemView', 'middleware' => 'anggota_lab'],
         '/anggota-lab/equipment/bookings/create' => ['controller' => EquipmentBookingController::class, 'action' => 'create', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'index', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],

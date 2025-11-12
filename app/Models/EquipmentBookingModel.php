@@ -28,13 +28,13 @@ class EquipmentBookingModel extends Model
             JOIN 
                 equipment e ON eb.equipment_id = e.id
             JOIN 
-                users u ON eb.user_id = u.id
+                users u ON eb.user_id = u.id WHERE eb.status = :status
             ORDER BY 
                 eb.start_date DESC
         ";
         
         $query = $this->db->prepare($query_sql);
-        $query->execute();
+        $query->execute(['status' => 'pending_approval']);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 

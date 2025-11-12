@@ -9,26 +9,26 @@ class RegistrationRequestModel extends Model
 {
     protected $table = 'registration_requests';
 
-    public function getAllRequests()
+    public function getAllRequestsAdmin()
     {
         $query = $this->db->prepare("
-            SELECT rr.*, u.name as dospem_name 
-            FROM {$this->table} rr
-            LEFT JOIN users u ON rr.dospem_id = u.id
-            ORDER BY rr.created_at DESC
-        ");
-        $query->execute();
+        SELECT rr.*, u.name as dospem_name 
+        FROM {$this->table} rr
+        LEFT JOIN users u ON rr.dospem_id = u.id
+        WHERE rr.status = :status
+
+    ");
+        $query->execute(['status' => 'approved_by_dospem']);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public function getRequestsByDospem($dospemId)
     {
         $query = $this->db->prepare("
-            SELECT * FROM {$this->table} 
-            WHERE dospem_id = :dospem_id 
-            ORDER BY created_at DESC
+            SELECT rr.*, u.name as dospem_name FROM {$this->table} rr LEFT JOIN users u ON rr.dospem_id = u.id 
+            WHERE rr.dospem_id = :dospem_id AND status = :status
+
         ");
-        $query->execute(['dospem_id' => $dospemId]);
+        $query->execute(['dospem_id' => $dospemId, 'status' => 'pending_approval']);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -58,7 +58,7 @@ class RegistrationRequestModel extends Model
             (nim, name, password, dospem_id, registration_purpose, status) 
             VALUES (:nim, :name, :password, :dospem_id, :registration_purpose, :status)
         ");
-        
+
         return $query->execute([
             'nim' => $data['nim'],
             'name' => $data['name'],
@@ -100,5 +100,4 @@ class RegistrationRequestModel extends Model
         $query = $this->db->prepare("DELETE FROM {$this->table} WHERE id = :id");
         return $query->execute(['id' => $id]);
     }
-
 }
