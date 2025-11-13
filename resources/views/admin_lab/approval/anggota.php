@@ -1,15 +1,19 @@
-<?php 
+<?php
 $pageTitle = 'Member Approval';
 $activeMenu = 'approval-anggota';
 ?>
 
-<?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
+<?php require BASE_PATH . '/resources/views/layouts/dashboard.php';
+$userRole = $_SESSION['user']['role'];
+
+
+?>
 
 <div class="py-12">
   <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
       <div class="p-6 bg-white border-b border-gray-200">
-        
+
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-semibold text-gray-700">Member Approvals</h2>
@@ -30,7 +34,7 @@ $activeMenu = 'approval-anggota';
 
             <tbody class="bg-white divide-y divide-gray-200">
               <?php if (!empty($userRequest)): ?>
-                <?php foreach ($userRequest as $row): ?> 
+                <?php foreach ($userRequest as $row): ?>
                   <tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <?= htmlspecialchars($row['nim'] ?? $row['id']) ?>
@@ -53,27 +57,36 @@ $activeMenu = 'approval-anggota';
 
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center justify-center gap-2">
-                        <button 
+                        <button
                           onclick="openModal('modal-<?= $row['id'] ?>')"
                           class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
                           title="View Details">
                           <i class="fas fa-eye mr-1"></i> Detail
                         </button>
+                        <form method="POST"
+                          action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                    default       => ''
+                                  }) . '/approval/anggota/approve/' . $row['id'] ?>"
+                          class="inline">
 
-                        <form method="POST" action="<?= BASE_URL ?>/admin/approval/anggota/approve/<?= $row['id'] ?>" class="inline">
-                          <button type="submit" 
-                                  onclick="return confirm('Approve this registration?')"
-                                  class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
-                                  title="Approve">
+                          <button type="submit"
+                            onclick="return confirm('Approve this registration?')"
+                            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                            title="Approve">
                             <i class="fas fa-check mr-1"></i> Approve
                           </button>
                         </form>
 
-                        <form method="POST" action="<?= BASE_URL ?>/admin/approval/anggota/reject/<?= $row['id'] ?>" class="inline">
-                          <button type="submit" 
-                                  onclick="return confirm('Reject this registration?')"
-                                  class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                                  title="Reject">
+                        <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                  }) . '/approval/anggota/reject/' . $row['id'] ?>" class="inline">
+                          <button type="submit"
+                            onclick="return confirm('Reject this registration?')"
+                            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                            title="Reject">
                             <i class="fas fa-times mr-1"></i> Reject
                           </button>
                         </form>
@@ -101,8 +114,8 @@ $activeMenu = 'approval-anggota';
           <div class="mt-4">
             <nav class="flex justify-between items-center text-sm text-gray-500">
               <span>
-                Showing <span class="font-medium">1</span> to 
-                <span class="font-medium"><?= count($userRequest) ?></span> of 
+                Showing <span class="font-medium">1</span> to
+                <span class="font-medium"><?= count($userRequest) ?></span> of
                 <span class="font-medium"><?= count($userRequest) ?></span> entries
               </span>
               <div class="flex space-x-1">
@@ -167,21 +180,27 @@ $activeMenu = 'approval-anggota';
           </div>
 
           <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
-            <button onclick="closeModal('modal-<?= $row['id'] ?>')" 
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button onclick="closeModal('modal-<?= $row['id'] ?>')"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               Close
             </button>
-            <form method="POST" action="<?= BASE_URL ?>/admin/approval/anggota/reject/<?= $row['id'] ?>" class="inline">
-              <button type="submit" 
-                      onclick="return confirm('Reject this registration?')"
-                      class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+            <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                  }) . '/approval/anggota/reject/' . $row['id'] ?>" class="inline">
+              <button type="submit"
+                onclick="return confirm('Reject this registration?')"
+                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
                 <i class="fas fa-times mr-2"></i>Reject
               </button>
             </form>
-            <form method="POST" action="<?= BASE_URL ?>/admin/approval/anggota/approve/<?= $row['id'] ?>" class="inline">
-              <button type="submit" 
-                      onclick="return confirm('Approve this registration?')"
-                      class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">
+            <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                  }) . '/approval/anggota/approve/' . $row['id'] ?>" class="inline">
+              <button type="submit"
+                onclick="return confirm('Approve this registration?')"
+                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">
                 <i class="fas fa-check mr-2"></i>Approve
               </button>
             </form>
@@ -197,6 +216,7 @@ $activeMenu = 'approval-anggota';
     document.getElementById(modalId).classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
+
   function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
     document.body.style.overflow = 'auto';

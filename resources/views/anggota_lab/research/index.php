@@ -2,10 +2,8 @@
 $pageTitle = 'Riset Anggota Lab';
 $activeMenu = 'riset-saya';
 
-// Diasumsikan BASE_PATH sudah didefinisikan di file index.php utama
 require BASE_PATH . '/resources/views/layouts/dashboard.php';
 
-// Disesuaikan dengan status baru dari migrasi
 $status_classes = [
     'pending_approval' => 'bg-yellow-100 text-yellow-800', // Status 'proposal' diganti
     'approved_by_dospem' => 'bg-blue-100 text-blue-800',

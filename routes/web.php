@@ -18,6 +18,7 @@ return [
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
         '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
         '/admin-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalAdminView', 'middleware' => 'admin_lab'],
+        '/admin-lab/publication' => ['controller' => ResearchController::class, 'action' => 'direktori', 'middleware' => 'admin_lab'],
         '/admin-berita/news/{id}/edit' => ['controller' => NewsController::class, 'action' => 'edit', 'middleware' => 'admin_berita'],
         '/admin-berita/news/create' => ['controller' => NewsController::class, 'action' => 'create', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'index', 'middleware' => 'admin_berita'],
@@ -39,6 +40,8 @@ return [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],
         '/register' => ['controller' => AuthController::class, 'action' => 'register', 'middleware' => 'guest'],
         '/logout' => ['controller' => AuthController::class, 'action' => 'logout', 'middleware' => 'auth'],
+        '/admin-lab/approval/{type}/approve/{id}' => ['controller' => ApprovalController::class, 'action' => 'approveRequestAdminLab', 'middleware' => 'admin_lab'],
+        '/admin-lab/approval/{type}/reject/{id}' => ['controller' => ApprovalController::class, 'action' => 'rejectRequestAdminLab', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/{id}/delete' => ['controller' => EquipmentController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/{id}' => ['controller' => EquipmentController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
@@ -48,8 +51,11 @@ return [
         '/anggota-lab/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}' => ['controller' => ResearchController::class, 'action' => 'update', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}/delete' => ['controller' => ResearchController::class, 'action' => 'destroy', 'middleware' => 'auth'],
+        '/anggota-lab/equipment/bookings/return/{id}' => ['controller' => EquipmentBookingController::class, 'action' => 'returnEquipment', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/bookings/{id}/delete' => ['controller' => EquipmentBookingController::class, 'action' => 'destroy', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'store', 'middleware' => 'mahasiswa'],
+        '/anggota-lab/approval/{type}/approve/{id}' => ['controller' => ApprovalController::class, 'action' => 'approveRequestDospem', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/approval/{type}/reject/{id}' => ['controller' => ApprovalController::class, 'action' => 'rejectRequestDospem', 'middleware' => 'anggota_lab'],
     ],
 ];
 ?>

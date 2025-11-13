@@ -9,7 +9,7 @@ use App\Models\UserModel;
 class ResearchController extends Controller
 {
     private $model;
-    private $userModel; 
+    private $userModel;
 
     public function __construct()
     {
@@ -38,15 +38,15 @@ class ResearchController extends Controller
         if (!$userId) {
             $this->redirect('/login');
         }
-        $statusFilter = $_GET['status'] ?? 'all'; 
+        $statusFilter = $_GET['status'] ?? 'all';
         $searchQuery = $_GET['search'] ?? null;
 
         $research = $this->model->getAll($statusFilter, $searchQuery);
 
         view('anggota_lab.research.direktori', [
-            'research' => $research, 
-            'currentStatus' => $statusFilter,   
-            'currentSearch' => $searchQuery,   
+            'research' => $research,
+            'currentStatus' => $statusFilter,
+            'currentSearch' => $searchQuery,
         ]);
     }
 
@@ -59,14 +59,14 @@ class ResearchController extends Controller
 
         if ($userRole === 'mahasiswa') {
             $data = [
-            'dospemList' => $dospemList,
-            'old' => [],
-            'errors' => []
+                'dospemList' => $dospemList,
+                'old' => [],
+                'errors' => []
             ];
         } else {
             $data = [
-            'old' => [],
-            'errors' => []
+                'old' => [],
+                'errors' => []
             ];
         }
 
@@ -94,7 +94,13 @@ class ResearchController extends Controller
                 return;
             }
 
-            $initialStatus = ($userRole === 'mahasiswa') ? 'pending_approval' : 'approved_by_dospem';
+            if ($userRole === 'mahasiswa') {
+                $initialStatus = 'pending_approval';
+            } elseif ($userRole === 'anggota_lab') {
+                $initialStatus = 'approved_by_dospem';
+            } elseif ($userRole === 'admin_lab') {
+                $initialStatus = 'approved_by_head';
+            }
 
             $researchData = [
                 'title' => $data['title'],
@@ -102,7 +108,7 @@ class ResearchController extends Controller
                 'publication_url' => $data['publication_url'] ?? null,
                 'dospem_id' => $data['dospem_id'],
                 'user_id' => $userId,
-                'status' => $initialStatus 
+                'status' => $initialStatus
             ];
 
             $this->model->create($researchData);
@@ -180,6 +186,7 @@ class ResearchController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $userId = $_SESSION['user']['id'] ?? null;
+            $userRole = $_SESSION['user']['role'] ?? null;
             $research = $this->model->getById($id);
 
             if (!$this->canUserManageProposal($research, $userId)) {
@@ -214,11 +221,13 @@ class ResearchController extends Controller
             return false;
         }
 
-        if ($research['user_id'] != $userId) {
+        $user = $this->userModel->getById($userId);
+
+        if ($research['user_id'] != $userId && $user['role'] != 'admin_lab') {
             return false;
         }
 
-        if (!in_array($research['status'], ['pending_approval', 'rejected'])) {
+        if (!in_array($research['status'], ['pending_approval', 'rejected']) && $user['role'] != 'admin_lab') {
             return false;
         }
         return true;

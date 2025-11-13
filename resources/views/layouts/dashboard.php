@@ -63,10 +63,16 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Equipment</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/publication"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-book w-5 text-center"></i>
-                    <span class="font-medium">Publikasi</span>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-flask w-5 text-center"></i>
+                    <span class="font-medium">Riset Saya</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Riset Lab</span>
                 </a>
 
                 <a href="<?= BASE_URL ?? '.' ?>/admin-lab/anggota"

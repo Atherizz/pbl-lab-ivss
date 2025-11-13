@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\UploadService;
 
 class NewsController extends Controller
 {
     private $model;
     private $uploadDir;
     private $itemsPerPage = 5;
+    public $uploadService;
     public $error = '';
 
     public function __construct()
@@ -16,78 +18,13 @@ class NewsController extends Controller
         parent::__construct();
         $this->model = $this->model('NewsModel');
         $this->uploadDir = __DIR__ . '/../../../public/uploads/news/';
+        $this->uploadService = new UploadService();
         
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
         }
     }
 
-    public function uploadImage($fileInputName = 'image_file')
-    {
-        if (!isset($_FILES[$fileInputName]) || $_FILES[$fileInputName]['error'] === UPLOAD_ERR_NO_FILE) {
-            $this->error = "No file selected!";
-            return false;
-        }
-
-        $file = $_FILES[$fileInputName];
-        $target_dir = $this->uploadDir;
-        $target_file = $target_dir . basename($file["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // Cek apakah file adalah gambar
-        $check = getimagesize($file["tmp_name"]);
-        if ($check === false) {
-            $this->error = "File is not an image!";
-            return false;
-        }
-
-        // Cek ukuran file (max 5MB)
-        if ($file["size"] > 5 * 1024 * 1024) {
-            $this->error = "Sorry, your file is too large! Maximum 5MB.";
-            return false;
-        }
-
-        // Cek format file yang diizinkan
-        $allowedTypes = ["jpg", "jpeg", "png", "gif"];
-        if (!in_array($imageFileType, $allowedTypes)) {
-            $this->error = "Only JPG, JPEG, PNG, and GIF are allowed!";
-            return false;
-        }
-
-        // Cek apakah direktori ada dan writable
-        if (!is_dir($target_dir) || !is_writable($target_dir)) {
-            $this->error = "Upload directory is not writable or does not exist: " . $target_dir;
-            return false;
-        }
-
-        // Generate unique filename untuk menghindari duplikat
-        $uniqueName = time() . '_' . uniqid() . '.' . $imageFileType;
-        $target_file = $target_dir . $uniqueName;
-
-        // Upload file
-        if (move_uploaded_file($file["tmp_name"], $target_file)) {
-            return $uniqueName;
-        } else {
-            $this->error = "There was an error while uploading!";
-            return false;
-        }
-    }
-
-    public function deleteImage($fileName)
-    {
-        if (empty($fileName)) {
-            return true;
-        }
-
-        $filePath = $this->uploadDir . basename($fileName);
-        
-        if (file_exists($filePath)) {
-            return unlink($filePath);
-        }
-        
-        return true;
-    }
 
     public function index()
     {
@@ -155,9 +92,9 @@ class NewsController extends Controller
             // Upload image
             $imageFileName = null;
             if (!empty($_FILES['image_file']['name'])) {
-                $imageFileName = $this->uploadImage('image_file');
+                $imageFileName = $this->uploadService->uploadImage($this->uploadDir, 'image_file');
                 if (!$imageFileName) {
-                    $errors[] = $this->error;
+                    $errors[] = $this->uploadService->error;
                 }
             } else {
                 $errors[] = 'Image file is required.';
@@ -206,10 +143,10 @@ class NewsController extends Controller
 
             // Cek apakah ada upload file baru
             if (!empty($_FILES['image_file']['name'])) {
-                $newImageFileName = $this->uploadImage('image_file');
+                $newImageFileName = $this->uploadService->uploadImage($this->uploadDir, 'image_file');
                 
                 if (!$newImageFileName) {
-                    $errors = [$this->error];
+                    $errors = [$this->uploadService->error];
                     view('admin_news.news.edit', ['errors' => $errors, 'news' => $news]);
                     return;
                 }
@@ -217,7 +154,7 @@ class NewsController extends Controller
                 // Hapus gambar lama
                 if (!empty($news['image_url'])) {
                     $oldFileName = basename($news['image_url']);
-                    $this->deleteImage($oldFileName);
+                    $this->uploadService->deleteImage($this->uploadDir, $oldFileName);
                 }
 
                 $imageUrl = 'uploads/news/' . $newImageFileName;
@@ -250,7 +187,7 @@ class NewsController extends Controller
             // Hapus image file
             if (!empty($news['image_url'])) {
                 $fileName = basename($news['image_url']);
-                $this->deleteImage($fileName);
+                $this->uploadService->deleteImage($this->uploadDir, $fileName);
             }
 
             // Hapus dari database

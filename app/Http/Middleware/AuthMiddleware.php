@@ -22,13 +22,6 @@ Class AuthMiddleware {
         }
     }
     
-    public function getUserRole() {
-        if (self::isLoggedIn()) {
-            return $_SESSION['user_role'];
-        }
-        return null;
-    }
-    
     public function requireAdminLab() {
         if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_lab') {
             header('Location: ' . BASE_URL . '/');;
@@ -43,7 +36,7 @@ Class AuthMiddleware {
     } 
 
     public function requireAnggotaLab() {
-        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'anggota_lab') {
+        if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'anggota_lab' && !$_SESSION['user']['role'] !== 'admin_lab') {
             header('Location: ' . BASE_URL . '/login');
             exit;
         }

@@ -3,17 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\ApprovalService;
 
 class ApprovalController extends Controller
 {
     private $registrationRequestModel;
     private $equipmentBookingModel;
+    private $researchModel;
+    private $approvalService;
+
 
     public function __construct()
     {
         parent::__construct();
         $this->registrationRequestModel = $this->model('RegistrationRequestModel');
         $this->equipmentBookingModel = $this->model('EquipmentBookingModel');
+        $this->researchModel = $this->model('ResearchModel');
+        $this->approvalService = new ApprovalService();
     }
 
  
@@ -52,48 +58,60 @@ class ApprovalController extends Controller
                     'userRequest' => $userRequest
                 ];
         } else {
-
+            $publication = $this->researchModel->getResearchByDospemId($userId);
+                $data = [
+                    'publication' => $publication
+                ];
         }
 
         view('admin_lab.approval.' . $type, $data);
     
     }
-
-    // REGISTRATION LIST
-    // public function registrationList()
-    // {
-    //     $userRole = $_SESSION['user']['role'];
-
-    //     if ($userRole === 'dospem') {
-    //         // Show only: status = 'pending_approval'
-    //         // dan dospem_id = current user id
-    //     }
-
-    //     if ($userRole === 'admin_lab') {
-    //         // Show only: status = 'approved_by_dospem'
-    //     }
-    // }
-
     // REGISTRASI USER
-    public function approveRegistrationDospem($id) {}
+    public function approveRequestAdminLab($type, $id) {
+        $action = ($type === 'peminjaman') ? 'approve' : 'approve_admin';
+        $result = $this->approvalService->validateApproval($type, $id, $action);
 
-    public function rejectRegistrationDospem($id) {}
+        if (!$result['valid']) {
+            $this->redirect('/admin-lab/approval/' . $type);
+            return;
+        }
 
-    public function approveRegistrationAdminLab($id) {}
+        $this->approvalService->approveByAdminLab($type, $id);
+        $this->redirect('/admin-lab/approval/' . $type);
+    }
 
-    public function rejectRegistrationAdminLab($id) {}
+    public function rejectRequestAdminLab($type, $id) {
+        $reason = $_POST['reason'] ?? null;
+        $result = $this->approvalService->validateApproval($type, $id, 'reject');
+        if (!$result['valid']) {
+            $this->redirect('/admin-lab/approval/' . $type);
+            return;
+        }
+        $this->approvalService->rejectByAdminLab($type, $id, $reason);
+        $this->redirect('/admin-lab/approval/' . $type);
+    }
 
-    // BOOKING
-    public function approveBookingAdminLab($id) {}
+    public function approveRequestDospem($type, $id) {
+        $result = $this->approvalService->validateApproval($type, $id, 'approve_dospem');
+        if (!$result['valid']) {
+            $this->redirect('/anggota-lab/approval/' . $type);
+            return;
+        }
+        $this->approvalService->approveByDospem($type, $id);
+        $this->redirect('/anggota-lab/approval/' . $type);
+    }
 
-    public function rejectBookingAdminLab($id) {}
+    public function rejectRequestDospem($type, $id) {
+        $reason = $_POST['reason'] ?? null;
+        $result = $this->approvalService->validateApproval($type, $id, 'reject');
+        if (!$result['valid']) {
+            $this->redirect('/anggota-lab/approval/' . $type);
+            return;
+        }
+        $this->approvalService->rejectByDospem($type, $id, $reason);
+        $this->redirect('/anggota-lab/approval/' . $type);
+    }
 
-    // RESEARCH
-    public function approveResearchDospem($id) {}
 
-    public function rejectResearchDospem($id) {}
-
-    public function approveResearchAdminLab($id) {}
-
-    public function rejectResearchAdminLab($id) {}
 }
