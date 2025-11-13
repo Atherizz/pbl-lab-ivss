@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ResearchController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentBookingController;
 
 return [
@@ -29,6 +30,8 @@ return [
         '/anggota-lab/equipment/bookings/create' => ['controller' => EquipmentBookingController::class, 'action' => 'create', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'index', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],
+        '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'index', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/profile/edit' => ['controller' => ProfileController::class, 'action' => 'edit', 'middleware' => 'anggota_lab'],
         '/' => ['view' => 'home', 'middleware' => 'guest'],
     ],
     'POST' => [

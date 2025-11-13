@@ -226,11 +226,13 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     x-transition
                     class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
-                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin' ?>/profile"
+                    <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
+                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin-lab' ?>/profile"
                         class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-gray-400"></i>
                         My Profile
                     </a>
+                    <?php endif; ?>
                     <form method="POST" action="<?= BASE_URL ?? '.' ?>/logout">
                         <button type="submit"
                             class="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100">

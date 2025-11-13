@@ -192,3 +192,45 @@ VALUES
 
 -- 🎓 Mahasiswa (NIM)
 ('Savero Athallah', '2441720001', '$2y$10$QO/LnId/OIRXosK2QpJkfeiRVrx5JKM3fLojypGQg6n2W0s3hl0HO', 'mahasiswa', 'active');
+
+-- MIGRATION 5
+
+CREATE TYPE major_enum AS ENUM (
+  'Teknik Informatika',
+  'Sistem Informasi Bisnis',
+  'Pengembangan Piranti Lunak Situs',
+  'Rekayasa Teknologi Informasi'
+);
+
+CREATE TABLE lab_user_profiles (
+  user_id            BIGINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+
+  nip                VARCHAR(30) UNIQUE,
+  nidn               VARCHAR(30) UNIQUE,
+  major              major_enum,       
+  email              VARCHAR(255),
+  photo_url          TEXT,
+
+  -- object: { "linkedin": "...", "google_scholar": "...", "sinta": "...", "cv": "...", "website": "...", ... }
+  social_links       JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+  -- array of strings: ["Data Science","Machine Learning","IR"]
+  research_focus     JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  -- array of objects:
+  -- [ { "level":"S2", "degree":"Teknik Informatika", "institution":"ITS", "start_year":2014, "end_year":2016 },
+  --   { "level":"S1", "degree":"Ilmu Komputer", "institution":"UB",  "start_year":2009, "end_year":2014 } ]
+  educations         JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  -- array of objects:
+  -- [ { "name":"IT Specialist - AI", "issuer":"Pearson VUE", "issued_on":"2025-02-01", "expires_on":null, "credential_url":"..." }, ... ]
+  certifications     JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  -- sanity checks tipe JSON
+  CONSTRAINT chk_social_object       CHECK (jsonb_typeof(social_links)   = 'object'),
+  CONSTRAINT chk_focus_array         CHECK (jsonb_typeof(research_focus) = 'array'),
+  CONSTRAINT chk_edu_array           CHECK (jsonb_typeof(educations)     = 'array'),
+  CONSTRAINT chk_cert_array          CHECK (jsonb_typeof(certifications) = 'array')
+);
+
+
