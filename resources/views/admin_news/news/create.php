@@ -7,8 +7,7 @@ $old_data = $old_data ?? ['title' => '', 'content' => '', 'image_file' => ''];
 ?>
 
 <?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
-<!-- Tambahkan Tailwind CSS jika belum ada di dashboard.php -->
-<script src="https://cdn.tailwindcss.com"></script>
+
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -26,8 +25,6 @@ $old_data = $old_data ?? ['title' => '', 'content' => '', 'image_file' => ''];
                     </div>
                 <?php endif; ?>
 
-                <!-- Form untuk membuat berita baru -->
-                <!-- PENTING: action diset ke path 'store' dan memiliki enctype="multipart/form-data" -->
                 <form action="<?= BASE_URL ?? '.' ?>/admin-berita/news" method="POST" enctype="multipart/form-data">
                     <div class="space-y-6">
                         <div>

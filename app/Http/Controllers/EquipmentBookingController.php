@@ -3,22 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\UploadService;
 
 class EquipmentBookingController extends Controller
 {
     private $model;
     private $equipmentModel;
+    private $uploadDir;
+
+    public $uploadService;
 
     public function __construct()
     {
         parent::__construct();
         $this->model = $this->model('EquipmentBookingModel'); 
         $this->equipmentModel = $this->model('EquipmentModel');
+        $this->uploadDir = __DIR__ . '/../../../public/uploads/booking/';
+        $this->uploadService = new UploadService();
+        
+        if (!is_dir($this->uploadDir)) {
+            mkdir($this->uploadDir, 0777, true);
+        }
     }
 
     public function index()
     {
-        $bookings = $this->model->getAllBookings();
+        $userId = $_SESSION['user']['id'];
+        $bookings = $this->model->getMyBookings($userId);
         view('anggota_lab.equipment.bookings.index', ['bookings' => $bookings]);
     }
 
@@ -97,16 +108,20 @@ class EquipmentBookingController extends Controller
         }
     }
 
-    public function updateStatus($id)
+    public function returnEquipment($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' || ($_POST['_method'] ?? '') === 'PATCH') {
-            $status = trim($_POST['status'] ?? '');
-
-            if (!in_array($status, ['approved', 'rejected', 'returned', 'pending_approval'])) {
-                return; 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' || ($_POST['_method'] ?? '') === 'PUT') {
+            $booking = $this->model->getById($id);
+            if ($booking) {
+                $this->equipmentModel->updateStatus($booking['equipment_id'], 'available');
             }
-            
-            $this->model->updateBookingStatus($id, $status);
+
+            if (!empty($_FILES['image_file']['name'])) {
+                $newImageFileName = $this->uploadService->uploadImage($this->uploadDir, 'image_file');
+                $imageUrl = 'uploads/booking/' . $newImageFileName;
+            }
+
+            $this->model->updateBookingStatus($id, 'returned', $imageUrl);
             $this->redirect('/anggota-lab/equipment/bookings');
         }
     }

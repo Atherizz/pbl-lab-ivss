@@ -57,4 +57,14 @@ class EquipmentModel extends Model
         $query = $this->db->prepare("DELETE FROM equipment WHERE id = :id");
         return $query->execute(['id' => $id]);
     }
+
+
+    public function updateStatus($id, string $status)
+    {
+        $query = $this->db->prepare("UPDATE {$this->table} SET status = :status WHERE id = :id");
+        return $query->execute([
+            'status' => $status,
+            'id' => $id
+        ]);
+    }
 }

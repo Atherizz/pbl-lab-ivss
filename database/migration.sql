@@ -233,4 +233,19 @@ CREATE TABLE lab_user_profiles (
   CONSTRAINT chk_cert_array          CHECK (jsonb_typeof(certifications) = 'array')
 );
 
+ALTER TABLE equipment_bookings
+ADD COLUMN return_proof_url TEXT NULL;
+
+ALTER TABLE registration_requests
+DROP CONSTRAINT registration_requests_status_check;
+
+ALTER TABLE registration_requests
+ADD CONSTRAINT registration_requests_status_check
+    CHECK (status IN (
+        'pending_approval',
+        'approved_by_dospem',
+        'approved_by_head',
+        'rejected'
+    ));
+
 

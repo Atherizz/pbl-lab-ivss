@@ -14,6 +14,7 @@ class ResearchModel extends Model
     $sql = "SELECT 
             r.*, 
             u_author.name AS author_name, 
+            u_author.role AS author_role,
             r.end_date AS publication_date  
         FROM {$this->table} r
         LEFT JOIN users u_author ON r.user_id = u_author.id 
