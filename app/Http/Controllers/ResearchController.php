@@ -9,7 +9,7 @@ use App\Models\UserModel;
 class ResearchController extends Controller
 {
     private $model;
-    private $userModel; // Tambahkan properti untuk UserModel
+    private $userModel; 
 
     public function __construct()
     {
@@ -29,6 +29,24 @@ class ResearchController extends Controller
 
         view('anggota_lab.research.index', [
             'researchList' => $researchList
+        ]);
+    }
+
+    public function direktori()
+    {
+        $userId = $_SESSION['user']['id'] ?? null;
+        if (!$userId) {
+            $this->redirect('/login');
+        }
+        $statusFilter = $_GET['status'] ?? 'all'; 
+        $searchQuery = $_GET['search'] ?? null;
+
+        $research = $this->model->getAll($statusFilter, $searchQuery);
+
+        view('anggota_lab.research.direktori', [
+            'research' => $research, 
+            'currentStatus' => $statusFilter,   
+            'currentSearch' => $searchQuery,   
         ]);
     }
 
@@ -200,8 +218,6 @@ class ResearchController extends Controller
             return false;
         }
 
-        // Hanya bisa diedit jika statusnya 'pending_approval' ATAU 'rejected'
-        // (Kita tambahkan 'rejected' agar bisa diperbaiki dan diajukan ulang)
         if (!in_array($research['status'], ['pending_approval', 'rejected'])) {
             return false;
         }

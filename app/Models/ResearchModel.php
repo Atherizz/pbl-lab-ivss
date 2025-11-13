@@ -9,6 +9,35 @@ class ResearchModel extends Model
 {
     protected $table = 'research_projects';
 
+    public function getAll(string $status = null, string $searchQuery = null)
+    {
+    $sql = "SELECT 
+            r.*, 
+            u_author.name AS author_name, 
+            r.end_date AS publication_date  
+        FROM {$this->table} r
+        LEFT JOIN users u_author ON r.user_id = u_author.id 
+        WHERE 1=1";
+
+    $params = [];
+
+    if ($status && $status !== 'all') {
+        $sql .= " AND r.status = :status";
+        $params['status'] = $status;
+    }
+
+    if ($searchQuery) {
+        $sql .= " AND r.title ILIKE :searchQuery"; 
+        $params['searchQuery'] = '%' . $searchQuery . '%';
+    }
+
+    $sql .= " ORDER BY r.id DESC";
+
+    $query = $this->db->prepare($sql);
+    $query->execute($params); 
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getByUserId($userId)
     {
         $sql = "SELECT r.*, u.name as dospem_name
@@ -54,12 +83,6 @@ class ResearchModel extends Model
         ]);
     }
 
-    /**
-     * Update status research
-     * @param int $id
-     * @param string $status
-     * @return bool
-     */
     public function updateStatus($id, $status)
     {
 
