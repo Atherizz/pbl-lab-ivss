@@ -3,7 +3,8 @@ $pageTitle = 'Research Approval';
 $activeMenu = 'approval-publikasi';
 ?>
 
-<?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
+<?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; 
+?>
 
 <div class="py-10">
 	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- Dikecilin lagi -->
@@ -27,38 +28,39 @@ $activeMenu = 'approval-publikasi';
 									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
 									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
 									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted By</th>
-									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supervisor</th>
-									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
-									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End</th>
 									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publication</th>
-									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
 									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200">
+								<?php if (!empty($publication)): ?>
+								<?php foreach ($publication as $row): ?>
 								<tr>
 									<td class="px-4 py-4 text-sm font-medium text-gray-900">1</td>
 									<td class="px-4 py-4 text-sm text-gray-700">
-										Example Research Title
-										<p class="text-xs text-gray-500 mt-1">Short description or abstract preview goes here.</p>
+										<?=  $row['title'] ?>
+										<p class="text-xs text-gray-500 mt-1"><?= $row['description'] ?></p>
 									</td>
-									<td class="px-4 py-4 text-sm text-gray-700">Savero Athallah</td>
-									<td class="px-4 py-4 text-sm text-gray-700">Dr. Dospem Name</td>
-									<td class="px-4 py-4 text-sm text-gray-700">2025-02-01</td>
-									<td class="px-4 py-4 text-sm text-gray-700">2025-12-31</td>
+									<td class="px-4 py-4 text-sm text-gray-700"><?=$row['user_name']  ?></td>
 									<td class="px-4 py-4 text-sm text-blue-600">
-										<a href="#" class="hover:underline">Publication Link</a>
-									</td>
-									<td class="px-4 py-4 text-sm">
-										<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-											pending_approval
-										</span>
+										<a href="#" class="hover:underline"><?= $row['publication_url'] ?></a>
 									</td>
 									<td class="px-4 py-4 text-sm font-medium space-x-2">
 										<button class="text-green-600 hover:text-green-900">Approve</button>
 										<button class="text-red-600 hover:text-red-900">Reject</button>
 									</td>
 								</tr>
+								<?php endforeach; ?>
+								  <?php else: ?>
+								<tr>
+									<td colspan="7" class="px-6 py-12 text-center">
+                    <div class="flex flex-col items-center text-gray-400">
+                      <i class="fas fa-inbox text-5xl mb-3"></i>
+                      <p class="text-sm font-medium">No pending approvals</p>
+                    </div>
+                  </td>
+                </tr>
+              <?php endif; ?>
 							</tbody>
 						</table>
 					</div>

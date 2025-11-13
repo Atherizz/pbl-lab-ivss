@@ -35,6 +35,7 @@ $activeMenu = 'approval-peminjaman';
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200">
+								<?php if (!empty($equipmentBooking)): ?>
 								<?php foreach ($equipmentBooking as $row): ?>
 								<tr>
 									<td class="px-5 py-4 text-sm font-medium text-gray-900"><?= $row['id'] ?></td>
@@ -54,6 +55,17 @@ $activeMenu = 'approval-peminjaman';
 									</td>
 								</tr>
 								<?php endforeach; ?>
+								              <?php else: ?>
+                <tr>
+                  <td colspan="4" class="px-6 py-12 text-center">
+                    <div class="flex flex-col items-center text-gray-400">
+                      <i class="fas fa-inbox text-5xl mb-3"></i>
+                      <p class="text-sm font-medium">No pending approvals</p>
+                      <p class="text-xs mt-1">All registration requests have been processed</p>
+                    </div>
+                  </td>
+                </tr>
+              <?php endif; ?>
 							</tbody>
 						</table>
 					</div>

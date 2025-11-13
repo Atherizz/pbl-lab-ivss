@@ -23,7 +23,6 @@ class ResearchModel extends Model
 
     public function getById($id)
     {
-        // Query ini juga mengambil data user pembuat dan dospem
         $sql = "SELECT r.*, 
                        u_user.name as user_name, 
                        u_dospem.name as dospem_name
@@ -34,6 +33,20 @@ class ResearchModel extends Model
         $query = $this->db->prepare($sql);
         $query->execute(['id' => $id]);
         return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getResearchByDospemId($id)
+    {
+        $sql = "SELECT r.*, 
+                       u_user.name as user_name, 
+                       u_dospem.name as dospem_name
+                FROM {$this->table} r
+                LEFT JOIN users u_user ON r.user_id = u_user.id
+                LEFT JOIN users u_dospem ON r.dospem_id = u_dospem.id
+                WHERE r.dospem_id = :dospem_id";
+        $query = $this->db->prepare($sql);
+        $query->execute(['dospem_id' => $id]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function create($data)

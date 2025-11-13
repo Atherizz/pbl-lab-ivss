@@ -8,12 +8,14 @@ class ApprovalController extends Controller
 {
     private $registrationRequestModel;
     private $equipmentBookingModel;
+    private $researchModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->registrationRequestModel = $this->model('RegistrationRequestModel');
         $this->equipmentBookingModel = $this->model('EquipmentBookingModel');
+        $this->researchModel = $this->model('ResearchModel');
     }
 
  
@@ -52,7 +54,10 @@ class ApprovalController extends Controller
                     'userRequest' => $userRequest
                 ];
         } else {
-
+            $publication = $this->researchModel->getResearchByDospemId($userId);
+                $data = [
+                    'publication' => $publication
+                ];
         }
 
         view('admin_lab.approval.' . $type, $data);
