@@ -1,21 +1,23 @@
-<?php
+<!-- <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-?>
-<nav x-data="{ open: false, dropdownOpen: false }" class="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+?> -->
+
+<nav x-data="{ open: false, dropdownOpen: false }" class="bg-slate-900 border-b border-slate-700 shadow-sm sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                     <a href="<?= BASE_URL ?? '.' ?>/" class="flex items-center gap-2">
-                        <i class="fas fa-eye text-blue-600 text-2xl"></i> 
-                        <span class="font-bold text-xl text-gray-800">IVSS Lab</span>
+                    <a href="<?= BASE_URL ?? '.' ?>/" class="flex items-center gap-2">
+                        <!-- Ikon diubah ke warna aksen cyan -->
+                        <i class="fas fa-eye text-cyan-400 text-2xl"></i> 
+                        <!-- Teks diubah ke putih -->
+                        <span class="font-bold text-xl text-white">IVSS Lab</span>
                     </a>
                 </div>
-
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -23,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <!-- Settings Dropdown (Jika Sudah Login) -->
                     <div class="relative">
                         <button @click="dropdownOpen = !dropdownOpen" 
-                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-slate-300 bg-slate-900 hover:text-white focus:outline-none transition ease-in-out duration-150">
                             
                             <!-- Tampilkan nama user dari session -->
                             <div><?= htmlspecialchars($_SESSION['user']['name'] ?? 'User') ?></div> 
@@ -44,21 +46,26 @@ if (session_status() === PHP_SESSION_NONE) {
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                             class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-slate-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                              style="display: none;"> 
                             
-                             <!-- Profile Link (Placeholder) -->
-                            <a href="<?= BASE_URL ?? '.' ?>/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <!-- Profile Link -->
+                            <a href="<?= BASE_URL ?? '.' ?>/profile" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-700">
                                 Profile
                             </a>
 
-                            <a href="<?= BASE_URL ?? '.' ?>/admin/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                    'mahasiswa' => 'anggota-lab',
+                                    'admin_berita' => 'admin-berita'
+                                  }) . '/dashboard'?>" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-700">
                                 Dashboard
                             </a>
 
                             <!-- Logout Form -->
                             <form method="POST" action="<?= BASE_URL ?? '.' ?>/logout">
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700">
                                     Log Out
                                 </button>
                             </form>
@@ -68,11 +75,12 @@ if (session_status() === PHP_SESSION_NONE) {
                     <!-- Tombol Login / Register (Jika Belum Login) -->
                     <div class="flex items-center space-x-4">
                         <a href="<?= BASE_URL ?? '.' ?>/login" 
-                           class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                           class="text-sm font-medium text-slate-300 hover:text-white">
                             Log in
                         </a>
+                        <!-- Tombol register diubah ke warna aksen cyan -->
                         <a href="<?= BASE_URL ?? '.' ?>/register" 
-                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-500 hover:bg-cyan-600">
                             Register
                         </a>
                     </div>
@@ -83,4 +91,3 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-- <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden"> ... </div> -->
 </nav>
-

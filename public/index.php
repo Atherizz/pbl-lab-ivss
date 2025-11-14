@@ -69,7 +69,7 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
                 $auth->requireAnggotaLab();
             } elseif ($routeInfo['middleware'] === 'mahasiswa') {
                 $auth->requireMahasiswa();
-            }
+            } 
         }
 
         if (class_exists($controllerName)) {

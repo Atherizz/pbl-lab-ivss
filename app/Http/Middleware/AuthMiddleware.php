@@ -24,7 +24,7 @@ Class AuthMiddleware {
     
     public function requireAdminLab() {
         if (!self::isLoggedIn() || $_SESSION['user']['role'] !== 'admin_lab') {
-            header('Location: ' . BASE_URL . '/');;
+            header('Location: ' . BASE_URL . '/login');;
             exit;
         }
     } 

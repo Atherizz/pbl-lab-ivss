@@ -70,25 +70,6 @@ $userRole = $_SESSION['user']['role'];
                                     default       => ''
                                   }) . '/approval/anggota/approve/' . $row['id'] ?>"
                           class="inline">
-
-                          <button type="submit"
-                            onclick="return confirm('Approve this registration?')"
-                            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
-                            title="Approve">
-                            <i class="fas fa-check mr-1"></i> Approve
-                          </button>
-                        </form>
-
-                        <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
-                                    'admin_lab'   => 'admin-lab',
-                                    'anggota_lab' => 'anggota-lab',
-                                  }) . '/approval/anggota/reject/' . $row['id'] ?>" class="inline">
-                          <button type="submit"
-                            onclick="return confirm('Reject this registration?')"
-                            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                            title="Reject">
-                            <i class="fas fa-times mr-1"></i> Reject
-                          </button>
                         </form>
                       </div>
                     </td>
@@ -170,11 +151,6 @@ $userRole = $_SESSION['user']['role'];
                 <div class="mt-1 p-4 bg-gray-50 rounded-lg">
                   <p class="text-sm text-gray-900 whitespace-pre-wrap"><?= htmlspecialchars($row['registration_purpose']) ?></p>
                 </div>
-              </div>
-
-              <div>
-                <label class="text-sm font-medium text-gray-700">Submitted Date</label>
-                <p class="mt-1 text-sm text-gray-900"><?= htmlspecialchars($row['created_at'] ?? '-') ?></p>
               </div>
             </div>
           </div>

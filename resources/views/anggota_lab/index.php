@@ -8,11 +8,11 @@ $activeMenu = 'dashboard';
             <!-- Dashboard Content -->
             
             <!-- Welcome Banner -->
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 mb-6 text-white shadow-lg">
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl p-8 mb-6 text-white shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold mb-2">Selamat Datang, <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Anggota Lab') ?>! 👋</h2>
-                        <p class="text-blue-100">Kelola riset dan peminjaman peralatan lab Anda.</p>
+                        <p class="text-slate-300">Kelola riset dan peminjaman peralatan lab Anda.</p>
                     </div>
                     <div class="hidden md:block">
                         <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
@@ -26,8 +26,8 @@ $activeMenu = 'dashboard';
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-flask text-blue-600 text-xl"></i>
+                        <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-flask text-cyan-400 text-xl"></i>
                         </div>
                         <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">Active</span>
                     </div>
@@ -75,14 +75,14 @@ $activeMenu = 'dashboard';
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Status Peminjaman Saya</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings" class="text-sm text-cyan-400 hover:text-cyan-300">Lihat Semua</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <!-- Peminjaman Aktif -->
                         <div class="p-6 hover:bg-gray-50 transition-colors">
                             <div class="flex gap-4">
-                                <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-desktop text-blue-600 text-xl"></i>
+                                <div class="w-16 h-16 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-desktop text-cyan-400 text-xl"></i>
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-2">
@@ -95,7 +95,7 @@ $activeMenu = 'dashboard';
                                         <span><i class="fas fa-calendar-check mr-1"></i>Selesai: 15 Nov 2024</span>
                                     </div>
                                     <div class="mt-3">
-                                        <button class="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                                        <button class="text-xs text-cyan-400 hover:text-cyan-300 font-medium">
                                             <i class="fas fa-undo mr-1"></i>Kembalikan Peralatan
                                         </button>
                                     </div>
@@ -124,8 +124,8 @@ $activeMenu = 'dashboard';
 
                         <!-- No Equipment -->
                         <div class="p-6 text-center">
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings'" 
-                                    class="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
+                                <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings'" 
+                                    class="inline-flex items-center gap-2 px-4 py-2 text-sm text-cyan-400 hover:text-cyan-300 font-medium">
                                 <i class="fas fa-plus-circle"></i>
                                 Ajukan Peminjaman Baru
                             </button>
@@ -140,7 +140,7 @@ $activeMenu = 'dashboard';
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                         <div class="space-y-3">
                             <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/riset/ajukan'" 
-                                    class="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
+                                    class="w-full flex items-center gap-3 px-4 py-3 bg-cyan-500/10 text-cyan-300 rounded-lg hover:bg-cyan-500/20 transition-colors">
                                 <i class="fas fa-flask"></i>
                                 <span class="font-medium text-sm">Ajukan Riset Baru</span>
                             </button>
@@ -149,8 +149,8 @@ $activeMenu = 'dashboard';
                                 <i class="fas fa-hand-holding"></i>
                                 <span class="font-medium text-sm">Pinjam Peralatan</span>
                             </button>
-                            <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog'" 
-                                    class="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors">
+                                <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog'" 
+                                    class="w-full flex items-center gap-3 px-4 py-3 bg-purple-500/10 text-purple-300 rounded-lg hover:bg-purple-500/20 transition-colors">
                                 <i class="fas fa-th-list"></i>
                                 <span class="font-medium text-sm">Lihat Katalog</span>
                             </button>
@@ -158,23 +158,23 @@ $activeMenu = 'dashboard';
                     </div>
 
                     <!-- Lab Hours -->
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm p-6 text-white">
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-sm p-6 text-white">
                         <div class="flex items-center gap-3 mb-3">
                             <i class="fas fa-clock text-2xl"></i>
                             <h3 class="text-lg font-semibold">Jam Operasional Lab</h3>
                         </div>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
-                                <span class="text-blue-100">Senin - Jumat</span>
+                                <span class="text-slate-300">Senin - Jumat</span>
                                 <span class="font-medium">08:00 - 17:00</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-blue-100">Sabtu</span>
+                                <span class="text-slate-300">Sabtu</span>
                                 <span class="font-medium">09:00 - 14:00</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-blue-100">Minggu</span>
-                                <span class="font-medium text-blue-200">Tutup</span>
+                                <span class="text-slate-300">Minggu</span>
+                                <span class="font-medium text-slate-300">Tutup</span>
                             </div>
                         </div>
                     </div>
@@ -187,19 +187,19 @@ $activeMenu = 'dashboard';
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Riset Aktif Saya</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/riset" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/riset" class="text-sm text-cyan-400 hover:text-cyan-300">Lihat Semua</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <div class="p-6 hover:bg-gray-50 transition-colors">
                             <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-flask text-blue-600"></i>
+                                <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-flask text-cyan-400"></i>
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="text-sm font-medium text-gray-900 mb-1">Deep Learning for Real-Time Object Detection</h4>
                                     <p class="text-xs text-gray-500 mb-2">Status: Active • Progress: 65%</p>
                                     <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
-                                        <div class="bg-blue-600 h-1.5 rounded-full" style="width: 65%"></div>
+                                        <div class="bg-cyan-500 h-1.5 rounded-full" style="width: 65%"></div>
                                     </div>
                                     <div class="flex items-center gap-3 text-xs text-gray-600">
                                         <span><i class="fas fa-calendar mr-1"></i>Deadline: 20 Dec 2024</span>
@@ -238,8 +238,8 @@ $activeMenu = 'dashboard';
                     <div class="divide-y divide-gray-100">
                         <div class="p-6 hover:bg-gray-50 transition-colors">
                             <div class="flex gap-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-trophy text-blue-600"></i>
+                                <div class="w-10 h-10 bg-cyan-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-trophy text-cyan-400"></i>
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="text-sm font-medium text-gray-900 mb-1">Lab Wins Research Excellence Award 2024</h4>
