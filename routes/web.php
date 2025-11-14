@@ -8,6 +8,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ResearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentBookingController;
+use App\Http\Controllers\HomeController;
 
 return [
     'GET' => [
@@ -34,7 +35,7 @@ return [
         '/anggota-lab/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],
         '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'index', 'middleware' => 'anggota_lab'],
         '/anggota-lab/profile/edit' => ['controller' => ProfileController::class, 'action' => 'edit', 'middleware' => 'anggota_lab'],
-        '/' => ['view' => 'home', 'middleware' => 'guest'],
+        '/' => ['controller' => HomeController::class, 'action' => 'index'],
     ],
     'POST' => [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],

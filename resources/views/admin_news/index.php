@@ -8,11 +8,11 @@ $activeMenu = 'dashboard';
             <!-- Dashboard Content -->
             
             <!-- Welcome Banner -->
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 mb-6 text-white shadow-lg">
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl p-8 mb-6 text-white shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold mb-2">Welcome back, <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Admin') ?>! 👋</h2>
-                        <p class="text-blue-100">Manage and publish lab news & updates.</p>
+                        <p class="text-slate-300">Manage and publish lab news & updates.</p>
                     </div>
                     <div class="hidden md:block">
                         <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
@@ -75,13 +75,13 @@ $activeMenu = 'dashboard';
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Recent News</h3>
-                        <a href="<?= BASE_URL ?? '.' ?>/admin/news" class="text-sm text-blue-600 hover:text-blue-700">View All</a>
+                        <a href="<?= BASE_URL ?? '.' ?>/admin/news" class="text-sm text-cyan-400 hover:text-cyan-300">View All</a>
                     </div>
                     <div class="divide-y divide-gray-100">
                         <div class="p-6 hover:bg-gray-50 transition-colors">
                             <div class="flex gap-4">
-                                <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-newspaper text-blue-600 text-xl"></i>
+                                <div class="w-16 h-16 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-newspaper text-cyan-400 text-xl"></i>
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-2">
@@ -151,7 +151,7 @@ $activeMenu = 'dashboard';
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                         <div class="space-y-3">
                             <button onclick="window.location.href='<?= BASE_URL ?? '.' ?>/admin/news/create'" 
-                                    class="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
+                                    class="w-full flex items-center gap-3 px-4 py-3 bg-cyan-500/10 text-cyan-300 rounded-lg hover:bg-cyan-500/20 transition-colors">
                                 <i class="fas fa-plus-circle"></i>
                                 <span class="font-medium text-sm">Create New Post</span>
                             </button>

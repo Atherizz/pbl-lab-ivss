@@ -249,3 +249,6 @@ ADD CONSTRAINT registration_requests_status_check
     ));
 
 
+ALTER TABLE research_projects
+ADD COLUMN rejection_reason TEXT NULL;
+

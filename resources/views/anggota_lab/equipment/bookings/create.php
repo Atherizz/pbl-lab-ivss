@@ -43,8 +43,8 @@ $equipmentId = $selectedEquipment['id'] ?? null;
                                     Start Date <span class="text-red-500">*</span>
                                 </label>
                                 <input type="datetime-local" id="start_date" name="start_date" required
-                                        value="<?= htmlspecialchars($old_data['start_date'] ?? '') ?>"
-                                        class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2">
+                                       value="<?= htmlspecialchars($old_data['start_date'] ?? '') ?>"
+                                       class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 bg-gray-100">
                             </div>
 
                             <div>
@@ -52,8 +52,8 @@ $equipmentId = $selectedEquipment['id'] ?? null;
                                     End Date <span class="text-red-500">*</span>
                                 </label>
                                 <input type="datetime-local" id="end_date" name="end_date" required
-                                        value="<?= htmlspecialchars($old_data['end_date'] ?? '') ?>"
-                                        class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2">
+                                       value="<?= htmlspecialchars($old_data['end_date'] ?? '') ?>"
+                                       class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 bg-gray-100">
                             </div>
                         </div>
 
@@ -62,14 +62,14 @@ $equipmentId = $selectedEquipment['id'] ?? null;
                                 Notes
                             </label>
                             <textarea id="notes" name="notes" rows="4"
-                                            class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2"><?= htmlspecialchars($old_data['notes'] ?? '') ?></textarea>
+                                      class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 bg-gray-100"><?= htmlspecialchars($old_data['notes'] ?? '') ?></textarea>
                             <p class="mt-1 text-sm text-gray-500">Optional: Tambahkan catatan atau alasan peminjaman.</p>
                         </div>
                         
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/katalog" 
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/katalog" 
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             Cancel
                         </a>

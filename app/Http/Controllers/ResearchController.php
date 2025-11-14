@@ -184,6 +184,9 @@ class ResearchController extends Controller
 
     public function destroy($id)
     {
+
+        $userRole = $_SESSION['user']['role'];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $userId = $_SESSION['user']['id'] ?? null;
             $userRole = $_SESSION['user']['role'] ?? null;
@@ -195,7 +198,12 @@ class ResearchController extends Controller
             }
 
             $this->model->delete($id);
-            $this->redirect('/anggota-lab/research');
+
+            if ($userRole === 'admin_lab') {
+                $this->redirect('/anggota-lab/research/direktori');
+            } else {
+                $this->redirect('/anggota-lab/research');
+            }
         } else {
             $this->redirect('/anggota-lab/research');
             return;

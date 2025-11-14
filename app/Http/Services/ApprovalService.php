@@ -60,15 +60,13 @@ class ApprovalService
     public function rejectByAdminLab($type, $id, $reason=null)
     {
         if ($type === 'anggota') {
-
             return $this->registrationRequestModel->updateStatus($id, 'pending_approval', $reason);
 
         } else if ($type === 'peminjaman') {
             return (bool) $this->bookingModel->updateBookingStatus($id, 'rejected');
 
         } else if ($type === 'publikasi') {
-
-            return (bool) $this->researchModel->updateStatus($id, 'rejected');
+            return (bool) $this->researchModel->updateStatus($id, 'rejected', $reason);
         }
 
         return false; 
@@ -93,7 +91,7 @@ class ApprovalService
             return (bool) $this->registrationRequestModel->updateStatus($id, 'rejected', $reason);
 
         } else if ($type === 'publikasi') {
-            return (bool) $this->researchModel->updateStatus($id, 'rejected');
+            return (bool) $this->researchModel->updateStatus($id, 'rejected', $reason);
 
         } 
 

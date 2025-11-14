@@ -39,7 +39,10 @@ class ApprovalController extends Controller
                 'equipmentBooking' => $equipmentBooking
             ];
         } else {
-
+                $publication = $this->researchModel->getApprovedByDospemResearch();
+                $data = [
+                    'publication' => $publication
+                ];
         }
 
         view('admin_lab.approval.' . $type, $data);
