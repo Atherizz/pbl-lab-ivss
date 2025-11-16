@@ -12,13 +12,9 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 ?>
 
 <div class="flex min-h-screen bg-gray-50" x-data="{ sidebarOpen: true }">
-    <aside
-        x-show="sidebarOpen"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="-translate-x-full"
-        x-transition:enter-end="translate-x-0"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="translate-x-0"
+    <aside x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-full"
         class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-blue-600 to-blue-700 shadow-xl"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
@@ -48,6 +44,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
         <!-- Navigation Menu -->
         <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
 
+
             <!-- MENU UNTUK ADMIN LAB -->
             <?php if ($userRole === 'admin_lab'): ?>
 
@@ -73,6 +70,12 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-users w-5 text-center"></i>
                     <span class="font-medium">Anggota</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/dataset"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Dataset</span>
                 </a>
 
                 <div class="my-4 border-t border-blue-500"></div>
@@ -147,6 +150,12 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Direktori Riset Lab</span>
                 </a>
 
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Dataset</span>
+                </a>
+
                 <?php if ($userRole === 'anggota_lab'): ?>
                     <div class="px-4 py-2">
                         <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Approval</span>
@@ -200,11 +209,13 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 <button @click="dropdownOpen = !dropdownOpen"
                     class="flex items-center justify-between w-full px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all duration-200">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold shadow-lg">
+                        <div
+                            class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold shadow-lg">
                             <?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 1)) ?>
                         </div>
                         <div class="text-left">
-                            <div class="font-medium text-sm"><?= htmlspecialchars($_SESSION['user']['name'] ?? 'User') ?></div>
+                            <div class="font-medium text-sm">
+                                <?= htmlspecialchars($_SESSION['user']['name'] ?? 'User') ?></div>
                             <div class="text-xs text-blue-200">
                                 <?php
                                 echo match ($userRole) {
@@ -218,12 +229,11 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                             </div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-up text-xs transition-transform duration-200" :class="dropdownOpen ? 'rotate-180' : ''"></i>
+                    <i class="fas fa-chevron-up text-xs transition-transform duration-200"
+                        :class="dropdownOpen ? 'rotate-180' : ''"></i>
                 </button>
 
-                <div x-show="dropdownOpen"
-                    @click.away="dropdownOpen = false"
-                    x-transition
+                <div x-show="dropdownOpen" @click.away="dropdownOpen = false" x-transition
                     class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
                     <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin' ?>/profile"
@@ -262,10 +272,12 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 <div class="flex items-center gap-4">
                     <button class="relative text-gray-600 hover:text-gray-900 transition-colors">
                         <i class="fas fa-bell text-xl"></i>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        <span
+                            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
                     </button>
 
-                    <div class="lg:hidden w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <div
+                        class="lg:hidden w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
                         <?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 1)) ?>
                     </div>
                 </div>
