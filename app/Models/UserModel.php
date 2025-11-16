@@ -28,6 +28,13 @@ class UserModel extends Model
         return $result;
     }
 
+    public function getById($id) {
+        $query = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+        $query->execute(['id' => $id]);
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public function checkCredential($user)
     {
         $password = $user['password'];
@@ -39,7 +46,7 @@ class UserModel extends Model
     }
 
     public function createUser($data) {
-        $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
-        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'user']);
+        $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role, dospem_id) VALUES (:name, :reg_number, :password, :role, :dospem_id)");
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'mahasiswa', 'dospem_id' => $data['dospem_id']]);
     }
 }

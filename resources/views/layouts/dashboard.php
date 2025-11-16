@@ -16,18 +16,18 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
         x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-full"
-        class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-blue-600 to-blue-700 shadow-xl"
+        class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-slate-800 to-slate-900 shadow-xl"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
         <!-- Logo Section -->
-        <div class="flex items-center justify-between h-20 px-6 border-b border-blue-500">
+        <div class="flex items-center justify-between h-20 px-6 border-b border-slate-700">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg">
-                    <i class="fas fa-eye text-blue-600 text-xl"></i>
+                <div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center shadow-lg">
+                    <i class="fas fa-eye text-cyan-400 text-xl"></i>
                 </div>
                 <div class="text-white">
                     <div class="font-bold text-lg">IVSS Lab</div>
-                    <div class="text-xs text-blue-200">
+                    <div class="text-xs text-slate-300">
                         <?php
                         echo match ($userRole) {
                             'admin_lab' => 'Admin Dashboard',
@@ -60,10 +60,16 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Equipment</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/publication"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-book w-5 text-center"></i>
-                    <span class="font-medium">Publikasi</span>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-flask w-5 text-center"></i>
+                    <span class="font-medium">Riset Saya</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Riset Lab</span>
                 </a>
 
                 <a href="<?= BASE_URL ?? '.' ?>/admin-lab/anggota"
@@ -81,7 +87,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 <div class="my-4 border-t border-blue-500"></div>
 
                 <div class="px-4 py-2">
-                    <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Approval</span>
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
                 </div>
 
                 <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/anggota"
@@ -126,10 +132,10 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Dashboard</span>
                 </a>
 
-                <div class="my-4 border-t border-blue-500"></div>
+                <div class="my-4 border-t border-slate-700"></div>
 
                 <div class="px-4 py-2">
-                    <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Riset</span>
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Riset</span>
                 </div>
 
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
@@ -158,7 +164,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
                 <?php if ($userRole === 'anggota_lab'): ?>
                     <div class="px-4 py-2">
-                        <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Approval</span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
                     </div>
 
                     <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/anggota"
@@ -175,10 +181,10 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
                 <?php else: ?>
 
-                    <div class="my-4 border-t border-blue-500"></div>
+                    <div class="my-4 border-t border-slate-700"></div>
 
                     <div class="px-4 py-2">
-                        <span class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Peralatan</span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Peralatan</span>
                     </div>
 
                     <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog"
@@ -204,7 +210,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
         </nav>
 
-        <div class="border-t border-blue-500 p-4">
+        <div class="border-t border-slate-700 p-4">
             <div x-data="{ dropdownOpen: false }" class="relative">
                 <button @click="dropdownOpen = !dropdownOpen"
                     class="flex items-center justify-between w-full px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all duration-200">
@@ -236,14 +242,16 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 <div x-show="dropdownOpen" @click.away="dropdownOpen = false" x-transition
                     class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
-                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin' ?>/profile"
-                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                        <i class="fas fa-user-circle mr-2 text-gray-400"></i>
+                    <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
+                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin-lab' ?>/profile"
+                        class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-user-circle mr-2 text-slate-400"></i>
                         My Profile
                     </a>
+                    <?php endif; ?>
                     <form method="POST" action="<?= BASE_URL ?? '.' ?>/logout">
                         <button type="submit"
-                            class="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100">
+                            class="block w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-50 transition-colors border-t border-slate-700">
                             <i class="fas fa-sign-out-alt mr-2"></i>
                             Log Out
                         </button>
@@ -256,21 +264,21 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-h-screen lg:ml-0">
         <!-- Top Bar -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+        <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-30 shadow-sm">
             <div class="flex items-center justify-between h-16 px-6">
                 <button @click="sidebarOpen = !sidebarOpen"
-                    class="lg:hidden text-gray-600 hover:text-gray-900 transition-colors">
+                    class="lg:hidden text-slate-300 hover:text-white transition-colors">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
 
                 <div class="flex-1 lg:flex-none">
                     <?php if (isset($pageTitle)): ?>
-                        <h1 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($pageTitle) ?></h1>
+                        <h1 class="text-xl font-semibold text-slate-100"><?= htmlspecialchars($pageTitle) ?></h1>
                     <?php endif; ?>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="relative text-gray-600 hover:text-gray-900 transition-colors">
+                    <button class="relative text-slate-300 hover:text-white transition-colors">
                         <i class="fas fa-bell text-xl"></i>
                         <span
                             class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>

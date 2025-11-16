@@ -9,6 +9,36 @@ class ResearchModel extends Model
 {
     protected $table = 'research_projects';
 
+    public function getAll(string $status = null, string $searchQuery = null)
+    {
+        $sql = "SELECT 
+            r.*, 
+            u_author.name AS author_name, 
+            u_author.role AS author_role,
+            r.end_date AS publication_date  
+        FROM {$this->table} r
+        LEFT JOIN users u_author ON r.user_id = u_author.id 
+        WHERE 1=1";
+
+        $params = [];
+
+        if ($status && $status !== 'all') {
+            $sql .= " AND r.status = :status";
+            $params['status'] = $status;
+        }
+
+        if ($searchQuery) {
+            $sql .= " AND r.title ILIKE :searchQuery";
+            $params['searchQuery'] = '%' . $searchQuery . '%';
+        }
+
+        $sql .= " ORDER BY r.id DESC";
+
+        $query = $this->db->prepare($sql);
+        $query->execute($params);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getByUserId($userId)
     {
         $sql = "SELECT r.*, u.name as dospem_name
@@ -23,7 +53,6 @@ class ResearchModel extends Model
 
     public function getById($id)
     {
-        // Query ini juga mengambil data user pembuat dan dospem
         $sql = "SELECT r.*, 
                        u_user.name as user_name, 
                        u_dospem.name as dospem_name
@@ -36,6 +65,34 @@ class ResearchModel extends Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getResearchByDospemId($id)
+    {
+        $sql = "SELECT r.*, 
+                       u_user.name as user_name, 
+                       u_dospem.name as dospem_name
+                FROM {$this->table} r
+                LEFT JOIN users u_user ON r.user_id = u_user.id
+                LEFT JOIN users u_dospem ON r.dospem_id = u_dospem.id
+                WHERE r.dospem_id = :dospem_id AND r.status = :status";
+
+        $query = $this->db->prepare($sql);
+        $query->execute(['dospem_id' => $id, 'status' => 'pending_approval']);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getApprovedByDospemResearch()
+    {
+        $sql = "SELECT r.*, 
+                       u_user.name as user_name, 
+                       u_dospem.name as dospem_name
+                FROM {$this->table} r
+                LEFT JOIN users u_user ON r.user_id = u_user.id
+                LEFT JOIN users u_dospem ON r.dospem_id = u_dospem.id
+                WHERE r.status = :status";
+        $query = $this->db->prepare($sql);
+        $query->execute(['status' => 'approved_by_dospem']);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table}
@@ -54,28 +111,40 @@ class ResearchModel extends Model
         ]);
     }
 
-    /**
-     * Update status research
-     * @param int $id
-     * @param string $status
-     * @return bool
-     */
-    public function updateStatus($id, $status)
+    public function updateStatus($id, $status, $rejectionReason = null)
     {
 
-        $sql = "UPDATE {$this->table} SET status = :status WHERE id = :id";
-        $query = $this->db->prepare($sql);
-        return $query->execute([
-            'id' => $id,
-            'status' => $status
-        ]);
+        if ($rejectionReason) {
+            $sql = "UPDATE {$this->table} 
+                SET status = :status, rejection_reason = :rejection_reason 
+                WHERE id = :id";
+
+            $query = $this->db->prepare($sql);
+
+            return $query->execute([
+                'id' => $id,
+                'status' => $status,
+                'rejection_reason' => $rejectionReason
+            ]);
+        } else {
+            $sql = "UPDATE {$this->table} 
+                SET status = :status 
+                WHERE id = :id";
+
+            $query = $this->db->prepare($sql);
+
+            return $query->execute([
+                'id' => $id,
+                'status' => $status
+            ]);
+        }
     }
 
 
     public function update($id, $data)
     {
         if (!isset($id, $data)) return false;
-        
+
         $sql = "UPDATE {$this->table} SET
                     title = :title,
                     description = :description,
@@ -96,11 +165,9 @@ class ResearchModel extends Model
     public function delete($id)
     {
         if (!isset($id)) return false;
-        
+
         $sql = "DELETE FROM {$this->table} WHERE id = :id";
         $query = $this->db->prepare($sql);
         return $query->execute(['id' => $id]);
     }
-
-
 }

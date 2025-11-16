@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Model; 
-use PDO; 
+use App\Models\Model;
+use PDO;
 
 class EquipmentBookingModel extends Model
 {
@@ -13,6 +13,28 @@ class EquipmentBookingModel extends Model
     {
         $query = $this->db->prepare("SELECT id, name FROM {$this->table} ORDER BY name ASC");
         $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMyBookings($userId)
+    {
+        $query_sql = "
+            SELECT 
+                eb.*, 
+                e.name AS equipment_name, 
+                u.name AS user_name
+            FROM 
+                {$this->table} eb
+            JOIN 
+                equipment e ON eb.equipment_id = e.id
+            JOIN 
+                users u ON eb.user_id = u.id WHERE eb.user_id = :user_id
+            ORDER BY 
+                eb.start_date DESC
+        ";
+
+        $query = $this->db->prepare($query_sql);
+        $query->execute(['user_id' => $userId]);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -32,7 +54,7 @@ class EquipmentBookingModel extends Model
             ORDER BY 
                 eb.start_date DESC
         ";
-        
+
         $query = $this->db->prepare($query_sql);
         $query->execute(['status' => 'pending_approval']);
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -54,7 +76,7 @@ class EquipmentBookingModel extends Model
             WHERE 
                 eb.id = :id
         ";
-        
+
         $query = $this->db->prepare($query_sql);
         $query->execute(['id' => $id]);
         return $query->fetch(PDO::FETCH_ASSOC);
@@ -77,7 +99,7 @@ class EquipmentBookingModel extends Model
             'end_date'     => $data['end_date'],
             'notes'        => $data['notes']
         ]);
-        
+
         return $success ? $query->rowCount() : 0;
     }
 
@@ -102,34 +124,40 @@ class EquipmentBookingModel extends Model
             'notes'        => $data['notes'],
             'id'           => $id
         ]);
-        
+
         return $success ? $query->rowCount() : 0;
     }
 
-    public function updateBookingStatus($id, $status)
+    public function updateBookingStatus($id, $status, $imageUrl = null)
     {
-        $query_sql = "
-            UPDATE {$this->table} SET
-                status = :status
-            WHERE id = :id
-        ";
-        
-        $query = $this->db->prepare($query_sql);
-        $success = $query->execute([
+        // Base query
+        $query_sql = "UPDATE {$this->table} SET status = :status";
+        $params = [
             'status' => $status,
             'id'     => $id
-        ]);
-        
+        ];
+
+        if ($imageUrl !== null) {
+            $query_sql .= ", return_proof_url = :return_proof_url";
+            $params['return_proof_url'] = $imageUrl;
+        }
+
+        $query_sql .= " WHERE id = :id";
+
+        $query = $this->db->prepare($query_sql);
+        $success = $query->execute($params);
+
         return $success ? $query->rowCount() : 0;
     }
-    
+
+
     public function deleteBooking($id)
     {
         $query_sql = "DELETE FROM {$this->table} WHERE id = :id";
-        
+
         $query = $this->db->prepare($query_sql);
         $success = $query->execute(['id' => $id]);
-        
+
         return $success ? $query->rowCount() : 0;
     }
 }
