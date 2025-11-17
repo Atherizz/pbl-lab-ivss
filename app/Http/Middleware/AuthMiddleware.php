@@ -17,8 +17,17 @@ Class AuthMiddleware {
     }    
     public function redirectIfLoggedIn() {
         if (self::isLoggedIn()) {
-            header('Location: ' . BASE_URL . '/equipment');;
-            exit;
+            if ($_SESSION['user']['role'] === 'admin_lab') {
+                header('Location: ' . BASE_URL . '/admin-lab/dashboard');
+                exit;
+            } elseif ($_SESSION['user']['role'] === 'admin_berita') {
+                header('Location: ' . BASE_URL . '/admin-berita/dashboard');
+                exit;
+            } else {
+                header('Location: ' . BASE_URL . '/anggota-lab/dashboard');
+                exit;
+            }
+            
         }
     }
     

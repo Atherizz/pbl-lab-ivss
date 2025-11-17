@@ -38,12 +38,10 @@ $status_classes = [
                                     Status
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Dates
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
                             </tr>
+                        </thead>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <?php if (!empty($researchList)) : ?>
@@ -61,22 +59,18 @@ $status_classes = [
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $status_classes[$research['status']] ?? 'bg-gray-100 text-gray-800' ?>">
-                                                <?= htmlspecialchars(ucwords(str_replace('_', ' ', $research['status']))) ?>
+                                                <?= htmlspecialchars(ucwords(str_replace('_', ' ', $research['status'] ?? 'pending_approval'))) ?>
                                             </span>
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <?php if (!empty($research['start_date'])): ?>
-                                                <div>Start: <?= date('d M Y', strtotime($research['start_date'])) ?></div>
-                                            <?php endif; ?>
-                                            <?php if (!empty($research['end_date'])): ?>
-                                                <div>End: <?= date('d M Y', strtotime($research['end_date'])) ?></div>
-                                            <?php endif; ?>
-                                        </td>
-
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                            <?php if ($research['status'] === 'pending_approval'):
-                                            ?>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
+                                            <button
+                                                onclick="openModal('modal-<?= $research['id'] ?>')"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                                                title="View Details">
+                                                <i class="fas fa-eye mr-1"></i> Detail
+                                            </button>
+                                            <?php if (($research['status'] ?? '') === 'pending_approval'): ?>
                                                 <a href="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/edit' ?>"
                                                    class="text-indigo-600 hover:text-indigo-900" title="Edit Proposal">
                                                     <i class="fas fa-edit"></i>
@@ -100,7 +94,7 @@ $status_classes = [
                                 <?php endforeach ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                         You have not proposed any research projects yet.
                                     </td>
                                 </tr>
@@ -121,4 +115,96 @@ $status_classes = [
             </div>
         </div>
     </div>
-</div>  
+        </div>
+    </div>
+</div>
+
+<?php if (!empty($researchList)): ?>
+    <?php foreach ($researchList as $research): ?>
+    <div id="modal-<?= $research['id'] ?>" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('modal-<?= $research['id'] ?>')"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="relative bg-white rounded-xl shadow-xl max-w-2xl w-full" onclick="event.stopPropagation()">
+
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900">Research Details</h3>
+                    <button onclick="closeModal('modal-<?= $research['id'] ?>')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1"><?= htmlspecialchars($research['title']) ?></h4>
+                        <p class="text-sm text-gray-600">Supervisor: <?= htmlspecialchars($research['dospem_name'] ?? 'N/A') ?></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Status</label>
+                            <p class="mt-1 text-sm">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $status_classes[$research['status']] ?? 'bg-gray-100 text-gray-800' ?>">
+                                    <?= htmlspecialchars(ucwords(str_replace('_', ' ', $research['status'] ?? 'pending_approval'))) ?>
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Publication URL</label>
+                            <p class="mt-1 text-sm text-blue-700">
+                                <?php if (!empty($research['publication_url'])): ?>
+                                    <a href="<?= htmlspecialchars($research['publication_url']) ?>" target="_blank" class="underline break-words">Open Link</a>
+                                <?php else: ?>
+                                    <span class="text-gray-500">-</span>
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Start Date</label>
+                            <p class="mt-1 text-sm text-gray-900"><?= !empty($research['start_date']) ? date('d M Y', strtotime($research['start_date'])) : '-' ?></p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">End Date</label>
+                            <p class="mt-1 text-sm text-gray-900"><?= !empty($research['end_date']) ? date('d M Y', strtotime($research['end_date'])) : '-' ?></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Description</label>
+                        <div class="mt-1 p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-gray-900 whitespace-pre-wrap"><?= htmlspecialchars($research['description'] ?? '-') ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+                    <button onclick="closeModal('modal-<?= $research['id'] ?>')"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('[id^="modal-"]');
+            modals.forEach(modal => modal.classList.add('hidden'));
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>

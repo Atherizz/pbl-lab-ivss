@@ -90,7 +90,7 @@ $statuses = [
                                     </div>
 
                                     <h3 class="mt-2 text-lg font-semibold text-gray-800">
-                                        <?= htmlspecialchars($row['title'] ?? 'N/A') ?> (<?= htmlspecialchars($row['id']) ?>)
+                                        <?= htmlspecialchars($row['title'] ?? 'N/A') ?>
                                     </h3>
 
                                     <div class="mt-2 text-sm text-gray-600">
