@@ -235,9 +235,9 @@ class ResearchController extends Controller
             return false;
         }
 
-        if (!in_array($research['status'], ['pending_approval', 'rejected']) && $user['role'] != 'admin_lab') {
-            return false;
-        }
+        // if (!in_array($research['status'], ['pending_approval', 'rejected']) && $user['role'] != 'admin_lab') {
+        //     return false;
+        // }
         return true;
     }
 }

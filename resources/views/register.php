@@ -24,41 +24,51 @@
                 </div>
                 <?php endif; ?>
 
-                <!-- Input NIM -->
-                <div>
-                          <label for="nim" class="block text-sm font-medium text-slate-300">NIM <span class="text-red-400">*</span></label>
-                    <input type="text" id="nim" name="nim" required 
-                           placeholder="Contoh: 2441720001"
-                              class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                          <p class="mt-1 text-xs text-slate-400">Masukkan Nomor Induk Mahasiswa</p>
-                </div>
+                <!-- Two-column layout for main fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Input NIM -->
+                    <div>
+                        <label for="nim" class="block text-sm font-medium text-slate-300">NIM <span class="text-red-400">*</span></label>
+                        <input type="text" id="nim" name="nim" required 
+                               placeholder="Contoh: 2441720001"
+                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                        <p class="mt-1 text-xs text-slate-400">Masukkan Nomor Induk Mahasiswa</p>
+                    </div>
 
-                <!-- Input Nama -->
-                <div class="mt-4">
-                          <label for="name" class="block text-sm font-medium text-slate-300">Nama Lengkap <span class="text-red-400">*</span></label>
-                    <input type="text" id="name" name="name" required 
-                              class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                </div>
+                    <!-- Input Nama -->
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-300">Nama Lengkap <span class="text-red-400">*</span></label>
+                        <input type="text" id="name" name="name" required 
+                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                    </div>
 
-                <!-- Input Password -->
-                <div class="mt-4">
-                          <label for="password" class="block text-sm font-medium text-slate-300">Password <span class="text-red-400">*</span></label>
-                    <input type="password" id="password" name="password" required 
-                              class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                          <p class="mt-1 text-xs text-slate-400">Minimal 8 karakter</p>
-                </div>
+                    <!-- Input Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-300">Password <span class="text-red-400">*</span></label>
+                        <input type="password" id="password" name="password" required minlength="8"
+                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                        <p class="mt-1 text-xs text-slate-400">Minimal 8 karakter</p>
+                    </div>
 
-                <!-- Dropdown Dosen Pembimbing -->
-                <div class="mt-4">
-                    <label for="dospem_id" class="block text-sm font-medium text-slate-300">Dosen Pembimbing <span class="text-red-400">*</span></label>
-                    <select id="dospem_id" name="dospem_id" required
-                            class="block w-full mt-1 bg-slate-900 text-slate-100 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                        <option value="">-- Pilih Dosen Pembimbing --</option>
-                        <?php foreach ($dospem as $row) : ?>
-                        <option value=<?=$row['id'] ?>><?= $row['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <p class="mt-1 text-xs text-slate-400">Pilih dosen pembimbing Anda</p>
+                    <!-- Konfirmasi Password -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-slate-300">Konfirmasi Password <span class="text-red-400">*</span></label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8"
+                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                    </div>
+
+                    <!-- Dropdown Dosen Pembimbing -->
+                    <div class="md:col-span-2">
+                        <label for="dospem_id" class="block text-sm font-medium text-slate-300">Dosen Pembimbing <span class="text-red-400">*</span></label>
+                        <select id="dospem_id" name="dospem_id" required
+                                class="block w-full mt-1 bg-slate-900 text-slate-100 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                            <option value="">-- Pilih Dosen Pembimbing --</option>
+                            <?php foreach ($dospem as $row) : ?>
+                            <option value=<?=$row['id'] ?>><?= $row['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="mt-1 text-xs text-slate-400">Pilih dosen pembimbing Anda</p>
+                    </div>
                 </div>
 
                 <!-- Tujuan Pendaftaran -->

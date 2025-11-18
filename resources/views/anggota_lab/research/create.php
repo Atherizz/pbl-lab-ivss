@@ -84,11 +84,11 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
 
                     <div class="mt-8 flex justify-end space-x-3">
                         <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
-                           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+                           class="px-5 py-2.5 text-base bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             Cancel
                         </a>
                         <button type="submit" name="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                class="px-5 py-2.5 text-base bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Submit Proposal
                         </button>
                     </div>

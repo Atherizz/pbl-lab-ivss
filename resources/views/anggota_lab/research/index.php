@@ -70,11 +70,11 @@ $status_classes = [
                                                 title="View Details">
                                                 <i class="fas fa-eye mr-1"></i> Detail
                                             </button>
+                                            <a href="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/edit' ?>"
+                                               class="text-indigo-600 hover:text-indigo-900" title="Edit Proposal">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                             <?php if (($research['status'] ?? '') === 'pending_approval'): ?>
-                                                <a href="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/edit' ?>"
-                                                   class="text-indigo-600 hover:text-indigo-900" title="Edit Proposal">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
                                                 <form action="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/delete' ?>" method="POST" class="inline">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit"
@@ -84,11 +84,8 @@ $status_classes = [
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                            <?php else: ?>
-                                                <span class="text-gray-400" title="Actions locked (not in pending status)">
-                                                    <i class="fas fa-lock"></i>
-                                                </span>
                                             <?php endif; ?>
+
                                         </td>
                                     </tr>
                                 <?php endforeach ?>
