@@ -11,7 +11,7 @@ class ApprovalController extends Controller
     private $equipmentBookingModel;
     private $researchModel;
     private $approvalService;
-
+    private $itemsPerPage = 5;
 
     public function __construct()
     {
@@ -22,54 +22,116 @@ class ApprovalController extends Controller
         $this->approvalService = new ApprovalService();
     }
 
- 
     public function approvalAdminView($type)
     {
-        /** @var string $type */  
-        $data = [];
+        $allData = [];
+
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = max(1, $currentPage);
+        $itemsPerPage = $this->itemsPerPage;
+
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1;
+        }
 
         if ($type === 'anggota') {
-                $userRequest = $this->registrationRequestModel->getAllRequestsAdmin();
-                $data = [
-                    'userRequest' => $userRequest
-                ];
+            $allData = $this->registrationRequestModel->getAllRequestsAdmin();
+            $dataKey = 'userRequest';
         } else if ($type === 'peminjaman') {
-            $equipmentBooking = $this->equipmentBookingModel->getAllBookings();
-            $data = [
-                'equipmentBooking' => $equipmentBooking
-            ];
+            $allData = $this->equipmentBookingModel->getAllBookings();
+            $dataKey = 'equipmentBooking';
         } else {
-                $publication = $this->researchModel->getApprovedByDospemResearch();
-                $data = [
-                    'publication' => $publication
-                ];
+            $allData = $this->researchModel->getApprovedByDospemResearch();
+            $dataKey = 'publication';
         }
+
+        $totalItems = count($allData);
+        $totalPages = (int)ceil($totalItems / $itemsPerPage);
+        
+        if ($currentPage > $totalPages && $totalPages > 0) {
+            $currentPage = $totalPages;
+        } elseif ($totalItems === 0) {
+            $currentPage = 1;
+        }
+
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        $paginatedData = array_slice($allData, $offset, $itemsPerPage);
+        
+        $startItem = 0;
+        $endItem = 0;
+        if ($totalItems > 0) {
+            $startItem = $offset + 1;
+            $endItem = min($offset + count($paginatedData), $totalItems);
+        }
+
+        $data = [
+            $dataKey       => $paginatedData,
+            'currentPage'  => $currentPage,
+            'totalPages'   => $totalPages,
+            'totalItems'   => $totalItems,
+            'startItem'    => $startItem,
+            'endItem'      => $endItem,
+        ];
 
         view('admin_lab.approval.' . $type, $data);
     }
-
-    public function approvalDospemView($type) {
-
-        /** @var string $type */  
-        $data = [];
+    
+    public function approvalDospemView($type) 
+    {
+        $allData = [];
 
         $userId = $_SESSION['user']['id'];
 
-        if ($type === 'anggota') {
-                $userRequest = $this->registrationRequestModel->getRequestsByDospem($userId);
-                $data = [
-                    'userRequest' => $userRequest
-                ];
-        } else {
-            $publication = $this->researchModel->getResearchByDospemId($userId);
-                $data = [
-                    'publication' => $publication
-                ];
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = max(1, $currentPage);
+        $itemsPerPage = $this->itemsPerPage;
+
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1;
         }
 
+        if ($type === 'anggota') {
+            $allData = $this->registrationRequestModel->getRequestsByDospem($userId);
+            $dataKey = 'userRequest';
+        } else {
+            $allData = $this->researchModel->getResearchByDospemId($userId);
+            $dataKey = 'publication';
+        }
+
+        $totalItems = count($allData);
+        $totalPages = (int)ceil($totalItems / $itemsPerPage);
+
+        if ($currentPage > $totalPages && $totalPages > 0) {
+            $currentPage = $totalPages;
+        } elseif ($totalItems === 0) {
+            $currentPage = 1;
+        }
+
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        $paginatedData = array_slice($allData, $offset, $itemsPerPage);
+
+        $startItem = 0;
+        $endItem = 0;
+        if ($totalItems > 0) {
+            $startItem = $offset + 1;
+            $endItem = min($offset + count($paginatedData), $totalItems);
+        }
+
+        $data = [
+            $dataKey       => $paginatedData,
+            'currentPage'  => $currentPage,
+            'totalPages'   => $totalPages,
+            'totalItems'   => $totalItems,
+            'startItem'    => $startItem,
+            'endItem'      => $endItem,
+        ];
+    
         view('admin_lab.approval.' . $type, $data);
     
     }
+    
+    // Fungsi Aksi Persetujuan (Approval)
+    
     // REGISTRASI USER
     public function approveRequestAdminLab($type, $id) {
         $action = ($type === 'peminjaman') ? 'approve' : 'approve_admin';
@@ -115,6 +177,4 @@ class ApprovalController extends Controller
         $this->approvalService->rejectByDospem($type, $id, $reason);
         $this->redirect('/anggota-lab/approval/' . $type);
     }
-
-
 }

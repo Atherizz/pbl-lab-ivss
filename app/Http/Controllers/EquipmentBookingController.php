@@ -10,6 +10,7 @@ class EquipmentBookingController extends Controller
     private $model;
     private $equipmentModel;
     private $uploadDir;
+    private $itemsPerPage = 6;
 
     public $uploadService;
 
@@ -25,19 +26,94 @@ class EquipmentBookingController extends Controller
             mkdir($this->uploadDir, 0777, true);
         }
     }
-
+    
     public function index()
     {
         $userId = $_SESSION['user']['id'];
-        $bookings = $this->model->getMyBookings($userId);
-        view('anggota_lab.equipment.bookings.index', ['bookings' => $bookings]);
+        $allBookings = $this->model->getMyBookings($userId); 
+        $totalItems = count($allBookings);
+        
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = max(1, $currentPage);
+
+        $itemsPerPage = $this->itemsPerPage; 
+
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1; 
+        }
+        
+        $totalPages = ceil($totalItems / $itemsPerPage);
+        
+        if ($currentPage > $totalPages && $totalPages > 0) {
+            $currentPage = (int)$totalPages;
+        }
+
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        $bookings = array_slice($allBookings, $offset, $itemsPerPage);
+        
+        $startItem = 0;
+        $endItem = 0;
+        if ($totalItems > 0) {
+            $startItem = $offset + 1;
+            $endItem = min($offset + count($bookings), $totalItems);
+        }
+        
+        $paginationData = [
+            'bookings'      => $bookings,
+            'currentPage'   => $currentPage,
+            'totalPages'    => (int)$totalPages,
+            'totalItems'    => $totalItems,
+            'startItem'     => $startItem,
+            'endItem'       => $endItem,
+            'success'       => $_SESSION['bookings_success'] ?? null,
+            'error'         => $_SESSION['bookings_error'] ?? null,
+        ];
+
+        view('anggota_lab.equipment.bookings.index', $paginationData);
     }
 
-        public function katalog()
+    public function katalog()
     {
-        $equipments = $this->equipmentModel->getAllEquipments();
-        view('anggota_lab.equipment.bookings.katalog', [
-        'equipments' => $equipments]);
+        $allEquipments = $this->equipmentModel->getAllEquipments();
+        $totalItems = count($allEquipments);
+        
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = max(1, $currentPage);
+
+        $itemsPerPage = $this->itemsPerPage; 
+
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1; 
+        }
+        
+        $totalPages = (int)ceil($totalItems / $itemsPerPage);
+        
+        if ($currentPage > $totalPages && $totalPages > 0) {
+            $currentPage = $totalPages;
+        } elseif ($totalItems === 0) {
+            $currentPage = 1;
+        }
+
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        $equipments = array_slice($allEquipments, $offset, $itemsPerPage);
+        
+        $startItem = 0;
+        $endItem = 0;
+        if ($totalItems > 0) {
+            $startItem = $offset + 1;
+            $endItem = min($offset + count($equipments), $totalItems);
+        }
+        
+        $paginationData = [
+            'equipments'    => $equipments,
+            'currentPage'   => $currentPage,
+            'totalPages'    => $totalPages,
+            'totalItems'    => $totalItems,
+            'startItem'     => $startItem,
+            'endItem'       => $endItem,
+        ];
+
+        view('anggota_lab.equipment.bookings.katalog', $paginationData);
     }
 
     public function create() { 
@@ -78,16 +154,16 @@ class EquipmentBookingController extends Controller
             $errors = [];
 
             if (empty($equipmentId)) {
-                $errors[] = 'Equipment ID is required.';
+                $errors[] = 'ID Peralatan wajib diisi.';
             }
             if ($startDate === '') {
-                $errors[] = 'Start Date is required.';
+                $errors[] = 'Tanggal Mulai wajib diisi.';
             }
             if ($endDate === '') {
-                $errors[] = 'End Date is required.';
+                $errors[] = 'Tanggal Akhir wajib diisi.';
             }
             if (empty($userId)) {
-                $errors[] = 'User ID is missing.';
+                $errors[] = 'ID Pengguna hilang.';
             }
 
             if (!empty($errors)) {
@@ -104,6 +180,7 @@ class EquipmentBookingController extends Controller
             ];
 
             $this->model->createBooking($data);
+            $_SESSION['bookings_success'] = 'Pemesanan peralatan berhasil dibuat!';
             $this->redirect('/anggota-lab/equipment/bookings'); 
         }
     }
@@ -115,13 +192,15 @@ class EquipmentBookingController extends Controller
             if ($booking) {
                 $this->equipmentModel->updateStatus($booking['equipment_id'], 'available');
             }
-
+            
+            $imageUrl = null;
             if (!empty($_FILES['image_file']['name'])) {
                 $newImageFileName = $this->uploadService->uploadImage($this->uploadDir, 'image_file');
                 $imageUrl = 'uploads/booking/' . $newImageFileName;
             }
 
             $this->model->updateBookingStatus($id, 'returned', $imageUrl);
+            $_SESSION['bookings_success'] = 'Peralatan berhasil dikembalikan!';
             $this->redirect('/anggota-lab/equipment/bookings');
         }
     }
@@ -129,7 +208,18 @@ class EquipmentBookingController extends Controller
     public function destroy($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
-            $this->model->deleteBooking($id);
+            $booking = $this->model->getById($id);
+            if (!$booking) {
+                $_SESSION['bookings_error'] = 'Pemesanan tidak ditemukan.';
+                $this->redirect('/anggota-lab/equipment/bookings');
+                return;
+            } 
+            if ($this->model->deleteBooking($id)) {
+                $_SESSION['bookings_success'] = 'Pemesanan peralatan berhasil dihapus!';
+            } else {
+                $_SESSION['bookings_error'] = 'Gagal menghapus pemesanan peralatan.';
+            }
+
             $this->redirect('/anggota-lab/equipment/bookings');
         }
     }
