@@ -70,7 +70,7 @@ $equipmentId = $selectedEquipment['id'] ?? null;
 
                     <div class="mt-8 flex justify-end space-x-3">
                         <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/katalog" 
-                           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+                           class="px-4 py-2 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                             Cancel
                         </a>
                         <button type="submit" name="submit"

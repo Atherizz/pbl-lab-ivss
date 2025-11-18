@@ -7,21 +7,63 @@ use App\Http\Controllers\Controller;
 class EquipmentController extends Controller
 {
     private $model;
+    private $itemsPerPage = 5;
+
     public function __construct()
     {
         parent::__construct();
         $this->model = $this->model('EquipmentModel');
     }
+
     public function index()
-    {
-        $equipments = $this->model->getAllEquipments();
-        view('admin_lab.equipments.index', [
-        'equipments' => $equipments]);
+    { 
+        $availableEquipments = $this->model->getAllEquipments();
+        $totalItems = count($availableEquipments);
+        
+        $itemsPerPage = $this->itemsPerPage; 
+
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, $page);
+
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1; 
+        }
+        $totalPages = ceil($totalItems / $itemsPerPage);
+        
+        if ($page > $totalPages && $totalPages > 0) {
+            $page = (int)$totalPages;
+        }
+
+        $offset = ($page - 1) * $itemsPerPage;
+        $equipments = array_slice($availableEquipments, $offset, $itemsPerPage);
+
+        $startItem = 0;
+        $endItem = 0;
+        if ($totalItems > 0) {
+            $startItem = $offset + 1;
+            $endItem = min($offset + count($equipments), $totalItems);
+        }
+
+        $paginationData = [
+            'equipments'   => $equipments,
+            'currentPage'  => $page,
+            'totalPages'   => (int)$totalPages,
+            'totalItems'   => $totalItems,
+            'itemsPerPage' => $itemsPerPage,
+            'startItem'    => $startItem, 
+            'endItem'      => $endItem,
+            'success'      => $_SESSION['euipments_success'] ?? null,
+            'error'        => $_SESSION['euipments_error'] ?? null,
+        ];
+
+        view('admin_lab.equipments.index', $paginationData);
     }
+
     public function create()
     {
         view('admin_lab.equipments.create');
     }
+
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
@@ -31,12 +73,12 @@ class EquipmentController extends Controller
             $errors = [];
 
             if ($name === '') {
-                $errors[] = 'Name is required.';
+                $errors[] = 'Nama wajib diisi.';
             }
 
             $validStatuses = ['available', 'in_use', 'maintenance', 'broken'];
             if (!in_array($status, $validStatuses)) {
-                $errors[] = 'Invalid status selected.';
+                $errors[] = 'Status yang dipilih tidak valid.';
             }
 
             if (!empty($errors)) {
@@ -45,6 +87,7 @@ class EquipmentController extends Controller
             }
 
             $this->model->createEquipment($_POST);
+            $_SESSION['euipments_success'] = 'Peralatan berhasil dibuat!';
             $this->redirect('/admin-lab/equipment');
         }
     }
@@ -60,14 +103,14 @@ class EquipmentController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (empty($_POST['name']) || empty($_POST['status'])) {
-                $errors = ['Name and Status are required.'];
+                $errors = ['Nama dan Status wajib diisi.'];
                 $equipment = $this->model->getById($id);
                 view('admin_lab.equipments.edit', ['errors' => $errors, 'equipment' => $equipment]);
                 return;
             }
 
             $this->model->updateEquipment($id, $_POST);
-
+            $_SESSION['euipments_success'] = 'Peralatan berhasil diperbarui!';
             $this->redirect('/admin-lab/equipment');
         }
     }
@@ -75,7 +118,11 @@ class EquipmentController extends Controller
     public function destroy($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
-            $this->model->deleteEquipment($id);
+            if ($this->model->deleteEquipment($id)) {
+                $_SESSION['euipments_success'] = 'Peralatan berhasil dihapus!';
+            } else {
+                $_SESSION['euipments_error'] = 'Gagal menghapus peralatan.';
+            }
             $this->redirect('/admin-lab/equipment');
         }
     }

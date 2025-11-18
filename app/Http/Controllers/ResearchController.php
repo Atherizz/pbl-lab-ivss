@@ -10,6 +10,7 @@ class ResearchController extends Controller
 {
     private $model;
     private $userModel;
+    private $itemsPerPage = 6;
 
     public function __construct()
     {
@@ -25,11 +26,40 @@ class ResearchController extends Controller
             $this->redirect('/login');
         }
 
-        $researchList = $this->model->getByUserId($userId);
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = $page < 1 ? 1 : $page;
 
-        view('anggota_lab.research.index', [
-            'researchList' => $researchList
-        ]);
+        $allResearch = $this->model->getByUserId($userId);
+        $totalItems = count($allResearch);
+        
+        $itemsPerPage = $this->itemsPerPage;
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1; 
+        }
+
+        $totalPages = ceil($totalItems / $itemsPerPage);
+        
+        if ($page > $totalPages && $totalPages > 0) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $itemsPerPage;
+        
+        $researchList = array_slice($allResearch, $offset, $itemsPerPage);
+
+        $paginationData = [
+            'researchList' => $researchList,
+            'currentPage'  => $page,
+            'totalPages'   => (int)$totalPages,
+            'totalItems'   => $totalItems,
+            'itemsPerPage' => $itemsPerPage,
+            'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
+            'endItem'      => min($offset + $itemsPerPage, $totalItems),
+            'success'      => $_SESSION['publication_success'] ?? null,
+            'error'        => $_SESSION['error'] ?? null,
+        ];
+
+        view('anggota_lab.research.index', $paginationData);
     }
 
     public function direktori()
@@ -38,16 +68,46 @@ class ResearchController extends Controller
         if (!$userId) {
             $this->redirect('/login');
         }
+        
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = $page < 1 ? 1 : $page;
+        
         $statusFilter = $_GET['status'] ?? 'all';
-        $searchQuery = $_GET['search'] ?? null;
+        $searchQuery = $_GET['search'] ?? '';
+        
+        $allResearch = $this->model->getAll($statusFilter, $searchQuery);
+        $totalItems = count($allResearch);
+        
+        $itemsPerPage = $this->itemsPerPage;
+        if ($itemsPerPage === 0) {
+            $itemsPerPage = 1; 
+        }
 
-        $research = $this->model->getAll($statusFilter, $searchQuery);
+        $totalPages = ceil($totalItems / $itemsPerPage); 
+        
+        if ($page > $totalPages && $totalPages > 0) {
+            $page = $totalPages;
+        }
 
-        view('anggota_lab.research.direktori', [
-            'research' => $research,
+        $offset = ($page - 1) * $itemsPerPage;
+        
+        $research = array_slice($allResearch, $offset, $itemsPerPage);
+        
+        $paginationData = [
+            'research'      => $research,
+            'currentPage'   => $page,
+            'totalPages'    => (int)$totalPages,
+            'totalItems'    => $totalItems,
+            'itemsPerPage'  => $itemsPerPage,
+            'startItem'     => $totalItems > 0 ? $offset + 1 : 0,
+            'endItem'       => min($offset + $itemsPerPage, $totalItems),
             'currentStatus' => $statusFilter,
             'currentSearch' => $searchQuery,
-        ]);
+            'success'       => $_SESSION['direktori_success'] ?? null,
+            'error'         => $_SESSION['direktori_error'] ?? null,
+        ];
+        
+        view('anggota_lab.research.direktori', $paginationData);
     }
 
     public function create()
@@ -78,7 +138,6 @@ class ResearchController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
-            // AMBIL ROLE USER DARI SESSION
             $userRole = $_SESSION['user']['role'] ?? null;
             $errors = $this->validateProposal($data);
 
@@ -112,6 +171,7 @@ class ResearchController extends Controller
             ];
 
             $this->model->create($researchData);
+            $_SESSION['publication_success'] = 'Proposal Riset berhasil diajukan!';
             $this->redirect('/anggota-lab/research');
         } else {
             $this->redirect('/anggota-lab/research/create');
@@ -131,7 +191,7 @@ class ResearchController extends Controller
         }
 
         view('anggota_lab.research.edit', [
-            'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
+            'header' => 'Edit Proyek Riset: ' . htmlspecialchars($research['title']),
             'research' => $research,
             'dospemList' => $dospemList,
             'old' => $research,
@@ -151,7 +211,7 @@ class ResearchController extends Controller
                 $dospemList = $this->userModel->getAllAnggotaLab();
 
                 view('anggota_lab.research.edit', [
-                    'header' => 'Edit Research Project: ' . htmlspecialchars($research['title']),
+                    'header' => 'Edit Proyek Riset: ' . htmlspecialchars($research['title']),
                     'research' => $research,
                     'dospemList' => $dospemList,
                     'errors' => $errors,
@@ -184,7 +244,6 @@ class ResearchController extends Controller
 
     public function destroy($id)
     {
-
         $userRole = $_SESSION['user']['role'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
@@ -198,7 +257,8 @@ class ResearchController extends Controller
             }
 
             $this->model->delete($id);
-
+            $_SESSION['direktori_success'] = 'Proyek Riset berhasil dihapus!';
+            
             if ($userRole === 'admin_lab') {
                 $this->redirect('/anggota-lab/research/direktori');
             } else {
@@ -214,10 +274,10 @@ class ResearchController extends Controller
     {
         $errors = [];
         if (empty(trim($data['title'] ?? ''))) {
-            $errors['title'] = 'Research Title is required.';
+            $errors['title'] = 'Judul Riset wajib diisi.';
         }
         if (empty(trim($data['description'] ?? ''))) {
-            $errors['description'] = 'Description / Abstract is required.';
+            $errors['description'] = 'Deskripsi / Abstrak wajib diisi.';
         }
 
         return $errors;
