@@ -18,7 +18,7 @@ class EquipmentModel extends Model
 
     public function getAllEquipments()
     {
-        $query = $this->db->prepare("SELECT * FROM equipment");
+        $query = $this->db->prepare("SELECT * FROM equipment ORDER BY id DESC");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
