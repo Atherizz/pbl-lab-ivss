@@ -20,6 +20,10 @@ $activeMenu = 'edit-riset';
                     </div>
                 <?php endif; ?>
 
+                <?php 
+                    $currentStatus = $old['status'] ?? $research['status'] ?? 'pending_approval';
+                    $locked = ($currentStatus !== 'pending_approval');
+                ?>
                 <form action="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . ($research['id'] ?? '') ?>" method="POST">
                     <input type="hidden" name="_method" value="PUT">
 
@@ -29,21 +33,25 @@ $activeMenu = 'edit-riset';
                             <label for="title" class="block text-sm font-medium text-gray-700">
                                 Judul Riset <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="title" name="title" required
-                                       value="<?= htmlspecialchars($old['title'] ?? $research['title'] ?? '', ENT_QUOTES) ?>"
-                                       class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['title']) ? 'border-red-500' : '' ?>">
+                            <input type="text" id="title" name="title" required <?= $locked ? 'disabled' : '' ?>
+                                   value="<?= htmlspecialchars($old['title'] ?? $research['title'] ?? '', ENT_QUOTES) ?>"
+                                   class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['title']) ? 'border-red-500' : '' ?>">
+                            <?php if ($locked): ?>
+                                <input type="hidden" name="title" value="<?= htmlspecialchars($old['title'] ?? $research['title'] ?? '', ENT_QUOTES) ?>">
+                            <?php endif; ?>
                             <?php if (isset($errors['title'])): ?>
                                 <p class="mt-1 text-xs text-red-600"><?= htmlspecialchars($errors['title']) ?></p>
                             <?php endif; ?>
                         </div>
                         
                         <div>
-                            <label for="dospem_id" class="block text-sm font-medium text-gray-700">
-                                Dosen Pembimbing <span class="text-red-500">*</span>
-                            </label>
-                            <select id="dospem_id" name="dospem_id" required
-                                     class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['dospem_id']) ? 'border-red-500' : '' ?>">
-                                <option value="">-- Pilih Dosen Pembimbing --</option>
+                            <?php if ($_SESSION['user']['role'] === 'mahasiswa'): ?>
+                                <label for="dospem_id" class="block text-sm font-medium text-gray-700">
+                                    Supervisor (Dosen Pembimbing) <span class="text-red-500">*</span>
+                                </label>
+                            <select id="dospem_id" name="dospem_id" required <?= $locked ? 'disabled' : '' ?>
+                                    class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['dospem_id']) ? 'border-red-500' : '' ?>">
+                                <option value="">-- Select Supervisor --</option>
                                 <?php if (!empty($dospemList)): ?>
                                     <?php
                                     $selectedDospemId = $old['dospem_id'] ?? $research['dospem_id'] ?? null;
@@ -53,8 +61,12 @@ $activeMenu = 'edit-riset';
                                             <?= htmlspecialchars($dospem['name']) ?>
                                         </option>
                                     <?php endforeach; ?>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </select>
+                            <?php if ($locked): ?>
+                                <input type="hidden" name="dospem_id" value="<?= htmlspecialchars($selectedDospemId ?? '', ENT_QUOTES) ?>">
+                            <?php endif; ?>
                              <?php if (isset($errors['dospem_id'])): ?>
                                 <p class="mt-1 text-xs text-red-600"><?= htmlspecialchars($errors['dospem_id']) ?></p>
                             <?php endif; ?>
@@ -64,8 +76,11 @@ $activeMenu = 'edit-riset';
                             <label for="description" class="block text-sm font-medium text-gray-700">
                                 Deskripsi / Abstrak <span class="text-red-500">*</span>
                             </label>
-                            <textarea id="description" name="description" rows="6" required
-                                     class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['description']) ? 'border-red-500' : '' ?>"><?= htmlspecialchars($old['description'] ?? $research['description'] ?? '', ENT_QUOTES) ?></textarea>
+                            <textarea id="description" name="description" rows="6" required <?= $locked ? 'disabled' : '' ?>
+                                      class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 <?= isset($errors['description']) ? 'border-red-500' : '' ?>"><?= htmlspecialchars($old['description'] ?? $research['description'] ?? '', ENT_QUOTES) ?></textarea>
+                            <?php if ($locked): ?>
+                                <input type="hidden" name="description" value="<?= htmlspecialchars($old['description'] ?? $research['description'] ?? '', ENT_QUOTES) ?>">
+                            <?php endif; ?>
                             <?php if (isset($errors['description'])): ?>
                                 <p class="mt-1 text-xs text-red-600"><?= htmlspecialchars($errors['description']) ?></p>
                             <?php endif; ?>

@@ -110,6 +110,7 @@ $status_classes = [
                                                     <i class="fas fa-lock"></i>
                                                 </span>
                                             <?php endif; ?>
+
                                         </td>
                                     </tr>
                                 <?php endforeach ?>

@@ -36,12 +36,25 @@ class AuthController extends Controller
             $nim = trim($_POST['nim'] ?? '');
             $name = trim($_POST['name'] ?? '');
             $password = trim($_POST['password'] ?? '');
+            $password_confirmation = trim($_POST['password_confirmation'] ?? '');
             $dospem_id = trim($_POST['dospem_id'] ?? '');
             $registration_purpose = trim($_POST['registration_purpose'] ?? '');
             
             // Validasi sederhana
-            if (empty($nim) || empty($name) || empty($password) || empty($dospem_id) || empty($registration_purpose)) {
+            if (empty($nim) || empty($name) || empty($password) || empty($password_confirmation) || empty($dospem_id) || empty($registration_purpose)) {
                 $_SESSION['error'] = 'Semua field harus diisi';
+                $this->redirect('/register');
+                exit;
+            }
+            
+            if (strlen($password) < 8) {
+                $_SESSION['error'] = 'Password minimal 8 karakter';
+                $this->redirect('/register');
+                exit;
+            }
+
+            if ($password !== $password_confirmation) {
+                $_SESSION['error'] = 'Konfirmasi password tidak cocok';
                 $this->redirect('/register');
                 exit;
             }
