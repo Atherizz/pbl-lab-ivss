@@ -18,3 +18,31 @@ function view($view, $data = []): void
 
     require BASE_PATH . "/resources/views/layouts/main.php"; 
 }
+
+/**
+ * Retrieve a flash message from session and remove it so it won't persist on refresh.
+ * Usage: if ($msg = flash('success')) { echo $msg; }
+ */
+function flash(string $key, $default = null): ?string
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION[$key])) {
+        return $default;
+    }
+    $value = $_SESSION[$key];
+    unset($_SESSION[$key]);
+    return is_string($value) ? $value : json_encode($value);
+}
+
+/**
+ * Set a flash message (helper for controllers/services).
+ */
+function set_flash(string $key, string $message): void
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION[$key] = $message;
+}

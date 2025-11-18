@@ -1,6 +1,8 @@
 <?php 
 $pageTitle = 'Persetujuan Penelitian';
 $activeMenu = 'approval-publikasi';
+
+$userRole = $_SESSION['user']['role'];
 ?>
 
 <?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
@@ -43,7 +45,11 @@ $activeMenu = 'approval-publikasi';
                                 </td>
                                 <td class="px-5 py-4 text-sm font-medium space-x-2">
                                     
-                                    <form method="POST" action="<?= BASE_URL . '/admin-lab/approval/publikasi/approve/' . $row['id'] ?>" class="inline">
+                                    <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                        'admin_lab'   => 'admin-lab',
+                                        'anggota_lab' => 'anggota-lab',
+                                        default       => ''
+                                        }) . '/approval/publikasi/approve/' . $row['id'] ?>" class="inline">
                                         <button type="submit" 
                                             onclick="return confirm('Setujui pendaftaran ini?')"
                                             class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
@@ -79,13 +85,20 @@ $activeMenu = 'approval-publikasi';
             </div>
 
             <?php if (isset($totalPages) && $totalPages > 1) : ?>
+                <?php 
+                    $baseApprovalPath = BASE_URL . '/' . (match ($userRole) {
+                        'admin_lab'   => 'admin-lab',
+                        'anggota_lab' => 'anggota-lab',
+                        default       => ''
+                    }) . '/approval/publikasi';
+                ?>
                 <div class="mt-6 p-6"> 
                     <nav class="flex justify-between items-center text-sm text-gray-500">
                         <span>Menampilkan <?= $startItem ?? 0 ?> hingga <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
                         
                         <div class="flex space-x-1">
                             <?php if ($currentPage > 1) : ?>
-                                <a href="<?= BASE_URL . '/admin-lab/approval/publikasi' ?>?page=<?= $currentPage - 1 ?>" 
+                                <a href="<?= $baseApprovalPath ?>?page=<?= $currentPage - 1 ?>" 
                                     class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                     <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
                                 </a>
@@ -106,7 +119,7 @@ $activeMenu = 'approval-publikasi';
                                 }
                                 
                                 if ($startPage > 1) : ?>
-                                    <a href="<?= BASE_URL . '/admin-lab/approval/publikasi' ?>?page=1" 
+                                    <a href="<?= $baseApprovalPath ?>?page=1" 
                                         class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                         1
                                     </a>
@@ -121,7 +134,7 @@ $activeMenu = 'approval-publikasi';
                                             <?= $i ?>
                                         </button>
                                     <?php else : ?>
-                                        <a href="<?= BASE_URL . '/admin-lab/approval/publikasi' ?>?page=<?= $i ?>" 
+                                        <a href="<?= $baseApprovalPath ?>?page=<?= $i ?>" 
                                             class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                             <?= $i ?>
                                         </a>
@@ -133,7 +146,7 @@ $activeMenu = 'approval-publikasi';
                                     <?php if ($endPage < $totalPages - 1) : ?>
                                         <span class="px-3 py-2">...</span>
                                     <?php endif; ?>
-                                    <a href="<?= BASE_URL . '/admin-lab/approval/publikasi' ?>?page=<?= $totalPages ?>" 
+                                    <a href="<?= $baseApprovalPath ?>?page=<?= $totalPages ?>" 
                                         class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                         <?= $totalPages ?>
                                     </a>
@@ -141,7 +154,7 @@ $activeMenu = 'approval-publikasi';
                             </div>
 
                             <?php if ($currentPage < $totalPages) : ?>
-                                <a href="<?= BASE_URL . '/admin-lab/approval/publikasi' ?>?page=<?= $currentPage + 1 ?>" 
+                                <a href="<?= $baseApprovalPath ?>?page=<?= $currentPage + 1 ?>" 
                                     class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                     Berikutnya <i class="fas fa-chevron-right ml-1"></i>
                                 </a>
@@ -166,7 +179,11 @@ $activeMenu = 'approval-publikasi';
       <div class="flex items-center justify-center min-h-screen p-4">
         <div class="relative bg-white rounded-xl shadow-xl max-w-lg w-full" onclick="event.stopPropagation()">
           
-          <form method="POST" action="<?= BASE_URL . '/admin-lab/approval/publikasi/reject/' . $row['id'] ?>">
+          <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                'admin_lab'   => 'admin-lab',
+                'anggota_lab' => 'anggota-lab',
+                default       => ''
+            }) . '/approval/publikasi/reject/' . $row['id'] ?>">
 
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 class="text-xl font-semibold text-gray-900">Alasan Penolakan</h3>

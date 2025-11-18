@@ -59,10 +59,6 @@ $userRole = $_SESSION['user']['role'];
                                                     title="Lihat Detail">
                                                     <i class="fas fa-eye mr-1"></i> Detail
                                                 </button>
-                                                <form method="POST"
-                                                    action="<?= BASE_URL . '/admin-lab/approval/anggota/approve/' . $row['id'] ?>"
-                                                    class="inline">
-                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -83,13 +79,20 @@ $userRole = $_SESSION['user']['role'];
                 </div>
 
                 <?php if (isset($totalPages) && $totalPages > 1) : ?>
+                    <?php 
+                        $baseApprovalPath = BASE_URL . '/' . (match ($userRole) {
+                            'admin_lab'   => 'admin-lab',
+                            'anggota_lab' => 'anggota-lab',
+                            default       => ''
+                        }) . '/approval/anggota';
+                    ?>
                     <div class="mt-6">
                         <nav class="flex justify-between items-center text-sm text-gray-500">
                             <span>Menampilkan <?= $startItem ?? 0 ?> hingga <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
                             
                             <div class="flex space-x-1">
                                 <?php if ($currentPage > 1) : ?>
-                                    <a href="<?= BASE_URL . '/admin-lab/approval/anggota' ?>?page=<?= $currentPage - 1 ?>" 
+                                    <a href="<?= $baseApprovalPath ?>?page=<?= $currentPage - 1 ?>" 
                                         class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                         <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
                                     </a>
@@ -110,7 +113,7 @@ $userRole = $_SESSION['user']['role'];
                                     }
                                     
                                     if ($startPage > 1) : ?>
-                                        <a href="<?= BASE_URL . '/admin-lab/approval/anggota' ?>?page=1" 
+                                        <a href="<?= $baseApprovalPath ?>?page=1" 
                                             class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                             1
                                         </a>
@@ -125,7 +128,7 @@ $userRole = $_SESSION['user']['role'];
                                                 <?= $i ?>
                                             </button>
                                         <?php else : ?>
-                                            <a href="<?= BASE_URL . '/admin-lab/approval/anggota' ?>?page=<?= $i ?>" 
+                                            <a href="<?= $baseApprovalPath ?>?page=<?= $i ?>" 
                                                 class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                                 <?= $i ?>
                                             </a>
@@ -137,7 +140,7 @@ $userRole = $_SESSION['user']['role'];
                                         <?php if ($endPage < $totalPages - 1) : ?>
                                             <span class="px-3 py-2">...</span>
                                         <?php endif; ?>
-                                        <a href="<?= BASE_URL . '/admin-lab/approval/anggota' ?>?page=<?= $totalPages ?>" 
+                                        <a href="<?= $baseApprovalPath ?>?page=<?= $totalPages ?>" 
                                             class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                             <?= $totalPages ?>
                                         </a>
@@ -145,7 +148,7 @@ $userRole = $_SESSION['user']['role'];
                                 </div>
 
                                 <?php if ($currentPage < $totalPages) : ?>
-                                    <a href="<?= BASE_URL . '/admin-lab/approval/anggota' ?>?page=<?= $currentPage + 1 ?>" 
+                                    <a href="<?= $baseApprovalPath ?>?page=<?= $currentPage + 1 ?>" 
                                         class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
                                         Berikutnya <i class="fas fa-chevron-right ml-1"></i>
                                     </a>
@@ -209,14 +212,22 @@ $userRole = $_SESSION['user']['role'];
                             class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                             Tutup
                         </button>
-                        <form method="POST" action="<?= BASE_URL . '/admin-lab/approval/anggota/reject/' . $row['id'] ?>" class="inline">
+                        <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                    default       => ''
+                                  }) . '/approval/anggota/reject/' . $row['id'] ?>" class="inline">
                             <button type="submit"
                                 onclick="return confirm('Tolak registrasi ini?')"
                                 class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
                                 <i class="fas fa-times mr-2"></i>Tolak
                             </button>
                         </form>
-                        <form method="POST" action="<?= BASE_URL . '/admin-lab/approval/anggota/approve/' . $row['id'] ?>" class="inline">
+                        <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
+                                    'admin_lab'   => 'admin-lab',
+                                    'anggota_lab' => 'anggota-lab',
+                                    default       => ''
+                                  }) . '/approval/anggota/approve/' . $row['id'] ?>" class="inline">
                             <button type="submit"
                                 onclick="return confirm('Setujui registrasi ini?')"
                                 class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">

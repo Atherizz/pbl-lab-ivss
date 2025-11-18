@@ -1,4 +1,4 @@
-<?php 
+<?php
 $pageTitle = 'Riset Anggota Lab';
 $activeMenu = 'riset-saya';
 
@@ -18,18 +18,18 @@ $status_classes = [
 
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
-                
-                <?php if (isset($success) && $success) : ?>
+
+                <?php if ($msg = flash('success')): ?>
                     <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($success) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($msg) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
                     </div>
                 <?php endif; ?>
-                <?php if (isset($error) && $error) : ?>
+                <?php if ($msg = flash('error')): ?>
                     <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($error) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($msg) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
@@ -91,7 +91,8 @@ $status_classes = [
                                                 title="Lihat Detail">
                                                 <i class="fas fa-eye mr-1"></i> Detail
                                             </button>
-                                            <?php if (($research['status'] ?? '') === 'pending_approval' || ($research['status'] ?? '') === 'rejected'): ?>
+                                            <?php $st = $research['status'] ?? 'pending_approval'; ?>
+                                            <?php if ($st === 'pending_approval'): ?>
                                                 <a href="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/edit' ?>"
                                                     class="text-indigo-600 hover:text-indigo-900" title="Ubah Proposal">
                                                     <i class="fas fa-edit"></i>
@@ -99,16 +100,21 @@ $status_classes = [
                                                 <form action="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/delete' ?>" method="POST" class="inline">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit"
-                                                            class="text-red-600 hover:text-red-900"
-                                                            title="Hapus Proposal"
-                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus proposal ini: <?= htmlspecialchars($research['title'], ENT_QUOTES) ?>?');">
+                                                        class="text-red-600 hover:text-red-900"
+                                                        title="Hapus Proposal"
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus proposal ini: <?= htmlspecialchars($research['title'], ENT_QUOTES) ?>?');">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                            <?php else: ?>
-                                                <span class="text-gray-400" title="Aksi dikunci (status bukan pending atau ditolak)">
+                                            <?php elseif ($st === 'rejected'): ?>
+                                                <span class="text-gray-400" title="Aksi dikunci (status ditolak)">
                                                     <i class="fas fa-lock"></i>
                                                 </span>
+                                            <?php else: ?>
+                                                <a href="<?= (BASE_URL ?? '.') . '/anggota-lab/research/' . $research['id'] . '/edit' ?>"
+                                                    class="text-indigo-600 hover:text-indigo-900" title="Ubah URL Publikasi">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
                                             <?php endif; ?>
 
                                         </td>
@@ -128,79 +134,79 @@ $status_classes = [
                 </div>
 
                 <?php if (isset($totalPages) && $totalPages > 1) : ?>
-                <div class="mt-6">
-                    <nav class="flex justify-between items-center text-sm text-gray-500">
-                        <span>Menampilkan <?= $startItem ?? 0 ?> sampai <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
-                        <div class="flex space-x-1">
-                            <?php if ($currentPage > 1) : ?>
-                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $currentPage - 1 ?>" 
-                                   class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
-                                    <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
-                                </a>
-                            <?php else : ?>
-                                <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
-                                    <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
-                                </button>
-                            <?php endif; ?>
-
+                    <div class="mt-6">
+                        <nav class="flex justify-between items-center text-sm text-gray-500">
+                            <span>Menampilkan <?= $startItem ?? 0 ?> sampai <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
                             <div class="flex space-x-1">
-                                <?php 
-                                $maxPages = 7;
-                                $startPage = max(1, $currentPage - floor($maxPages / 2));
-                                $endPage = min($totalPages, $startPage + $maxPages - 1);
-                                
-                                if ($endPage - $startPage < $maxPages - 1) {
-                                    $startPage = max(1, $endPage - $maxPages + 1);
-                                }
-                                
-                                if ($startPage > 1) : ?>
-                                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=1" 
-                                       class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
-                                        1
+                                <?php if ($currentPage > 1) : ?>
+                                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $currentPage - 1 ?>"
+                                        class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                        <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
                                     </a>
-                                    <?php if ($startPage > 2) : ?>
-                                        <span class="px-3 py-2">...</span>
-                                    <?php endif; ?>
+                                <?php else : ?>
+                                    <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
+                                        <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
+                                    </button>
                                 <?php endif; ?>
-                                
-                                <?php for ($i = $startPage; $i <= $endPage; $i++) : ?>
-                                    <?php if ($i == $currentPage) : ?>
-                                        <button class="px-3 py-2 border rounded-md bg-blue-600 text-white font-semibold">
-                                            <?= $i ?>
-                                        </button>
-                                    <?php else : ?>
-                                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $i ?>" 
-                                           class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
-                                            <?= $i ?>
+
+                                <div class="flex space-x-1">
+                                    <?php
+                                    $maxPages = 7;
+                                    $startPage = max(1, $currentPage - floor($maxPages / 2));
+                                    $endPage = min($totalPages, $startPage + $maxPages - 1);
+
+                                    if ($endPage - $startPage < $maxPages - 1) {
+                                        $startPage = max(1, $endPage - $maxPages + 1);
+                                    }
+
+                                    if ($startPage > 1) : ?>
+                                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=1"
+                                            class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                            1
+                                        </a>
+                                        <?php if ($startPage > 2) : ?>
+                                            <span class="px-3 py-2">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $startPage; $i <= $endPage; $i++) : ?>
+                                        <?php if ($i == $currentPage) : ?>
+                                            <button class="px-3 py-2 border rounded-md bg-blue-600 text-white font-semibold">
+                                                <?= $i ?>
+                                            </button>
+                                        <?php else : ?>
+                                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $i ?>"
+                                                class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                                <?= $i ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php
+                                    if ($endPage < $totalPages) : ?>
+                                        <?php if ($endPage < $totalPages - 1) : ?>
+                                            <span class="px-3 py-2">...</span>
+                                        <?php endif; ?>
+                                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $totalPages ?>"
+                                            class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                            <?= $totalPages ?>
                                         </a>
                                     <?php endif; ?>
-                                <?php endfor; ?>
-                                
-                                <?php 
-                                if ($endPage < $totalPages) : ?>
-                                    <?php if ($endPage < $totalPages - 1) : ?>
-                                        <span class="px-3 py-2">...</span>
-                                    <?php endif; ?>
-                                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $totalPages ?>" 
-                                       class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
-                                        <?= $totalPages ?>
+                                </div>
+
+                                <?php if ($currentPage < $totalPages) : ?>
+                                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $currentPage + 1 ?>"
+                                        class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
+                                        Berikutnya <i class="fas fa-chevron-right ml-1"></i>
                                     </a>
+                                <?php else : ?>
+                                    <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
+                                        Berikutnya <i class="fas fa-chevron-right ml-1"></i>
+                                    </button>
                                 <?php endif; ?>
                             </div>
-
-                            <?php if ($currentPage < $totalPages) : ?>
-                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research?page=<?= $currentPage + 1 ?>" 
-                                   class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">
-                                    Berikutnya <i class="fas fa-chevron-right ml-1"></i>
-                                </a>
-                            <?php else : ?>
-                                <button class="px-3 py-2 border rounded-md text-gray-300 cursor-not-allowed" disabled>
-                                    Berikutnya <i class="fas fa-chevron-right ml-1"></i>
-                                </button>
-                            <?php endif; ?>
-                        </div>
-                    </nav>
-                </div>
+                        </nav>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
@@ -209,71 +215,78 @@ $status_classes = [
 
 <?php if (!empty($researchList)): ?>
     <?php foreach ($researchList as $research): ?>
-    <div id="modal-<?= $research['id'] ?>" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('modal-<?= $research['id'] ?>')"></div>
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="relative bg-white rounded-xl shadow-xl max-w-2xl w-full" onclick="event.stopPropagation()">
+        <div id="modal-<?= $research['id'] ?>" class="fixed inset-0 z-50 hidden overflow-y-auto">
+            <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('modal-<?= $research['id'] ?>')"></div>
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="relative bg-white rounded-xl shadow-xl max-w-2xl w-full" onclick="event.stopPropagation()">
 
-                <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-900">Detail Riset</h3>
-                    <button onclick="closeModal('modal-<?= $research['id'] ?>')" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-
-                <div class="p-6 space-y-4">
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <h4 class="text-lg font-semibold text-gray-900 mb-1"><?= htmlspecialchars($research['title']) ?></h4>
-                        <p class="text-sm text-gray-600">Pembimbing: <?= htmlspecialchars($research['dospem_name'] ?? 'N/A') ?></p>
+                    <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-900">Detail Riset</h3>
+                        <button onclick="closeModal('modal-<?= $research['id'] ?>')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-sm font-medium text-gray-700">Status</label>
-                            <p class="mt-1 text-sm">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $status_classes[$research['status']] ?? 'bg-gray-100 text-gray-800' ?>">
-                                    <?= htmlspecialchars(ucwords(str_replace('_', ' ', $research['status'] ?? 'pending_approval'))) ?>
-                                </span>
-                            </p>
+                    <div class="p-6 space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-1"><?= htmlspecialchars($research['title']) ?></h4>
+                            <p class="text-sm text-gray-600">Pembimbing: <?= htmlspecialchars($research['dospem_name'] ?? 'N/A') ?></p>
                         </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-700">Tautan Publikasi</label>
-                            <p class="mt-1 text-sm text-blue-700">
-                                <?php if (!empty($research['publication_url'])): ?>
-                                    <a href="<?= htmlspecialchars($research['publication_url']) ?>" target="_blank" class="underline break-words">Buka Tautan</a>
-                                <?php else: ?>
-                                    <span class="text-gray-500">-</span>
-                                <?php endif; ?>
-                            </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Status</label>
+                                <p class="mt-1 text-sm">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $status_classes[$research['status']] ?? 'bg-gray-100 text-gray-800' ?>">
+                                        <?= htmlspecialchars(ucwords(str_replace('_', ' ', $research['status'] ?? 'pending_approval'))) ?>
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Tautan Publikasi</label>
+                                <p class="mt-1 text-sm text-blue-700">
+                                    <?php if (!empty($research['publication_url'])): ?>
+                                        <a href="<?= htmlspecialchars($research['publication_url']) ?>" target="_blank" class="underline break-words">Buka Tautan</a>
+                                    <?php else: ?>
+                                        <span class="text-gray-500">-</span>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                                <p class="mt-1 text-sm text-gray-900"><?= !empty($research['start_date']) ? date('d M Y', strtotime($research['start_date'])) : '-' ?></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Tanggal Selesai</label>
+                                <p class="mt-1 text-sm text-gray-900"><?= !empty($research['end_date']) ? date('d M Y', strtotime($research['end_date'])) : '-' ?></p>
+                            </div>
                         </div>
+                        <?php if ($research['rejection_reason'] !== null): ?>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Alasan Penolakan</label>
+                                <p class="mt-1 text-sm text-blue-700">
+                                <p class="text-sm text-gray-600"><?= htmlspecialchars($research['rejection_reason'])  ?></p>
+                                </p>
+                            </div>
+                        <?php endif; ?>
                         <div>
-                            <label class="text-sm font-medium text-gray-700">Tanggal Mulai</label>
-                            <p class="mt-1 text-sm text-gray-900"><?= !empty($research['start_date']) ? date('d M Y', strtotime($research['start_date'])) : '-' ?></p>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-700">Tanggal Selesai</label>
-                            <p class="mt-1 text-sm text-gray-900"><?= !empty($research['end_date']) ? date('d M Y', strtotime($research['end_date'])) : '-' ?></p>
+                            <label class="text-sm font-medium text-gray-700">Deskripsi</label>
+                            <div class="mt-1 p-4 bg-gray-50 rounded-lg">
+                                <p class="text-sm text-gray-900 whitespace-pre-wrap"><?= htmlspecialchars($research['description'] ?? '-') ?></p>
+                            </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-sm font-medium text-gray-700">Deskripsi</label>
-                        <div class="mt-1 p-4 bg-gray-50 rounded-lg">
-                            <p class="text-sm text-gray-900 whitespace-pre-wrap"><?= htmlspecialchars($research['description'] ?? '-') ?></p>
-                        </div>
+                    <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+                        <button onclick="closeModal('modal-<?= $research['id'] ?>')"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            Tutup
+                        </button>
                     </div>
-                </div>
 
-                <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
-                    <button onclick="closeModal('modal-<?= $research['id'] ?>')"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                        Tutup
-                    </button>
                 </div>
-
             </div>
         </div>
-    </div>
     <?php endforeach; ?>
 <?php endif; ?>
 
