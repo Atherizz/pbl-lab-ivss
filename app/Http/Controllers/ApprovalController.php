@@ -72,7 +72,7 @@ class ApprovalController extends Controller
             'startItem'    => $startItem,
             'endItem'      => $endItem,
         ];
-
+        
         view('admin_lab.approval.' . $type, $data);
     }
     
@@ -132,49 +132,64 @@ class ApprovalController extends Controller
     
     // Fungsi Aksi Persetujuan (Approval)
     
-    // REGISTRASI USER
+    // PERSETUJUAN OLEH ADMIN LAB
     public function approveRequestAdminLab($type, $id) {
         $action = ($type === 'peminjaman') ? 'approve' : 'approve_admin';
         $result = $this->approvalService->validateApproval($type, $id, $action);
 
         if (!$result['valid']) {
+            set_flash('error', 'Aksi persetujuan gagal: ' . ($result['message'] ?? 'Data tidak valid.'));
             $this->redirect('/admin-lab/approval/' . $type);
             return;
         }
 
         $this->approvalService->approveByAdminLab($type, $id);
+        set_flash('success', ' Berhasil disetujui oleh Admin Lab.');
         $this->redirect('/admin-lab/approval/' . $type);
     }
 
     public function rejectRequestAdminLab($type, $id) {
         $reason = $_POST['reason'] ?? null;
         $result = $this->approvalService->validateApproval($type, $id, 'reject');
+        
         if (!$result['valid']) {
+            set_flash('error', 'Aksi penolakan gagal: ' . ($result['message'] ?? 'Data tidak valid.'));
             $this->redirect('/admin-lab/approval/' . $type);
             return;
         }
+        
         $this->approvalService->rejectByAdminLab($type, $id, $reason);
+        set_flash('success', ' Berhasil ditolak oleh Admin Lab.');
         $this->redirect('/admin-lab/approval/' . $type);
     }
 
+    // PERSETUJUAN OLEH DOSEN PEMBIMBING (DOSPEM)
     public function approveRequestDospem($type, $id) {
         $result = $this->approvalService->validateApproval($type, $id, 'approve_dospem');
+        
         if (!$result['valid']) {
+            set_flash('error', 'Aksi persetujuan gagal: ' . ($result['message'] ?? 'Data tidak valid.'));
             $this->redirect('/anggota-lab/approval/' . $type);
             return;
         }
+        
         $this->approvalService->approveByDospem($type, $id);
+        set_flash('success', ' Berhasil disetujui oleh Dosen Pembimbing.');
         $this->redirect('/anggota-lab/approval/' . $type);
     }
 
     public function rejectRequestDospem($type, $id) {
         $reason = $_POST['reason'] ?? null;
         $result = $this->approvalService->validateApproval($type, $id, 'reject');
+        
         if (!$result['valid']) {
+            set_flash('error', 'Aksi penolakan gagal: ' . ($result['message'] ?? 'Data tidak valid.'));
             $this->redirect('/anggota-lab/approval/' . $type);
             return;
         }
+        
         $this->approvalService->rejectByDospem($type, $id, $reason);
+        set_flash('success', ' Berhasil ditolak oleh Dosen Pembimbing.');
         $this->redirect('/anggota-lab/approval/' . $type);
     }
 }

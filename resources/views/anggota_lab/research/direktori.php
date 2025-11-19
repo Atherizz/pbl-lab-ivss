@@ -2,6 +2,10 @@
 $pageTitle = 'Direktori Semua Riset';
 $activeMenu = 'direktori-riset';
 
+// MODIFIKASI: Ambil pesan flash menggunakan helper flash()
+$successMessage = flash('success'); 
+$errorMessage = flash('error'); 
+
 $statuses = [
     'all' => 'Semua Status',
     'pending_approval' => 'Menunggu Persetujuan',
@@ -22,17 +26,17 @@ $statuses = [
                     <h2 class="text-2xl font-semibold text-gray-700">Direktori Riset</h2>
                 </div>
 
-                <?php if (isset($success) && $success) : ?>
+                <?php if ($successMessage) : ?>
                     <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($success) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($successMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
                     </div>
                 <?php endif; ?>
-                <?php if (isset($error) && $error) : ?>
+                <?php if ($errorMessage) : ?>
                     <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($error) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($errorMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
@@ -249,8 +253,10 @@ $statuses = [
         const submitForm = () => {
             const currentUrl = new URL(window.location.href);
 
+            // Selalu reset ke halaman 1 saat filter/search berubah
             currentUrl.searchParams.set('page', 1);
 
+            // Hapus parameter yang sudah ada dari URL untuk menghindari duplikasi
             currentUrl.searchParams.delete('search');
             currentUrl.searchParams.delete('status');
 

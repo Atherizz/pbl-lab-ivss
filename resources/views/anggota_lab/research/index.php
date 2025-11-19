@@ -2,6 +2,9 @@
 $pageTitle = 'Riset Anggota Lab';
 $activeMenu = 'riset-saya';
 
+$successMessage = flash('success'); 
+$errorMessage = flash('error');
+
 $status_classes = [
     'pending_approval' => 'bg-yellow-100 text-yellow-800',
     'approved_by_dospem' => 'bg-blue-100 text-blue-800',
@@ -19,17 +22,17 @@ $status_classes = [
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
 
-                <?php if ($msg = flash('success')): ?>
+                <?php if ($successMessage) : ?>
                     <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($msg) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($successMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
                     </div>
                 <?php endif; ?>
-                <?php if ($msg = flash('error')): ?>
+                <?php if ($errorMessage) : ?>
                     <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($msg) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($errorMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>

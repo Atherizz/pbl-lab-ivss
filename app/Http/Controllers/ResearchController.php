@@ -55,8 +55,6 @@ class ResearchController extends Controller
             'itemsPerPage' => $itemsPerPage,
             'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
             'endItem'      => min($offset + $itemsPerPage, $totalItems),
-            'success'      => $_SESSION['publication_success'] ?? null,
-            'error'        => $_SESSION['error'] ?? null,
         ];
 
         view('anggota_lab.research.index', $paginationData);
@@ -103,8 +101,6 @@ class ResearchController extends Controller
             'endItem'       => min($offset + $itemsPerPage, $totalItems),
             'currentStatus' => $statusFilter,
             'currentSearch' => $searchQuery,
-            'success'       => $_SESSION['direktori_success'] ?? null,
-            'error'         => $_SESSION['direktori_error'] ?? null,
         ];
         
         view('anggota_lab.research.direktori', $paginationData);
@@ -171,7 +167,9 @@ class ResearchController extends Controller
             ];
 
             $this->model->create($researchData);
-            $_SESSION['publication_success'] = 'Proposal Riset berhasil diajukan!';
+            
+            set_flash('success', 'Proposal Riset berhasil diajukan!');
+            
             $this->redirect('/anggota-lab/research');
         } else {
             $this->redirect('/anggota-lab/research/create');
@@ -235,6 +233,9 @@ class ResearchController extends Controller
             ];
 
             $this->model->update($id, $updateData);
+
+            set_flash('success', 'Proyek Riset berhasil diperbarui!');
+            
             $this->redirect('/anggota-lab/research');
         } else {
             $this->redirect('/anggota-lab/research');
@@ -257,7 +258,8 @@ class ResearchController extends Controller
             }
 
             $this->model->delete($id);
-            $_SESSION['direktori_success'] = 'Proyek Riset berhasil dihapus!';
+            
+            set_flash('success', 'Proyek Riset berhasil dihapus!');
             
             if ($userRole === 'admin_lab') {
                 $this->redirect('/anggota-lab/research/direktori');
@@ -295,9 +297,6 @@ class ResearchController extends Controller
             return false;
         }
 
-        // if (!in_array($research['status'], ['pending_approval', 'rejected']) && $user['role'] != 'admin_lab') {
-        //     return false;
-        // }
         return true;
     }
 }
