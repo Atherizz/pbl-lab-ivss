@@ -1,6 +1,9 @@
 <?php 
 $pageTitle = 'Manajemen Peralatan';
 $activeMenu = 'equipment';
+
+$successMessage = flash('success'); 
+$errorMessage = flash('error');
 ?>
 
 <?php require BASE_PATH . '/resources/views/layouts/dashboard.php'; ?>
@@ -10,18 +13,17 @@ $activeMenu = 'equipment';
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 
-                <?php if (isset($success) && $success) : ?>
+                <?php if ($successMessage) : ?>
                     <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($success) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($successMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>
                     </div>
                 <?php endif; ?>
-
-                <?php if (isset($error) && $error) : ?>
+                <?php if ($errorMessage) : ?>
                     <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-                        <span class="block sm:inline"><?= htmlspecialchars($error) ?></span>
+                        <span class="block sm:inline"><?= htmlspecialchars($errorMessage) ?></span>
                         <button class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
                             <span>&times;</span>
                         </button>

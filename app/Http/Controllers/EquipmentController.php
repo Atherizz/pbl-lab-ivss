@@ -28,6 +28,7 @@ class EquipmentController extends Controller
         if ($itemsPerPage === 0) {
             $itemsPerPage = 1; 
         }
+        
         $totalPages = ceil($totalItems / $itemsPerPage);
         
         if ($page > $totalPages && $totalPages > 0) {
@@ -35,6 +36,7 @@ class EquipmentController extends Controller
         }
 
         $offset = ($page - 1) * $itemsPerPage;
+        
         $equipments = array_slice($availableEquipments, $offset, $itemsPerPage);
 
         $startItem = 0;
@@ -52,8 +54,6 @@ class EquipmentController extends Controller
             'itemsPerPage' => $itemsPerPage,
             'startItem'    => $startItem, 
             'endItem'      => $endItem,
-            'success'      => $_SESSION['euipments_success'] ?? null,
-            'error'        => $_SESSION['euipments_error'] ?? null,
         ];
 
         view('admin_lab.equipments.index', $paginationData);
@@ -87,7 +87,9 @@ class EquipmentController extends Controller
             }
 
             $this->model->createEquipment($_POST);
-            $_SESSION['euipments_success'] = 'Peralatan berhasil dibuat!';
+            
+            set_flash('success', 'Peralatan berhasil dibuat!');
+            
             $this->redirect('/admin-lab/equipment');
         }
     }
@@ -110,7 +112,9 @@ class EquipmentController extends Controller
             }
 
             $this->model->updateEquipment($id, $_POST);
-            $_SESSION['euipments_success'] = 'Peralatan berhasil diperbarui!';
+            
+            set_flash('success', 'Peralatan berhasil diperbarui!');
+            
             $this->redirect('/admin-lab/equipment');
         }
     }
@@ -119,9 +123,13 @@ class EquipmentController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             if ($this->model->deleteEquipment($id)) {
-                $_SESSION['euipments_success'] = 'Peralatan berhasil dihapus!';
+                
+                set_flash('success', 'Peralatan berhasil dihapus!');
+                
             } else {
-                $_SESSION['euipments_error'] = 'Gagal menghapus peralatan.';
+                
+                set_flash('error', 'Gagal menghapus peralatan.');
+                
             }
             $this->redirect('/admin-lab/equipment');
         }

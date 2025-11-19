@@ -65,8 +65,6 @@ class EquipmentBookingController extends Controller
             'totalItems'    => $totalItems,
             'startItem'     => $startItem,
             'endItem'       => $endItem,
-            'success'       => $_SESSION['bookings_success'] ?? null,
-            'error'         => $_SESSION['bookings_error'] ?? null,
         ];
 
         view('anggota_lab.equipment.bookings.index', $paginationData);
@@ -180,7 +178,9 @@ class EquipmentBookingController extends Controller
             ];
 
             $this->model->createBooking($data);
-            $_SESSION['bookings_success'] = 'Pemesanan peralatan berhasil dibuat!';
+            
+            set_flash('success', 'Pemesanan peralatan berhasil dibuat!');
+            
             $this->redirect('/anggota-lab/equipment/bookings'); 
         }
     }
@@ -200,7 +200,9 @@ class EquipmentBookingController extends Controller
             }
 
             $this->model->updateBookingStatus($id, 'returned', $imageUrl);
-            $_SESSION['bookings_success'] = 'Peralatan berhasil dikembalikan!';
+            
+            set_flash('success', 'Peralatan berhasil dikembalikan!');
+            
             $this->redirect('/anggota-lab/equipment/bookings');
         }
     }
@@ -210,14 +212,14 @@ class EquipmentBookingController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['_method'] ?? '') === 'DELETE' || isset($_POST['submit']))) {
             $booking = $this->model->getById($id);
             if (!$booking) {
-                $_SESSION['bookings_error'] = 'Pemesanan tidak ditemukan.';
+                set_flash('error', 'Pemesanan tidak ditemukan.');
                 $this->redirect('/anggota-lab/equipment/bookings');
                 return;
             } 
             if ($this->model->deleteBooking($id)) {
-                $_SESSION['bookings_success'] = 'Pemesanan peralatan berhasil dihapus!';
+                set_flash('success', 'Pemesanan peralatan berhasil dihapus!');
             } else {
-                $_SESSION['bookings_error'] = 'Gagal menghapus pemesanan peralatan.';
+                set_flash('error', 'Gagal menghapus pemesanan peralatan.');
             }
 
             $this->redirect('/anggota-lab/equipment/bookings');
