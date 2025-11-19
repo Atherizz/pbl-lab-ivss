@@ -49,7 +49,7 @@ $activeMenu = 'katalog-equipment';
                         <p class="text-gray-700 text-sm mb-4"><?= htmlspecialchars($equipment['description'] ?? 'Deskripsi tidak tersedia.') ?></p>
 
                         <?php if ($isAvailable) : ?>
-                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/create?equipment_id=<?= htmlspecialchars($equipment['id']) ?>"
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings/create/<?= htmlspecialchars($equipment['id']) ?>"
                                style="background-color: #235fe7;" 
                                class="inline-block w-full text-center px-4 py-2 text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
                                 Peminjaman

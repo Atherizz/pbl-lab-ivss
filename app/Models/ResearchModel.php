@@ -153,12 +153,20 @@ class ResearchModel extends Model
                 WHERE id = :id";
         $query = $this->db->prepare($sql);
 
+        $dospemId = $data['dospem_id'] ?? null;
+
+        if ($dospemId === '' || $dospemId === null) {
+            $dospemId = null;
+        } else {
+            $dospemId = (int) $dospemId;
+        }
+
         return $query->execute([
             'id' => $id,
             'title' => $data['title'],
             'description' => $data['description'],
             'publication_url' => $data['publication_url'],
-            'dospem_id' => $data['dospem_id']
+            'dospem_id' => $dospemId
         ]);
     }
 
