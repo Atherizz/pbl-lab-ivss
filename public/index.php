@@ -69,7 +69,9 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
                 $auth->requireAnggotaLab();
             } elseif ($routeInfo['middleware'] === 'mahasiswa') {
                 $auth->requireMahasiswa();
-            } 
+            } elseif ($routeInfo['middleware'] === 'pengguna_lab') {
+                $auth->requirePenggunalab();
+            }
         }
 
         if (class_exists($controllerName)) {
