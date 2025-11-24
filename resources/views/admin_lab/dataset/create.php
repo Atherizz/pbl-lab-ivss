@@ -85,7 +85,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                     </div>
 
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="<?= BASE_URL ?? '.' ?>/admin-lab/dataset"
+                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             Cancel
                         </a>
