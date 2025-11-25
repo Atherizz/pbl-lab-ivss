@@ -9,7 +9,7 @@ use App\Http\Controllers\ResearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentBookingController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DatasetController; // TAMBAHKAN INI
+use App\Http\Controllers\DatasetController; 
 
 return [
     'GET' => [
@@ -65,6 +65,7 @@ return [
         '/admin-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}' => ['controller' => DatasetController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/delete' => ['controller' => DatasetController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
+        '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'store', 'middleware' => 'anggota_lab'],
     ],
 ];
 ?>
