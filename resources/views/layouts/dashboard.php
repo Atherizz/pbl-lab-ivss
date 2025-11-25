@@ -157,13 +157,6 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Anggota</span>
                 </a>
 
-                <!-- TAMBAHAN: DATASET (ADMIN) -->
-                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-folder w-5 text-center"></i>
-                    <span class="font-medium">Direktori Dataset</span>
-                </a>
-
                 <div class="my-4 border-t border-slate-700"></div>
 
                 <div class="px-4 py-2">
@@ -188,7 +181,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Peminjaman Barang</span>
                 </a>
 
-            <!-- MENU UNTUK ADMIN NEWS -->
+                <!-- MENU UNTUK ADMIN NEWS -->
             <?php elseif ($userRole === 'admin_berita'): ?>
 
                 <a href="<?= BASE_URL ?? '.' ?>/admin-berita/dashboard"
@@ -203,14 +196,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">News</span>
                 </a>
 
-                <!-- TAMBAHAN: DATASET (VIEW ONLY) -->
-                <a href="<?= BASE_URL ?? '.' ?>/dataset/direktori"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-folder w-5 text-center"></i>
-                    <span class="font-medium">Direktori Dataset</span>
-                </a>
-
-            <!-- MENU UNTUK ANGGOTA LAB -->
+                <!-- MENU UNTUK ANGGOTA LAB -->
             <?php else: ?>
 
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dashboard"
@@ -241,13 +227,6 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder-open w-5 text-center"></i>
                     <span class="font-medium">Direktori Riset Lab</span>
-                </a>
-
-                <!-- TAMBAHAN: DATASET (VIEW ONLY) -->
-                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-folder w-5 text-center"></i>
-                    <span class="font-medium">Direktori Dataset</span>
                 </a>
 
                 <?php if ($userRole === 'anggota_lab'): ?>
@@ -330,7 +309,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="absolute bottom-full left-0 right-0 mb-2 bg-slate-800 rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
                     <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/profile"
+                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin-lab' ?>/profile"
                         class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-700 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-slate-400"></i>
                         My Profile
