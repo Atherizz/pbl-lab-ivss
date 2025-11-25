@@ -51,28 +51,6 @@
 .theme-slate input:focus,
 .theme-slate select:focus,
 .theme-slate textarea:focus { outline: none !important; border-color: #06b6d4 !important; box-shadow: 0 0 0 3px rgba(6,182,212,.25) !important; }
-
-/* Force dark theme on autofilled fields (Chrome/Edge/WebKit) */
-.theme-slate input:-webkit-autofill,
-.theme-slate select:-webkit-autofill,
-.theme-slate textarea:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px #0b1220 inset !important;
-    -webkit-text-fill-color: #e2e8f0 !important;
-    border: 1px solid #334155 !important;
-    caret-color: #e2e8f0;
-}
-/* Extra specificity to beat utility collisions */
-.theme-slate form input[type="text"],
-.theme-slate form input[type="password"],
-.theme-slate form input[type="email"],
-.theme-slate form input[type="url"],
-.theme-slate form input[type="tel"],
-.theme-slate form select,
-.theme-slate form textarea {
-    background-color: #0b1220 !important;
-    color: #e2e8f0 !important;
-    border-color: #334155 !important;
-}
 </style>
 </head>
 

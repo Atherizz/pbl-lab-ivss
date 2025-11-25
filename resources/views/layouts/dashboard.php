@@ -330,7 +330,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="absolute bottom-full left-0 right-0 mb-2 bg-slate-800 rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
                     <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
-                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin-lab' ?>/profile"
+                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/profile"
                         class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-700 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-slate-400"></i>
                         My Profile
