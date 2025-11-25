@@ -1,5 +1,4 @@
-<?php $title = 'Laboratorium Intelligent Vision and Smart System (IVSS)'; ?>
-    <?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
+<?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
 
 <!DOCTYPE html>
 <html lang="id">
@@ -132,205 +131,249 @@
       <button class="px-6 py-2.5 bg-slate-700 border border-slate-600 text-slate-300 rounded-lg font-semibold hover:border-cyan-500 hover:text-cyan-400 transition-all">Oldest</button>
     </div>
 
-    <section id="visi-misi" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                    Visi & Misi
-                </h2>
-                <p class="mt-4 text-lg leading-6 text-slate-400">
-                    Arahan dan tujuan dari IVSS Laboratory.
-                </p>
-            </div>
-
-            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                    <h3 class="text-2xl font-semibold text-cyan-400">Visi</h3>
-                    <p class="mt-4 text-slate-300">
-                        "Menjadi laboratorium riset unggulan di bidang visi komputer dan sistem cerdas yang inovatif dan diakui secara internasional, serta berkontribusi aktif dalam pengembangan teknologi untuk kemajuan masyarakat."
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-semibold text-cyan-400">Misi</h3>
-                    <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
-                        <li>Melaksanakan riset berkualitas tinggi di bidang visi komputer, machine learning, dan sistem cerdas.</li>
-                        <li>Mengembangkan solusi teknologi inovatif untuk memecahkan masalah industri dan sosial.</li>
-                        <li>Menghasilkan publikasi ilmiah bereputasi di konferensi dan jurnal internasional.</li>
-                        <li>Membangun kolaborasi strategis dengan industri, pemerintah, dan institusi akademik lainnya.</li>
-                    </ul>
-                </div>
-            </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-slate-700 border border-slate-600 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
+        <div class="flex items-start justify-between mb-4">
+          <span class="bg-purple-900/30 text-purple-300 border border-purple-800 text-xs font-bold px-3 py-1 rounded-full">Computer Vision</span>
+          <span class="text-xs text-slate-500 font-bold group-hover:text-cyan-400 transition-colors">2020</span>
         </div>
-    </section>
-
-    <section id="publikasi" class="py-20 bg-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                    Publikasi Terbaru
-                </h2>
-                <p class="mt-4 text-lg leading-6 text-slate-400">
-                    Hasil riset dan kontribusi kami di dunia ilmiah.
-                </p>
-            </div>
-
-            <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            Real-time Object Detection using Optimized YOLOv8 on Edge Devices
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Penulis: Dr. A. Budi, Savero A., dkk.
-                        </p>
-                        <p class="mt-4 text-sm font-medium text-cyan-400">
-                            Dipublikasikan di: IEEE International Conference on Robotics (ICRA) 2025
-                        </p>
-                        <a href="#" class="mt-6 inline-block text-base font-medium text-cyan-400 hover:text-cyan-300">
-                            Baca Selengkapnya &rarr;
-                        </a>
-                    </div>
-                </div>
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            A Novel Approach for Anomaly Detection in Industrial Manufacturing
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Penulis: Prof. C. Dewi, dkk.
-                        </p>
-                        <p class="mt-4 text-sm font-medium text-cyan-400">
-                            Dipublikasikan di: Journal of Machine Learning Research (JMLR) Vol. 26
-                        </p>
-                        <a href="#" class="mt-6 inline-block text-base font-medium text-cyan-400 hover:text-cyan-300">
-                            Baca Selengkapnya &rarr;
-                        </a>
-                    </div>
-                </div>
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            Semantic Segmentation for Autonomous Driving in Tropical Environments
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Penulis: Dr. E. Fajar, dkk.
-                        </p>
-                        <p class="mt-4 text-sm font-medium text-cyan-400">
-                            Dipublikasikan di: CVPR Workshop 2025
-                        </p>
-                        <a href="#" class="mt-6 inline-block text-base font-medium text-cyan-400 hover:text-cyan-300">
-                            Baca Selengkapnya &rarr;
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <h3 class="text-lg font-semibold text-slate-100 leading-snug mb-3 group-hover:text-cyan-400 transition-colors">
+          Comparison of Viola-Jones Haar Cascade Classifier and Histogram of Oriented Gradients (HOG)
+        </h3>
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i class="fas fa-quote-right text-xs"></i>
+            <span class="text-sm font-semibold">145 citations</span>
+          </div>
         </div>
-    </section>
+        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+      </div>
 
-    <section id="team" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                    Tim Riset Kami
-                </h2>
-                <p class="mt-4 text-lg leading-6 text-slate-400">
-                    Dosen, peneliti, dan mahasiswa yang berdedikasi.
-                </p>
-            </div>
-
-            <h3 class="mt-16 text-2xl font-semibold text-white text-center">Dosen & Pembimbing</h3>
-            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <div class="text-center bg-slate-800 p-6 rounded-lg shadow-xl">
-                    <img class="w-32 h-32 rounded-full mx-auto object-cover object-center"
-                         src="https://placehold.co/256x256/334155/E0F2FE?text=Foto+Dosen"
-                         alt="Foto Dosen 1">
-                    <h4 class="mt-4 text-xl font-medium text-white">Prof. Dr. Ir. C. Dewi, M.Sc.</h4>
-                    <p class="text-base font-medium text-cyan-400">Kepala Laboratorium</p>
-                    <p class="mt-2 text-sm text-slate-400">Keahlian: Deep Learning, AI Ethics</p>
-                </div>
-                <div class="text-center bg-slate-800 p-6 rounded-lg shadow-xl">
-                    <img class="w-32 h-32 rounded-full mx-auto object-cover object-center"
-                         src="https://placehold.co/256x256/334155/E0F2FE?text=Foto+Dosen"
-                         alt="Foto Dosen 2">
-                    <h4 class="mt-4 text-xl font-medium text-white">A. Budi Santoso, S.Kom., Ph.D.</h4>
-                    <p class="text-base font-medium text-cyan-400">Dosen Pembimbing</p>
-                    <p class="mt-2 text-sm text-slate-400">Keahlian: Computer Vision, Robotics</p>
-                </div>
-                </div>
-
-            <h3 class="mt-16 text-2xl font-semibold text-white text-center">Anggota Riset Aktif</h3>
-            <div class="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                <div class="text-center bg-slate-800 p-4 rounded-lg shadow-lg">
-                    <img class="w-24 h-24 rounded-full mx-auto object-cover object-center"
-                         src="https://placehold.co/128x128/334155/E0F2FE?text=Foto"
-                         alt="Foto Anggota 1">
-                    <h4 class="mt-3 text-lg font-medium text-white">Savero Athallah</h4>
-                    <p class="text-sm font-medium text-cyan-400">Research Assistant</p>
-                </div>
-                 <div class="text-center bg-slate-800 p-4 rounded-lg shadow-lg">
-                    <img class="w-24 h-24 rounded-full mx-auto object-cover object-center"
-                         src="https://placehold.co/128x128/334155/E0F2FE?text=Foto"
-                         alt="Foto Anggota 2">
-                    <h4 class="mt-3 text-lg font-medium text-white">Budi Doremi</h4>
-                    <p class="text-sm font-medium text-cyan-400">Junior Researcher</p>
-                </div>
-                </div>
+      <div class="bg-slate-700 border border-slate-600 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
+        <div class="flex items-start justify-between mb-4">
+          <span class="bg-blue-900/30 text-blue-300 border border-blue-800 text-xs font-bold px-3 py-1 rounded-full">Data Science</span>
+          <span class="text-xs text-slate-500 font-bold group-hover:text-cyan-400 transition-colors">2017</span>
         </div>
-    </section>
-
-    <section id="fasilitas" class="py-20 bg-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                    Fasilitas & Peralatan
-                </h2>
-                <p class="mt-4 text-lg leading-6 text-slate-400">
-                    Infrastruktur pendukung riset kelas dunia.
-                </p>
-            </div>
-
-            <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                                        <img class="h-56 w-full object-cover"
-                         src="https://images.unsplash.com/photo-1633555774810-70430678b43c?q=80&w=2070&auto=format&fit=crop"
-                         alt="GPU Server">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            High-Performance GPU Server
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Dilengkapi dengan NVIDIA A100 & H100 untuk training model deep learning skala besar.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                                        <img class="h-56 w-full object-cover"
-                         src="https://images.unsplash.com/photo-1567443024551-f3e3cc2be874?q=80&w=2070&auto=format&fit=crop"
-                         alt="Robotic Arm">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            Robotics & Automation Set
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Lengan robot industri, drone, dan sensor LiDAR untuk riset autonomous systems.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-slate-700">
-                                        <img class="h-56 w-full object-cover"
-                         src="https://images.unsplash.com/photo-1535016120720-40c646be5580?q=80&w=2070&auto=format&fit=crop"
-                         alt="VR/AR Equipment">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white">
-                            VR/AR Development Kit
-                        </h3>
-                        <p class="mt-3 text-base text-slate-400">
-                            Perangkat Meta Quest 3 dan HoloLens 2 untuk pengembangan aplikasi mixed reality.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <h3 class="text-lg font-semibold text-slate-100 leading-snug mb-3 group-hover:text-cyan-400 transition-colors">
+          Study of Hoax News Detection using Naïve Bayes Classifier in Indonesian Language
+        </h3>
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i class="fas fa-quote-right text-xs"></i>
+            <span class="text-sm font-semibold">111 citations</span>
+          </div>
         </div>
-    </section>
+        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+      </div>
+
+      <div class="bg-slate-700 border border-slate-600 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
+        <div class="flex items-start justify-between mb-4">
+          <span class="bg-indigo-900/30 text-indigo-300 border border-indigo-800 text-xs font-bold px-3 py-1 rounded-full">AI Decision System</span>
+          <span class="text-xs text-slate-500 font-bold group-hover:text-cyan-400 transition-colors">2020</span>
+        </div>
+        <h3 class="text-lg font-semibold text-slate-100 leading-snug mb-3 group-hover:text-cyan-400 transition-colors">
+          Pengembangan Sistem Penunjang Keputusan Penentuan UKT Mahasiswa (Metode MOORA)
+        </h3>
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center gap-2 text-slate-400">
+            <i class="fas fa-quote-right text-xs"></i>
+            <span class="text-sm font-semibold">85 citations</span>
+          </div>
+        </div>
+        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-slate-900 overflow-hidden">
+    
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px] -z-0 pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+
+      <div class="text-center mb-16">
+        <span class="text-cyan-400 font-semibold tracking-wider uppercase text-sm">Tim Kami</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-4">
+          Anggota Laboratorium
+        </h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+          Para peneliti dan ahli yang berdedikasi mengembangkan inovasi di bidang visi komputer dan sistem cerdas.
+        </p>
+      </div>
+
+      <div class="mb-16">
+        <div class="group relative bg-slate-800/50 border border-slate-700 hover:border-cyan-500/50 rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 max-w-2xl mx-auto backdrop-blur-sm">
+          
+          <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="relative shrink-0">
+              <div class="w-48 h-48 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 group-hover:from-cyan-400 group-hover:to-blue-600 transition-all duration-500">
+                <img class="w-full h-full rounded-full object-cover border-4 border-slate-800" 
+                     src="Anggota_Lab/Ulla_Delfana.jpg" 
+                     alt="Ulla Delfana" />
+              </div>
+              <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-cyan-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-slate-900">
+                HEAD OF LAB
+              </div>
+            </div>
+
+            <div class="text-center md:text-left flex-1">
+              <h3 class="text-[20px] font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                Dr. Ulla Delfana Rosiani, ST., MT.
+              </h3>
+              <p class="text-slate-400 mb-6 text-lg leading-relaxed">
+                Memimpin visi dan strategi riset laboratorium dalam pengembangan teknologi kecerdasan buatan terdepan.
+              </p>
+              
+              <a href="./Peneliti/UllaDelfana.php" 
+                 class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-700 text-white font-medium hover:bg-cyan-600 transition-all duration-300 group-hover:pl-8">
+                Lihat Profil Lengkap
+                <i class="fas fa-arrow-right text-sm"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Mamluatul_Haniah.jpg" alt="Mamluatul Haniah" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Mamluatul Hani'ah,
+              </h4>
+             <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
+            <a href="./Peneliti/mamluatulHaniah.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Rosa_Andrie_Asmara.jpg" alt="Rosa Andrie" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Prof. Rosa Andrie A.,
+              </h4>
+              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., MT., Dr. Eng</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Professor</span>
+            <a href="./Peneliti/RosaAndrie.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Mungki_Astiningrum.jpg" alt="Mungki Astiningrum" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Mungki Astiningrum,
+              </h4>
+              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., M.Kom.</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
+            <a href="./Peneliti/MungkiAstiningrum.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Vivi_Nur.jpg" alt="Vivi Nur" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Vivi Nur W.,
+              </h4>
+              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
+            <a href="./Peneliti/ViviNur.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Ely_Setyo_Astuti.jpg" alt="Ely Setyo" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Dr. Ely Setyo Astuti,
+              </h4>
+             <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., MT.</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
+            <a href="./Peneliti/ElySetyo.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="relative w-16 h-16 shrink-0">
+               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
+                   src="Anggota_Lab/Wilda_Imama_Sabilla.jpg" alt="Wilda Imama" />
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
+                Wilda Imama S.,
+              </h4>
+              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-700/50 my-4"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
+            <a href="./Peneliti/WildaImama.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+              Detail <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <script src="carousel.js"></script>
+
+</body>
+</html>
 
 </div> <?php require BASE_PATH . '/resources/views/layouts/footer.php'; ?>

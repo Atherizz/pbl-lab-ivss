@@ -36,12 +36,10 @@ class ApprovalService
             $userData = [
                 'name' => $registeredUser['name'],
                 'reg_number' => $registeredUser['nim'],
-                'password' => $registeredUser['password'],
                 'dospem_id' => $registeredUser['dospem_id']
             ];
 
-            $this->userModel->createUser($userData);
-
+            $this->userModel->registerUser($userData);
             return true;
 
         } else if ($type === 'peminjaman') {
