@@ -5,7 +5,7 @@ $mode = $mode ?? 'create';
 $fullName = $fullName ?? 'Nama Pengguna';
 $BASE_URL = $BASE_URL ?? '';
 $userId = $userId ?? null;
-//role//
+
 $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
 $pageTitle = ($mode === 'edit') ? 'Edit Profil Lab User' : 'Buat Profil Lab User';
@@ -169,6 +169,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const certificationContainer = document.getElementById('certification-container');
     const addCertBtn = document.getElementById('add-cert-btn');
 
+    // =========================================================================
+    // RESEARCH FOCUS LOGIC
+    // =========================================================================
+
     function createFocusTag(tag, index) {
         const span = document.createElement('span');
         span.className = 'px-3 py-1 rounded-full bg-sky-100 text-sky-800 text-xs inline-flex items-center gap-2 focus-tag';
@@ -223,6 +227,10 @@ document.addEventListener('DOMContentLoaded', function() {
             addTag();
         }
     });
+
+    // =========================================================================
+    // PENDIDIKAN (EDUCATION) LOGIC
+    // =========================================================================
 
     function createEducationElement(data, index) {
         const wrapper = document.createElement('div');
@@ -291,6 +299,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     addEducationBtn.addEventListener('click', addEducation);
 
+    // =========================================================================
+    // SERTIFIKASI (CERTIFICATION) LOGIC
+    // =========================================================================
+
     function createCertificationElement(data, index) {
         const wrapper = document.createElement('div');
         wrapper.className = 'grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm certification-item';
@@ -345,6 +357,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     addCertBtn.addEventListener('click', addCert);
+
+
+    // =========================================================================
+    // INITIAL RENDER
+    // =========================================================================
     
     renderResearchFocus();
     renderEducations();
