@@ -6,7 +6,7 @@ $profile = $profile ?? [];
 if (!is_array($profile)) {
     $profile = [];
 }
-
+//nama//
 $fullName = $fullName ?? 'Pengguna Lab';
 $email = $profile['email'] ?? ($_SESSION['user']['email'] ?? '-');
 $photo_url = htmlspecialchars($profile['photo_url'] ?? 'https://placehold.co/220x300/e5e7eb/4b5563?text=No+Photo');
