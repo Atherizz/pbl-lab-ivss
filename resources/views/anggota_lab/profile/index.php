@@ -49,8 +49,25 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                 
                 <div class="p-6 w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-gray-200 bg-gray-50 flex flex-col items-center">
                     
-                    <div class="w-56 h-72 rounded-xl overflow-hidden shadow-md bg-white mb-6 border border-gray-100">
-                        <img src="<?= $photo_url ?>" alt="Profile Photo" class="w-full h-full object-cover">
+                    <div class="w-56 h-72 rounded-xl overflow-hidden shadow-md bg-white mb-6 border border-gray-100 relative group">
+                        <?php if (!empty($profile['photo_url'])): ?>
+                            <img src="<?= BASE_URL . '/' . htmlspecialchars($profile['photo_url']) ?>" alt="Profile Photo" class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                                <div class="text-center">
+                                    <i class="fas fa-user text-6xl text-gray-400 mb-3"></i>
+                                    <p class="text-sm text-gray-500">Belum ada foto</p>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- Hover overlay untuk edit photo -->
+                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                            <a href="<?= BASE_URL ?>/anggota-lab/profile/photo" 
+                               class="px-4 py-2 bg-white text-gray-800 rounded-lg hover:bg-gray-100 transition text-sm font-medium">
+                                <i class="fas fa-camera mr-2"></i>Ubah Foto
+                            </a>
+                        </div>
                     </div>
                     
                     <h3 class="text-lg font-bold text-gray-800 mb-4 text-center"><?= htmlspecialchars($fullName) ?></h3>

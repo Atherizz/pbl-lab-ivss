@@ -117,7 +117,8 @@ class AuthController extends Controller
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'name' => $user['name'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'reg_number' => $user['reg_number']
                 ];
                 if ($_SESSION['user']['role'] == 'admin_lab') {
                     $this->redirect('/admin-lab/dashboard');

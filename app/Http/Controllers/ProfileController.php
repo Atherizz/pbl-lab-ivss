@@ -3,18 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\LabUserProfileModel; 
+use App\Http\Services\UploadService;
 
 class ProfileController extends Controller
 {
     private $userProfileModel;
     private $userId; 
+    private $uploadDir;
+
+    public $uploadService;
 
     public function __construct()
     {
         parent::__construct(); 
         $this->userProfileModel = $this->model('LabUserProfileModel'); 
         $this->userId = $_SESSION['user']['id'] ?? 0;
+        $this->uploadDir = __DIR__ . '/../../../public/uploads/profiles/';
+        $this->uploadService = new UploadService();
+
+        if (!is_dir($this->uploadDir)) {
+            mkdir($this->uploadDir, 0777, true);
+        }
     }
     
     public function index() 
@@ -56,6 +65,7 @@ class ProfileController extends Controller
             'mode'       => $isUpdate ? 'edit' : 'create', 
             'pageTitle'  => $isUpdate ? 'Edit Profil Anggota Lab' : 'Buat Profil Anggota Lab Baru',
             'activeMenu' => 'profile-user-lab',
+            'nip'        => $_SESSION['user']['reg_number'],
             'fullName'   => $_SESSION['user']['name'] ?? 'Pengguna Lab',
             'BASE_URL'   => BASE_URL ?? '/', 
             'userId'     => $this->userId 
@@ -84,7 +94,27 @@ class ProfileController extends Controller
              return;
         }
 
-        $success = false;
+        if (!empty($postData['educations'])) {
+            foreach ($postData['educations'] as $education) {
+                $startYear = (int)($education['start_year'] ?? 0);
+                $endYear = (int)($education['end_year'] ?? 0);
+                
+                if ($startYear && $endYear && $startYear >= $endYear) {
+                    set_flash('error', 'Tahun selesai pendidikan harus lebih besar dari tahun mulai.');
+                    $this->redirect('/anggota-lab/profile/edit');
+                    return;
+                }
+            }
+        }
+
+        // Photo URL tidak lagi diupload di sini - sudah dipindah ke halaman terpisah
+        // Preserve existing photo if updating
+        if ($isUpdate && !empty($existingProfile['photo_url'])) {
+            $postData['photo_url'] = $existingProfile['photo_url'];
+        }
+
+
+        $success = false; 
         if ($isUpdate) {
             $success = $this->userProfileModel->updateProfile($postData, $this->userId);
             $message = 'Profil berhasil diperbarui!';
@@ -101,6 +131,113 @@ class ProfileController extends Controller
             set_flash('error', $error_message);
         }
         $this->redirect('/anggota-lab/profile');
+    }
+
+    // --- PHOTO MANAGEMENT ---
+    
+    public function photoManager()
+    {
+        if (!$this->userId) {
+            set_flash('error', 'Silakan login.');
+            $this->redirect('/login');
+            return;
+        }
+
+        $profile = $this->userProfileModel->getProfileByUserId($this->userId);
+
+        $data = [
+            'profile'    => $profile,
+            'pageTitle'  => 'Kelola Foto Profil',
+            'activeMenu' => 'profile-user-lab',
+            'fullName'   => $_SESSION['user']['name'] ?? 'Pengguna Lab',
+            'BASE_URL'   => BASE_URL ?? '/',
+            'userId'     => $this->userId
+        ];
+
+        view('anggota_lab.profile.photo', $data);
+    }
+
+    public function uploadPhoto()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            set_flash('error', 'Invalid request method.');
+            $this->redirect('/anggota-lab/profile/photo');
+            return;
+        }
+
+        if (empty($_FILES['photo']['name'])) {
+            set_flash('error', 'Silakan pilih foto untuk diupload.');
+            $this->redirect('/anggota-lab/profile/photo');
+            return;
+        }
+
+        $newImageFileName = $this->uploadService->uploadImage($this->uploadDir, 'photo');
+        
+        if (!$newImageFileName) {
+            set_flash('error', 'Upload gagal: ' . $this->uploadService->error);
+            $this->redirect('/anggota-lab/profile/photo');
+            return;
+        }
+
+        $imageUrl = '/uploads/profiles/' . $newImageFileName;
+        
+        // Get existing profile
+        $profile = $this->userProfileModel->getProfileByUserId($this->userId);
+        $fileName = basename($profile['photo_url']);
+
+        // Hapus foto lama jika ada
+        if ($profile && !empty($profile['photo_url'])) {
+            $this->uploadService->deleteImage($this->uploadDir, $fileName);
+        }
+
+        // Update photo URL di database
+        if ($profile) {
+            // Update existing profile
+            $this->userProfileModel->updateProfile(['photo_url' => $imageUrl], $this->userId);
+        } else {
+            // Create new profile with photo only
+            $this->userProfileModel->createProfile(['photo_url' => $imageUrl], $this->userId);
+        }
+
+        set_flash('success', 'Foto profil berhasil diperbarui.');
+        $this->redirect('/anggota-lab/profile/photo');
+    }
+
+    public function deletePhoto()
+    {
+        if (!$this->userId) {
+            set_flash('error', 'Silakan login.');
+            $this->redirect('/login');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            set_flash('error', 'Invalid request method.');
+            $this->redirect('/anggota-lab/profile/photo');
+            return;
+        }
+
+        $profile = $this->userProfileModel->getProfileByUserId($this->userId);
+
+        if (!$profile || empty($profile['photo_url'])) {
+            set_flash('error', 'Tidak ada foto untuk dihapus.');
+            $this->redirect('/anggota-lab/profile/photo');
+            return;
+        }
+
+        $fileName = basename($profile['photo_url']);
+
+        // Hapus file foto
+        if ($profile && !empty($profile['photo_url'])) {
+            $this->uploadService->deleteImage($this->uploadDir, $fileName);
+        }
+
+        // Set photo_url ke NULL di database
+        $this->userProfileModel->updateProfile(['photo_url' => null], $this->userId);
+
+        set_flash('success', 'Foto profil berhasil dihapus.');
+        $this->redirect('/anggota-lab/profile/photo');
     }
     
     // --- FUNGSIONALITAS SANITASI ---
