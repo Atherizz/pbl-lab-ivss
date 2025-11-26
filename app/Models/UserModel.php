@@ -7,7 +7,6 @@ use PDO;
 
 class UserModel extends Model
 {
-
     public function getAllUsers()
     {
         $query = $this->db->prepare("SELECT * FROM users");

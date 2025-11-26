@@ -1,3 +1,4 @@
 .php_tmp/
 /vendor/
 /.env
+public/uploads/

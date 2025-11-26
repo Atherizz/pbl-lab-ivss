@@ -51,7 +51,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
     </div>
 <?php endif; ?>
 
-<form action="<?= $formAction ?>" method="<?= $formMethod ?>" class="bg-white border border-slate-300 rounded-xl shadow-lg overflow-hidden">
+<form action="<?= $formAction ?>" method="<?= $formMethod ?>" enctype="multipart/form-data" class="bg-white border border-slate-300 rounded-xl shadow-lg overflow-hidden">
 
     <input type="hidden" name="user_id" value="<?= $userId ?>">
 
@@ -68,7 +68,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-700">NIP</label>
-                <input name="nip" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="1990..." value="<?= htmlspecialchars($profile['nip'] ?? '') ?>"/>
+                <input name="nip" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="1990..." value="<?= htmlspecialchars($nip) ?>" disabled/>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-700">NIDN</label>
@@ -88,10 +88,6 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                         </option>
                     <?php endforeach; ?>
                 </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium mb-1 text-slate-700">Photo URL</label>
-                <input name="photo_url" type="url" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="https://..." value="<?= htmlspecialchars($profile['photo_url'] ?? '') ?>"/>
             </div>
         </div>
     </section>
@@ -254,11 +250,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div>
                 <label class="text-xs text-slate-600">Mulai</label>
-                <input name="educations[${index}][start_year]" value="${data.start_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="2014"/>
+                <input name="educations[${index}][start_year]" value="${data.start_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-start-year" placeholder="2014" data-index="${index}"/>
             </div>
             <div>
                 <label class="text-xs text-slate-600">Selesai</label>
-                <input name="educations[${index}][end_year]" value="${data.end_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="2016"/>
+                <input name="educations[${index}][end_year]" value="${data.end_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-end-year" placeholder="2016" data-index="${index}"/>
+                <p class="text-xs text-red-500 mt-1 hidden education-year-error-${index}">Tahun selesai harus lebih besar dari tahun mulai</p>
             </div>
             <div class="md:col-span-5">
                 <label class="text-xs text-slate-600">Institusi</label>
@@ -298,6 +295,55 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     addEducationBtn.addEventListener('click', addEducation);
+
+    // Validasi start_year < end_year untuk education
+    function validateEducationYears() {
+        let isValid = true;
+        
+        educations.forEach((edu, index) => {
+            const startYear = parseInt(edu.start_year);
+            const endYear = parseInt(edu.end_year);
+            const errorElement = document.querySelector(`.education-year-error-${index}`);
+            
+            if (errorElement) {
+                if (startYear && endYear && startYear >= endYear) {
+                    errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errorElement.classList.add('hidden');
+                }
+            }
+        });
+        
+        return isValid;
+    }
+
+    // Event listener untuk real-time validation
+    educationContainer.addEventListener('input', function(e) {
+        if (e.target.classList.contains('education-start-year') || 
+            e.target.classList.contains('education-end-year')) {
+            const index = parseInt(e.target.dataset.index);
+            
+            // Update data array
+            if (e.target.classList.contains('education-start-year')) {
+                educations[index].start_year = e.target.value;
+            } else {
+                educations[index].end_year = e.target.value;
+            }
+            
+            validateEducationYears();
+        }
+    });
+
+    // Validasi saat submit form
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        if (!validateEducationYears()) {
+            e.preventDefault();
+            alert('Mohon periksa kembali tahun pendidikan. Tahun selesai harus lebih besar dari tahun mulai.');
+            return false;
+        }
+    });
 
     // =========================================================================
     // SERTIFIKASI (CERTIFICATION) LOGIC
@@ -358,6 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addCertBtn.addEventListener('click', addCert);
 
+
+   
 
     // =========================================================================
     // INITIAL RENDER
