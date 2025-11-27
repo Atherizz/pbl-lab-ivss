@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DatasetController; 
+use App\Http\Controllers\MemberController;
 
 return [
     'GET' => [
@@ -41,6 +42,8 @@ return [
         '/anggota-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'index', 'middleware' => 'pengguna_lab'],
         '/admin-lab/dataset/create' => ['controller' => DatasetController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/edit' => ['controller' => DatasetController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
+        '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
+        '/admin-lab/members/create' => ['controller' => MemberController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/' => ['controller' => HomeController::class, 'action' => 'index'],
         '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
     ],
@@ -70,6 +73,8 @@ return [
         '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'store', 'middleware' => 'anggota_lab'],
         '/anggota-lab/profile/photo/upload' => ['controller' => ProfileController::class, 'action' => 'uploadPhoto', 'middleware' => 'anggota_lab'],
         '/anggota-lab/profile/photo/delete' => ['controller' => ProfileController::class, 'action' => 'deletePhoto', 'middleware' => 'anggota_lab'],
+        '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
+        '/admin-lab/members/{id}/delete' => ['controller' => MemberController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
     ],
 ];
 ?>
