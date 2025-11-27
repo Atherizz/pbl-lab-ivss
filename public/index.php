@@ -58,7 +58,6 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
 
         if (isset($routeInfo['middleware'])) {
             $auth = new AuthMiddleware();
-
             if ($routeInfo['middleware'] === 'auth') {
                 $auth->requireLogin(); 
             } elseif ($routeInfo['middleware'] === 'admin_lab') {

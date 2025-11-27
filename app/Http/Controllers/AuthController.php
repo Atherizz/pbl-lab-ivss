@@ -1,26 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\SiakadService;
 
 class AuthController extends Controller
 {
     private $userModel;
     private $registrationRequestModel;
+    private $siakadService;
 
     public function __construct()
     {
         parent::__construct();
         $this->userModel = $this->model('UserModel');
         $this->registrationRequestModel = $this->model('RegistrationRequestModel');
+        $this->siakadService = new SiakadService();
     }
-    
+
     public function showRegistrationForm()
     {
         $dospem = $this->userModel->getAllAnggotaLab();
 
         view('register', [
-        'dospem' => $dospem]);
+            'dospem' => $dospem
+        ]);
     }
 
     public function showLoginForm()
@@ -39,46 +44,34 @@ class AuthController extends Controller
             $password_confirmation = trim($_POST['password_confirmation'] ?? '');
             $dospem_id = trim($_POST['dospem_id'] ?? '');
             $registration_purpose = trim($_POST['registration_purpose'] ?? '');
-            
+
             // Validasi sederhana
-            if (empty($nim) || empty($name) || empty($password) || empty($password_confirmation) || empty($dospem_id) || empty($registration_purpose)) {
+            if (empty($nim) || empty($name) || empty($dospem_id) || empty($registration_purpose)) {
                 $_SESSION['error'] = 'Semua field harus diisi';
                 $this->redirect('/register');
                 exit;
             }
-            
-            if (strlen($password) < 8) {
-                $_SESSION['error'] = 'Password minimal 8 karakter';
-                $this->redirect('/register');
-                exit;
-            }
 
-            if ($password !== $password_confirmation) {
-                $_SESSION['error'] = 'Konfirmasi password tidak cocok';
-                $this->redirect('/register');
-                exit;
-            }
-            
             // Validasi panjang registration_purpose
             if (strlen($registration_purpose) < 50) {
                 $_SESSION['error'] = 'Tujuan pendaftaran minimal 50 karakter';
                 $this->redirect('/register');
                 exit;
             }
-            
+
             // Cek apakah email atau NIM sudah terdaftar
             try {
                 $existingNim = $this->registrationRequestModel->getByNim($nim);
-                
+
                 if ($existingNim) {
                     $_SESSION['error'] = 'NIM atau Email sudah terdaftar';
                     $this->redirect('/register');
                     exit;
                 }
-                
+
                 // Hash password
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-                
+
                 // Insert ke registration_requests menggunakan model
                 $data = [
                     'nim' => $nim,
@@ -87,12 +80,11 @@ class AuthController extends Controller
                     'dospem_id' => $dospem_id,
                     'registration_purpose' => $registration_purpose
                 ];
-                
+
                 $this->registrationRequestModel->createRequest($data);
-                
+
                 $_SESSION['success'] = 'Pendaftaran berhasil! Silakan tunggu persetujuan dari Dosen Pembimbing.';
                 $this->redirect('/login');
-                
             } catch (\Exception $e) {
                 $_SESSION['error'] = 'Terjadi kesalahan saat pendaftaran: ' . $e->getMessage();
                 $this->redirect('/register');
@@ -100,22 +92,43 @@ class AuthController extends Controller
             }
         }
     }
-    
+
     public function login()
     {
         if (isset($_POST['submit'])) {
             $regNumber = $_POST['reg_number'];
             $password = $_POST['password'];
-
+            $isLoggedIn = false;
+            $isSiakadLogged = false;
             $user = $this->userModel->getByRegNumber($regNumber);
 
-            if ($user && password_verify($password, $user['password'])) {
+
+            if ($user) {
+                if ($user['password'] == null) {
+                    $isLoggedIn = $this->siakadService->login($regNumber, $password);
+                    if ($isLoggedIn) {
+                        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+                        $this->userModel->updateRegisteredUserPassword($hashedPassword, $user['id']);
+                    }
+                } else {
+                    $isLoggedIn = password_verify($password, $user['password']);
+                }
+            } else {
+                $isSiakadLogged = $this->siakadService->login($regNumber, $password);
+                if ($isSiakadLogged){
+                $_SESSION['error'] = 'Anda belum terdaftar sebagai anggota lab!';
+                $this->redirect('/login');
+                exit;
+            }
+            }
+
+            if ($isLoggedIn) {
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'name' => $user['name'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'reg_number' => $user['reg_number']
                 ];
-
                 if ($_SESSION['user']['role'] == 'admin_lab') {
                     $this->redirect('/admin-lab/dashboard');
                     exit;
@@ -126,9 +139,7 @@ class AuthController extends Controller
                     $this->redirect('/anggota-lab/dashboard');
                     exit;
                 }
-
-
-            } else { 
+            } else {
                 $_SESSION['error'] = 'NIM/NIP atau password salah';
                 $this->redirect('/login');
                 exit;
@@ -136,15 +147,16 @@ class AuthController extends Controller
         }
     }
 
-    public function logout() {
-          if (session_status() === PHP_SESSION_NONE) {
+    public function logout()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
-            }
-        
+        }
+
         $_SESSION = [];
-        
+
         session_destroy();
-        
+
         $this->redirect('/login');
         exit;
     }
