@@ -51,6 +51,29 @@ class ResearchModel extends Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getResearchByUserId($id)
+{
+    $sql = "SELECT r.*, 
+                   u_user.name as user_name, 
+                   u_dospem.name as dospem_name
+            FROM {$this->table} r
+            LEFT JOIN users u_user ON r.user_id = u_user.id
+            LEFT JOIN users u_dospem ON r.dospem_id = u_dospem.id
+            WHERE r.user_id = :user_id 
+            AND r.status IN ('approved_by_head', 'completed')
+            ORDER BY r.start_date DESC
+            LIMIT 3";
+
+    try {
+        $query = $this->db->prepare($sql);
+        $query->execute(['user_id' => $id]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        error_log("Database Error in getResearchByUserId: " . $e->getMessage());
+        return [];
+    }
+}
+
     public function getById($id)
     {
         $sql = "SELECT r.*, 

@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Direktori Riset - IVSS Lab</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-  <style>
-    html { scroll-behavior: smooth; }
-    * { font-family: 'Poppins', sans-serif; }
-    
-    /* Scrollbar dark mode */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
-  </style>
-</head>
-
-<body class="bg-slate-900 text-slate-300 selection:bg-cyan-500 selection:text-white">
-
-  <header class="px-6 py-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto flex justify-between items-center w-full">
-      <div class="text-cyan-400 text-4xl font-extrabold">IVSS</div>
-      <nav class="hidden md:flex items-center gap-8 text-[16px] font-medium text-slate-300">
-        <a href="home.php" class="hover:text-cyan-400 transition-colors">Home</a>
-        <a href="#" class="text-cyan-400 font-bold transition-colors">Publikasi</a>
-        <div class="flex items-center gap-4 ml-8">
-          <a href="login.php" class="px-5 py-2 text-cyan-400 border border-cyan-500 rounded-full hover:bg-cyan-500 hover:text-white transition-all">Login</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+<?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
 
   <section class="relative bg-slate-800 py-16 border-b border-slate-700">
     <div class="absolute inset-0 bg-gradient-to-b from-slate-900/50 to-slate-800"></div>

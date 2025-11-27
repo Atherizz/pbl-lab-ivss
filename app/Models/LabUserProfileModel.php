@@ -33,44 +33,41 @@ class LabUserProfileModel extends Model
         return $profile ?: null;
     }
 
-    /**
-     * [BARU] Mengambil semua anggota lab (User + Profil) untuk Landing Page REZA
-     */
-    public function getAllMembers()
-    {
-        // Join tabel users dan lab_user_profiles
-        // Mengambil user dengan role 'anggota_lab' atau 'admin_lab'
-        $sql = "SELECT 
-                    u.id, 
-                    u.name, 
-                    u.role, 
-                    p.photo_url, 
-                    p.nip, 
-                    p.nidn, 
-                    p.major,
-                    p.research_focus
-                FROM users u 
-                LEFT JOIN {$this->table} p ON u.id = p.user_id 
-                WHERE u.role IN ('anggota_lab', 'admin_lab') 
-                ORDER BY 
-                    CASE WHEN u.role = 'admin_lab' THEN 1 ELSE 2 END, -- Admin/Kepala Lab di urutan pertama
-                    u.name ASC"; 
-        
-        try {
-            $stmt = $this->db->query($sql);
-            $members = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+public function getAllMembers()
+{
+    // Join tabel users dan lab_user_profiles dengan alias
+    // Mengambil user dengan role 'anggota_lab' atau 'admin_lab'
+    $sql = "SELECT 
+                u.id AS user_id, 
+                u.name AS user_name, 
+                u.role AS user_role, 
+                p.photo_url AS profile_photo, 
+                u.reg_number AS nip, 
+                p.nidn AS nidn, 
+                p.major AS major,
+                p.research_focus AS research_focus
+            FROM users u 
+            LEFT JOIN {$this->table} p ON u.id = p.user_id 
+            WHERE u.role IN ('anggota_lab', 'admin_lab') 
+            ORDER BY 
+                CASE WHEN u.role = 'admin_lab' THEN 1 ELSE 2 END, -- Admin/Kepala Lab di urutan pertama
+                u.name ASC"; 
+    
+    try {
+        $stmt = $this->db->query($sql);
+        $members = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            // Decode research_focus jika ingin menampilkan tag keahlian
-            foreach ($members as &$member) {
-                $member['research_focus'] = json_decode($member['research_focus'] ?? '[]', true);
-            }
-
-            return $members;
-        } catch (\PDOException $e) {
-            error_log("Database Error in getAllMembers: " . $e->getMessage());
-            return [];
+        // Decode research_focus jika ingin menampilkan tag keahlian
+        foreach ($members as &$member) {
+            $member['research_focus'] = json_decode($member['research_focus'] ?? '[]', true);
         }
+
+        return $members;
+    } catch (\PDOException $e) {
+        error_log("Database Error in getAllMembers: " . $e->getMessage());
+        return [];
     }
+}
     // end of getAllMembers
     
     /**
