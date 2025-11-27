@@ -78,27 +78,37 @@ class LabUserProfileModel extends Model
      */
     private function prepareData(array $data, int $userId): array
     {
-        $socialLinks = $data['social_links'] ?? [];
+        $prepared = ['user_id' => $userId];
+        
+        if (array_key_exists('nip', $data)) {
+            $prepared['nip'] = $data['nip'];
+        }
+        if (array_key_exists('nidn', $data)) {
+            $prepared['nidn'] = $data['nidn'];
+        }
+        if (array_key_exists('major', $data)) {
+            $prepared['major'] = $data['major'];
+        }
+        if (array_key_exists('email', $data)) {
+            $prepared['email'] = $data['email'];
+        }
+        if (array_key_exists('photo_url', $data)) {
+            $prepared['photo_url'] = $data['photo_url'];
+        }
+        if (array_key_exists('social_links', $data)) {
+            $prepared['social_links'] = json_encode($data['social_links']);
+        }
+        if (array_key_exists('research_focus', $data)) {
+            $prepared['research_focus'] = json_encode($data['research_focus']);
+        }
+        if (array_key_exists('educations', $data)) {
+            $prepared['educations'] = json_encode($data['educations']);
+        }
+        if (array_key_exists('certifications', $data)) {
+            $prepared['certifications'] = json_encode($data['certifications']);
+        }
 
-        $prepared = [
-            'user_id'          => $userId,
-            'nip'              => $data['nip'] ?? null,
-            'nidn'             => $data['nidn'] ?? null,
-            'major'            => $data['major'] ?? null,
-            'email'            => $data['email'] ?? null,
-            'photo_url'        => $data['photo_url'] ?? null,
-            
-            // Encode array ke JSON sebelum disimpan ke DB
-            'social_links'     => json_encode($socialLinks),
-            'research_focus'   => json_encode($data['research_focus'] ?? []),
-            'educations'       => json_encode($data['educations'] ?? []), 
-            'certifications'   => json_encode($data['certifications'] ?? []),
-        ];
-
-        // Filter null value kecuali kolom JSON
-        return array_filter($prepared, fn($value, $key) => $value !== null || 
-            in_array($key, ['social_links', 'research_focus', 'educations', 'certifications']), 
-            ARRAY_FILTER_USE_BOTH);
+        return $prepared;
     }
     
     /**

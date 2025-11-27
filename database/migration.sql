@@ -252,3 +252,18 @@ ADD CONSTRAINT registration_requests_status_check
 ALTER TABLE research_projects
 ADD COLUMN rejection_reason TEXT NULL;
 
+-- migration 6
+ALTER TABLE registration_requests
+    ALTER COLUMN password DROP NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN password DROP NOT NULL;
+
+ALTER TABLE users
+    DROP COLUMN profile_image_url;
+
+ALTER TABLE users
+    DROP COLUMN research_focus;
+
+
+

@@ -62,36 +62,18 @@
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1.5">Nama Lengkap</label>
               <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i class="fas fa-user text-slate-500 text-xs"></i>
-                </div>
                 <input type="text" name="name" required placeholder="Nama Anda"
-                       class="w-full pl-9 pr-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                       class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
               </div>
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1.5">NIM / NIP</label>
               <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i class="fas fa-id-card text-slate-500 text-xs"></i>
-                </div>
                 <input type="text" name="nim" required placeholder="Nomor Induk"
-                       class="w-full pl-9 pr-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                       class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
               </div>
             </div>
           </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-lock text-slate-500 text-xs"></i>
-              </div>
-              <input type="password" name="password" required placeholder="Buat password kuat"
-                     class="w-full pl-9 pr-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
-            </div>
-          </div>
-
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1.5">Dosen Pembimbing</label>
             <div class="relative">

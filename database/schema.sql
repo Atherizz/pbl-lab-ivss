@@ -45,6 +45,7 @@ CREATE TABLE equipment_bookings (
     status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
         CHECK (status IN ('pending_approval', 'approved', 'rejected', 'returned')),
     notes TEXT NULL,
+    return_proof_url TEXT NULL,
     CONSTRAINT fk_equipment_bookings_equipment
         FOREIGN KEY (equipment_id) 
         REFERENCES equipment(id) 
@@ -67,6 +68,7 @@ CREATE TABLE research_projects (
         CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head', 'completed', 'rejected')),
     user_id BIGINT NULL,
     dospem_id BIGINT NULL,
+    rejection_reason TEXT NULL,
     CONSTRAINT fk_research_projects_user
         FOREIGN KEY (user_id) 
         REFERENCES users(id) 
@@ -110,7 +112,12 @@ CREATE TABLE registration_requests (
     registration_purpose TEXT,
     dospem_id BIGINT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
-        CHECK (status IN ('pending_approval', 'approved_by_dospem', 'approved_by_head')),
+        CHECK (status IN (
+        'pending_approval',
+        'approved_by_dospem',
+        'approved_by_head',
+        'rejected'
+    )),
     rejection_reason TEXT NULL,
     CONSTRAINT fk_registration_requests_dospem
         FOREIGN KEY (dospem_id) 
