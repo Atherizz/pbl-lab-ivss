@@ -87,17 +87,34 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 .theme-slate .ring-blue-500 { --tw-ring-color: #06b6d4 !important; }
 </style>
 
-<div class="theme-slate flex min-h-screen bg-slate-900" x-data="{ sidebarOpen: true }">
+<div class="theme-slate flex min-h-screen bg-slate-900" x-data="{ sidebarOpen: false }">
+    
+    <!-- Mobile Overlay -->
+    <div x-show="sidebarOpen" 
+         @click="sidebarOpen = false"
+         x-transition:enter="transition-opacity ease-linear duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+         style="display: none;">
+    </div>
+    
     <aside
-        x-show="sidebarOpen"
-        x-transition:enter="transition ease-out duration-200"
+        x-show="sidebarOpen || window.innerWidth >= 1024"
+        x-transition:enter="transition ease-out duration-200 transform"
         x-transition:enter-start="-translate-x-full"
         x-transition:enter-end="translate-x-0"
-        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave="transition ease-in duration-200 transform"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-full"
         class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-slate-800 to-slate-900 shadow-xl"
-        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+        style="display: none;"
+        x-init="$watch('sidebarOpen', value => { if (window.innerWidth >= 1024) $el.style.display = 'block'; })">
+        
+        <div class="flex flex-col h-full">
 
         <!-- Logo Section -->
         <div class="flex items-center justify-between h-20 px-6 border-b border-slate-700">
@@ -330,7 +347,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="absolute bottom-full left-0 right-0 mb-2 bg-slate-800 rounded-lg shadow-xl overflow-hidden"
                     style="display: none;">
                     <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
-                    <a href="<?= BASE_URL ?? '.' ?><?= $userRole === 'anggota_lab' ? '/anggota-lab' : '/admin-lab' ?>/profile"
+                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/profile"
                         class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-700 transition-colors">
                         <i class="fas fa-user-circle mr-2 text-slate-400"></i>
                         My Profile
@@ -346,6 +363,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 </div>
             </div>
         </div>
+        </div>
     </aside>
 
     <!-- Main Content Area -->
@@ -358,7 +376,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <i class="fas fa-bars text-xl"></i>
                 </button>
 
-                <div class="flex-1 lg:flex-none">
+                <div class="flex-1 lg:flex-none lg:ml-0">
                     <?php if (isset($pageTitle)): ?>
                         <h1 class="text-xl font-semibold text-slate-100"><?= htmlspecialchars($pageTitle) ?></h1>
                     <?php endif; ?>

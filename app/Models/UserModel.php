@@ -7,7 +7,6 @@ use PDO;
 
 class UserModel extends Model
 {
-
     public function getAllUsers()
     {
         $query = $this->db->prepare("SELECT * FROM users");
@@ -44,6 +43,18 @@ class UserModel extends Model
         }
         return false;
     }
+    public function registerUser($data) {
+        $query = $this->db->prepare("INSERT INTO users (name, reg_number, role, dospem_id) VALUES (:name, :reg_number, :role, :dospem_id)");
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'role' => 'mahasiswa', 'dospem_id' => $data['dospem_id']]);
+    }
+
+    public function updateRegisteredUserPassword($password, $id) {
+    $query = $this->db->prepare("UPDATE users SET password = :password WHERE id = :id");
+    return $query->execute([
+        'password' => $password, 
+        'id' => $id
+    ]);
+}
 
     public function createUser($data) {
         $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role, dospem_id) VALUES (:name, :reg_number, :password, :role, :dospem_id)");

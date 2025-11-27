@@ -9,7 +9,7 @@ use App\Http\Controllers\ResearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentBookingController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DatasetController; // TAMBAHKAN INI
+use App\Http\Controllers\DatasetController; 
 
 return [
     'GET' => [
@@ -36,6 +36,7 @@ return [
         '/anggota-lab/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],
         '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'index', 'middleware' => 'anggota_lab'],
         '/anggota-lab/profile/edit' => ['controller' => ProfileController::class, 'action' => 'edit', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/profile/photo' => ['controller' => ProfileController::class, 'action' => 'photoManager', 'middleware' => 'anggota_lab'],
         '/dataset/direktori' => ['controller' => DatasetController::class, 'action' => 'direktori', 'middleware' => 'auth'],
         '/anggota-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'index', 'middleware' => 'pengguna_lab'],
         '/admin-lab/dataset/create' => ['controller' => DatasetController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
@@ -65,6 +66,9 @@ return [
         '/admin-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}' => ['controller' => DatasetController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/delete' => ['controller' => DatasetController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
+        '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'store', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/profile/photo/upload' => ['controller' => ProfileController::class, 'action' => 'uploadPhoto', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/profile/photo/delete' => ['controller' => ProfileController::class, 'action' => 'deletePhoto', 'middleware' => 'anggota_lab'],
     ],
 ];
 ?>

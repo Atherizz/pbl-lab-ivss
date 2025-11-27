@@ -1,107 +1,120 @@
-    <?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
-<!-- Konten Form Register -->
-    <div class="min-h-[calc(100vh-64px)] flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-900">
-        
-        <!-- Box Form -->
-        <div class="w-full sm:max-w-md mt-6 px-6 py-8 bg-slate-800 shadow-md overflow-hidden sm:rounded-lg border border-slate-700">
-            
-            <h2 class="text-center text-3xl font-bold text-white mb-2">
-                Pendaftaran Anggota Lab
-            </h2>
-            <p class="text-center text-sm text-slate-400 mb-6">
-                Intelligent Vision & Smart System Laboratory
-            </p>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - IVSS Lab</title>
 
-            <!-- Form disesuaikan dari kodemu -->
-            <!-- Pastikan form action-mu benar -->
-            <form action="<?= BASE_URL ?? '.' ?>/register" method="POST">
-                
-                <!-- Menampilkan Error (jika ada) -->
-                <?php if (isset($_SESSION['error'])): ?>
-                <div class="p-4 mb-4 text-sm text-red-400 bg-red-900/30 border border-red-700 rounded-lg" role="alert">
-                    <?= $_SESSION['error']; ?>
-                    <?php unset($_SESSION['error']); ?>
-                </div>
-                <?php endif; ?>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-                <!-- Two-column layout for main fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Input NIM -->
-                    <div>
-                        <label for="nim" class="block text-sm font-medium text-slate-300">NIM <span class="text-red-400">*</span></label>
-                        <input type="text" id="nim" name="nim" required 
-                               placeholder="Contoh: 2441720001"
-                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                        <p class="mt-1 text-xs text-slate-400">Masukkan Nomor Induk Mahasiswa</p>
-                    </div>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .brand-font { font-family: 'Poppins', sans-serif; }
+  </style>
+</head>
 
-                    <!-- Input Nama -->
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-slate-300">Nama Lengkap <span class="text-red-400">*</span></label>
-                        <input type="text" id="name" name="name" required 
-                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                    </div>
+<body class="min-h-screen bg-slate-900 flex flex-col">
 
-                    <!-- Input Password -->
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-slate-300">Password <span class="text-red-400">*</span></label>
-                        <input type="password" id="password" name="password" required minlength="8"
-                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                        <p class="mt-1 text-xs text-slate-400">Minimal 8 karakter</p>
-                    </div>
+  <?php include __DIR__ . '/layouts/navbar.php'; ?>
 
-                    <!-- Konfirmasi Password -->
-                    <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-slate-300">Konfirmasi Password <span class="text-red-400">*</span></label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8"
-                               class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                    </div>
-
-                    <!-- Dropdown Dosen Pembimbing -->
-                    <div class="md:col-span-2">
-                        <label for="dospem_id" class="block text-sm font-medium text-slate-300">Dosen Pembimbing <span class="text-red-400">*</span></label>
-                        <select id="dospem_id" name="dospem_id" required
-                                class="block w-full mt-1 bg-slate-900 text-slate-100 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
-                            <option value="">-- Pilih Dosen Pembimbing --</option>
-                            <?php foreach ($dospem as $row) : ?>
-                            <option value=<?=$row['id'] ?>><?= $row['name'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <p class="mt-1 text-xs text-slate-400">Pilih dosen pembimbing Anda</p>
-                    </div>
-                </div>
-
-                <!-- Tujuan Pendaftaran -->
-                <div class="mt-4">
-                    <label for="registration_purpose" class="block text-sm font-medium text-slate-300">Tujuan Pendaftaran <span class="text-red-400">*</span></label>
-                    <textarea id="registration_purpose" name="registration_purpose" rows="4" required
-                              placeholder="Jelaskan tujuan Anda mendaftar di lab IVSS, minat riset, atau project yang ingin dikerjakan..."
-                              class="block w-full mt-1 bg-slate-900 text-slate-100 placeholder-slate-500 border-slate-700 rounded-md shadow-sm focus:border-cyan-500 focus:ring-cyan-500"></textarea>
-                    <p class="mt-1 text-xs text-slate-400">Minimal 50 karakter. Jelaskan motivasi dan tujuan Anda bergabung dengan lab.</p>
-                </div>
-
-                <!-- Info Note -->
-                <div class="mt-4 p-3 bg-slate-700/50 border border-slate-600 rounded-md">
-                    <p class="text-xs text-slate-300">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Pendaftaran Anda akan diverifikasi oleh Dosen Pembimbing dan Kepala Lab.
-                    </p>
-                </div>
-
-                <!-- Tombol Submit -->
-                <div class="mt-6">
-                    <button type="submit" name="submit" 
-                            class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-slate-900 bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-cyan-500">
-                        Daftar
-                    </button>
-                </div>
-
-                <!-- Link ke Login -->
-                <div class="text-center mt-4">
-                    <a class="text-sm text-slate-400 hover:text-slate-200 underline" href="<?= BASE_URL ?? '.' ?>/login">
-                        Already have an account? Log in.
-                    </a>
-                </div>
-            </form>
+  <div class="flex-1 flex items-center justify-center p-4 py-10">
+    <div class="w-full max-w-5xl bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-700">
+      
+      <div class="hidden md:block w-5/12 bg-cover bg-center relative" 
+           style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000');">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-900"></div>
+        <div class="absolute bottom-0 left-0 p-10 z-10">
+          <h3 class="text-2xl font-bold text-white mb-2 brand-font">
+            Join the <br> <span class="text-cyan-400">Innovation</span>
+          </h3>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Bergabunglah dengan komunitas peneliti dan pengembang teknologi masa depan di IVSS Lab.
+          </p>
         </div>
+      </div>
+
+      <div class="w-full md:w-7/12 p-8 md:p-10 flex flex-col justify-center">
+        
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400">
+              <i class="fas fa-atom text-xl"></i> </div>
+            <span class="text-2xl font-bold text-cyan-400 brand-font">IVSS LAB</span>
+          </div>
+          <h2 class="text-2xl font-bold text-white mb-1">Buat Akun Baru</h2>
+          <p class="text-slate-400 text-sm">Lengkapi data untuk mengajukan akses laboratorium.</p>
+        </div>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="mb-5 p-3 text-sm text-red-200 bg-red-900/50 border border-red-800 rounded-lg flex items-center gap-2">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><?= $_SESSION['error']; ?></span>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <form action="<?= BASE_URL ?? '.' ?>/register" method="POST" class="space-y-4">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Nama Lengkap</label>
+              <div class="relative">
+                <input type="text" name="name" required placeholder="Nama Anda"
+                       class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">NIM / NIP</label>
+              <div class="relative">
+                <input type="text" name="nim" required placeholder="Nomor Induk"
+                       class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">Dosen Pembimbing</label>
+            <div class="relative">
+               <select name="dospem_id" required
+                        class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm appearance-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                    <option value="" disabled selected>-- Pilih Dosen --</option>
+                    <?php if (!empty($dospem)): ?>
+                        <?php foreach ($dospem as $ds): ?>
+                            <option value="<?= $ds['id'] ?>"><?= htmlspecialchars($ds['name']) ?></option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="" disabled>Data dosen tidak tersedia</option>
+                    <?php endif; ?>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">Tujuan / Judul Riset (Min. 50 Karakter)</label>
+            <textarea name="registration_purpose" required rows="3" placeholder="Jelaskan detail riset atau skripsi yang akan dilakukan..."
+                      class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"></textarea>
+          </div>
+
+          <button type="submit" name="submit" 
+                  class="w-full py-3 px-4 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-cyan-500/20 transition-all duration-200 transform hover:-translate-y-1 mt-2">
+            Daftar Sekarang
+          </button>
+
+        </form>
+
+        <div class="mt-6 text-center text-sm text-slate-400">
+          Sudah punya akun? 
+          <a href="login.php" class="font-medium text-cyan-400 hover:text-cyan-300 transition-colors underline">Log in</a>
+        </div>
+      </div>
+
     </div>
+  </div>
+
+</body>
+</html>
