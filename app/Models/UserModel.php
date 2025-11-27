@@ -56,9 +56,9 @@ class UserModel extends Model
     ]);
     }
 
-    public function createAnggotaLab($data) {
+    public function createMember($data) {
         $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
-        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'anggota_lab']);
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => $data['role']]);
     }
 
     public function createUser($data) {

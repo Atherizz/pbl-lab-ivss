@@ -1,5 +1,5 @@
 <?php 
-$pageTitle = 'Tambah Anggota Lab Baru';
+$pageTitle = 'Tambah User';
 $activeMenu = 'members';
 
 $old = $old ?? [];
@@ -12,7 +12,7 @@ $errors = $errors ?? [];
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-6">Tambah Anggota Lab</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6">Tambah User</h2>
 
                 <?php if (!empty($errors)): ?>
                     <div class="mb-4 p-4 rounded-lg bg-red-50 border border-red-200">
@@ -64,7 +64,24 @@ $errors = $errors ?? [];
                             </p>
                         </div>
 
-                        <input type="hidden" name="role" value="anggota_lab">
+                        <?php 
+                            $roleError = $errors['role'] ?? null; 
+                        ?>
+                        <div>
+                            <label for="role" class="block text-sm font-medium text-gray-700">
+                                Role <span class="text-red-500">*</span>
+                            </label>
+                            <select id="role" name="role" required 
+                                class="block w-full mt-1 p-2 border <?= $roleError ? 'border-red-500' : 'border-gray-300' ?> rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Pilih Role</option>
+                                <option value="anggota_lab" <?= ($old['role'] ?? '') === 'anggota_lab' ? 'selected' : '' ?>>Anggota Lab</option>
+                                <option value="admin_berita" <?= ($old['role'] ?? '') === 'admin_berita' ? 'selected' : '' ?>>Admin Berita</option>
+                            </select>
+                            
+                            <?php if ($roleError): ?>
+                                <p class="mt-1 text-sm text-red-600"><?= htmlspecialchars($roleError) ?></p>
+                            <?php endif; ?>
+                        </div>
 
                     </div>
 

@@ -71,13 +71,23 @@ class MemberController extends Controller
             $name = trim($_POST['name'] ?? '');
             $regNumber = trim($_POST['reg_number'] ?? '');
             $password = $_POST['password'] ?? ''; 
+            $role = $_POST['role'];
 
             $errors = [];
             $password = $regNumber;
 
-            if ($name === '' || $regNumber === '' || $password === '') {
-                $errors[] = 'Nama, NIM/NIP, dan Password wajib diisi.';
+            if ($name === '' || $regNumber === '' || $password === '' || $role === '') {
+                $errors[] = 'Nama, NIM/NIP, Password, dan Role wajib diisi.';
             }
+
+            if ($regNumber !== '') {
+            $isRegisteredUser = $this->model->getByRegNumber($regNumber);
+            
+            if ($isRegisteredUser) {
+                $errors[] = 'NIM/NIP sudah terdaftar! Gunakan NIM/NIP lain.';
+            }
+        }
+
 
             if (!empty($errors)) {
                 view('admin_lab.members.create', ['errors' => $errors, 'old' => $_POST]);
@@ -90,9 +100,10 @@ class MemberController extends Controller
                 'name' => $name,
                 'reg_number' => $regNumber,
                 'password' => $hashedPassword,
+                'role' => $role
             ];
 
-            $this->model->createAnggotaLab($data); 
+            $this->model->createMember($data); 
             set_flash('success', 'Anggota berhasil ditambahkan!');
             $this->redirect('/admin-lab/members');
         }
