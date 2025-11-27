@@ -372,11 +372,11 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
         <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-30 shadow-sm">
             <div class="flex items-center justify-between h-16 px-6">
                 <button @click="sidebarOpen = !sidebarOpen"
-                    class="text-slate-300 hover:text-white transition-colors">
+                    class="lg:hidden text-slate-300 hover:text-white transition-colors">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
 
-                <div class="flex-1 lg:flex-none lg:ml-4">
+                <div class="flex-1 lg:flex-none lg:ml-0">
                     <?php if (isset($pageTitle)): ?>
                         <h1 class="text-xl font-semibold text-slate-100"><?= htmlspecialchars($pageTitle) ?></h1>
                     <?php endif; ?>
