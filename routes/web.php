@@ -44,8 +44,11 @@ return [
         '/admin-lab/dataset/{id}/edit' => ['controller' => DatasetController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
         '/admin-lab/members/create' => ['controller' => MemberController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
-        '/' => ['controller' => HomeController::class, 'action' => 'index'],
         '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
+        '/publikasi' => ['controller' => HomeController::class, 'action' => 'publication'],
+        '/berita' => ['controller' => HomeController::class, 'action' => 'news'],
+        '/profile/{id}' => ['controller' => HomeController::class, 'action' => 'profile'],
+        '/' => ['controller' => HomeController::class, 'action' => 'index'],
     ],
     'POST' => [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],

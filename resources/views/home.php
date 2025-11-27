@@ -1,29 +1,5 @@
 <?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Laboratorium IVSS</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-  <style>
-    html { scroll-behavior: smooth; }
-    * { font-family: 'Poppins', sans-serif; }
-    
-    /* Scrollbar dark mode */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
-  </style>
-</head>
 
 <body class="bg-slate-900 text-slate-300">
 
@@ -119,14 +95,13 @@
 
     </div>
   </section>
-  <section id="riset-penelitian" class="max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-800 border-y border-slate-700">
+ <section id="riset-penelitian" class="max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-800 border-y border-slate-700">
     <div class="text-center mb-12">
       <h2 class="text-4xl font-bold text-cyan-400 mb-3">Riset dan Penelitian</h2>
       <p class="text-slate-400 text-lg">Publikasi dan kontribusi ilmiah dari dosen dan peneliti Laboratorium IVSS</p>
     </div>
 
     <div class="flex flex-wrap justify-center gap-4 mb-10">
-      <button class="px-6 py-2.5 bg-cyan-600 text-white font-semibold rounded-lg shadow-md hover:bg-cyan-500 transition-all">Most Cited</button>
       <button class="px-6 py-2.5 bg-slate-700 border border-slate-600 text-slate-300 rounded-lg font-semibold hover:border-cyan-500 hover:text-cyan-400 transition-all">Latest</button>
       <button class="px-6 py-2.5 bg-slate-700 border border-slate-600 text-slate-300 rounded-lg font-semibold hover:border-cyan-500 hover:text-cyan-400 transition-all">Oldest</button>
     </div>
@@ -146,7 +121,7 @@
             <span class="text-sm font-semibold">145 citations</span>
           </div>
         </div>
-        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+        <a href="research-detail.html?id=1" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">Baca Selengkapnya</a>
       </div>
 
       <div class="bg-slate-700 border border-slate-600 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
@@ -163,7 +138,7 @@
             <span class="text-sm font-semibold">111 citations</span>
           </div>
         </div>
-        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+        <a href="research-detail.html?id=2" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">Baca Selengkapnya</a>
       </div>
 
       <div class="bg-slate-700 border border-slate-600 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
@@ -180,12 +155,19 @@
             <span class="text-sm font-semibold">85 citations</span>
           </div>
         </div>
-        <a href="#" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">BACA</a>
+        <a href="research-detail.html?id=3" class="block text-center bg-slate-600 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">Baca Selengkapnya</a>
       </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="<?= BASE_URL ?? '.' ?>/publikasi" class="inline-flex items-center gap-2 px-8 py-3 bg-cyan-600 text-white font-semibold rounded-lg shadow-lg hover:bg-cyan-500 hover:shadow-xl transition-all">
+        Lihat Semua Riset
+        <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
   </section>
 
-  <section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-slate-900 overflow-hidden">
+<section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-slate-900 overflow-hidden">
     
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px] -z-0 pointer-events-none"></div>
 
@@ -202,11 +184,17 @@
       </div>
 
       <?php 
-        // Ambil Kepala Lab (Misal data pertama)
-        $headOfLab = !empty($members) ? $members[0] : null;
+        // Ambil Kepala Lab (user dengan role 'admin_lab')
+        $headOfLab = null;
+        $researchers = [];
         
-        // Ambil sisanya sebagai peneliti
-        $researchers = !empty($members) ? array_slice($members, 1) : [];
+        foreach($members as $member) {
+            if($member['user_role'] === 'admin_lab') {
+                $headOfLab = $member;
+            } else {
+                $researchers[] = $member;
+            }
+        }
       ?>
 
       <?php if($headOfLab): ?>
@@ -217,8 +205,8 @@
             <div class="relative shrink-0">
               <div class="w-48 h-48 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 group-hover:from-cyan-400 group-hover:to-blue-600 transition-all duration-500">
                 <img class="w-full h-full rounded-full object-cover border-4 border-slate-800" 
-                     src="<?= !empty($headOfLab['photo_url']) ? BASE_URL . '/' . $headOfLab['photo_url'] : 'https://ui-avatars.com/api/?name=' . urlencode($headOfLab['name']) ?>" 
-                     alt="<?= htmlspecialchars($headOfLab['name']) ?>" />
+                     src="<?= !empty($headOfLab['profile_photo']) ? BASE_URL . '/' . $headOfLab['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($headOfLab['user_name']) ?>" 
+                     alt="<?= htmlspecialchars($headOfLab['user_name']) ?>" />
               </div>
               <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-cyan-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-slate-900">
                 HEAD OF LAB
@@ -227,13 +215,13 @@
 
             <div class="text-center md:text-left flex-1">
               <h3 class="text-[20px] font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
-                <?= htmlspecialchars($headOfLab['name']) ?>
+                <?= htmlspecialchars($headOfLab['user_name']) ?>
               </h3>
               <p class="text-slate-400 mb-6 text-lg leading-relaxed">
-                NIP/NIDN: <?= htmlspecialchars($headOfLab['nip'] ?? '-') ?>
+                NIP: <?= htmlspecialchars($headOfLab['nip'] ?? $headOfLab['nidn'] ?? '-') ?>
               </p>
               
-              <a href="#" 
+              <a href="<?= BASE_URL ?>/profile/<?= $headOfLab['user_id'] ?>" 
                  class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-700 text-white font-medium hover:bg-cyan-600 transition-all duration-300 group-hover:pl-8">
                 Lihat Profil Lengkap
                 <i class="fas fa-arrow-right text-sm"></i>
@@ -251,15 +239,15 @@
           <div class="flex items-center gap-4 mb-4">
             <div class="relative w-16 h-16 shrink-0">
                <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="<?= !empty($member['photo_url']) ? BASE_URL . '/' . $member['photo_url'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['name']) ?>" 
-                   alt="<?= htmlspecialchars($member['name']) ?>" />
+                   src="<?= !empty($member['profile_photo']) ? BASE_URL . '/' . $member['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['user_name']) ?>" 
+                   alt="<?= htmlspecialchars($member['user_name']) ?>" />
             </div>
             <div>
               <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                <?= htmlspecialchars($member['name']) ?>
+                <?= htmlspecialchars($member['user_name']) ?>
               </h4>
-              <p class="text-[14px] text-slate-400 uppercase tracking-wider font-semibold">
-                  <?= htmlspecialchars($member['major'] ?? 'Researcher') ?>
+              <p class="text-slate-400 mb-6 text-lg leading-relaxed">
+                NIP: <?= htmlspecialchars($member['nip']) ?>
               </p>
             </div>
           </div>
@@ -268,7 +256,7 @@
           
           <div class="flex justify-between items-center">
             <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="#" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+            <a href="<?= BASE_URL ?>/profile/<?= $member['user_id'] ?>" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
               Detail <i class="fas fa-chevron-right text-xs"></i>
             </a>
           </div>

@@ -17,21 +17,42 @@ class HomeController extends Controller
 
     public function index()
     {
-        // 1. Ambil data dari Model
         $allMembers = $this->userProfileModel->getAllMembers();
-
-        // 2. (Opsional) Pisahkan Kepala Lab dan Peneliti biasa
-        // Asumsi: Kepala lab punya user_id tertentu atau role khusus, 
-        // disini kita filter manual atau ambil user pertama sebagai contoh.
         
-        // Contoh sederhana: Kita kirim semua data ke view
+
         view('home', [
             'members' => $allMembers
         ]);
     }
 
+    public function publication()
+    {
+        
+
+        view('publications', [
+        ]);
+    }
+
+    public function profile($id)
+    {
+
+        $profile = $this->userProfileModel->getProfileByUserId($id); 
+        $user = $this->model('UserModel')->getById($id);
+        $research = $this->model('ResearchModel')->getResearchByUserId($id);
+
+        view('profile', [
+            'profile' => $profile,
+            'user' => $user,
+            'research' => $research
+        ]);
+    }
+    public function news()
+    {
+        view('news', []);
+    }
+
     public function fasilitas()
     {
-        view('fasilitasLab', []);
+        view('fasilitas', []);
     }
 }

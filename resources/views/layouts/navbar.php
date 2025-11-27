@@ -27,7 +27,7 @@ $base_url = defined('BASE_URL') ? BASE_URL : '.';
                 class="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors">
                 Anggota Laboratorium
             </a>
-            <a href="<?= $base_url ?>/peralatanLab.php" 
+            <a href="<?= $base_url ?>/fasilitas" 
             class="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors">
             Fasilitas
             </a>
@@ -35,7 +35,7 @@ $base_url = defined('BASE_URL') ? BASE_URL : '.';
             class="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors">
             Riset
             </a>
-            <a href="<?= $base_url ?>/news.php" 
+            <a href="<?= $base_url ?>/berita" 
             class="text-slate-300 hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors">
             Berita
             </a>

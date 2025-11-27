@@ -24,7 +24,7 @@
     <div class="w-full max-w-5xl bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-700">
       
       <div class="hidden md:block w-5/12 bg-cover bg-center relative" 
-           style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000');">
+            style="background-image: url('<?= BASE_URL ?? '.' ?>/assets/logo-white.webp');">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-900"></div>
         <div class="absolute bottom-0 left-0 p-10 z-10">
           <h3 class="text-2xl font-bold text-white mb-2 brand-font">

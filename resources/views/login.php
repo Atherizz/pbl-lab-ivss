@@ -5,11 +5,8 @@
       
       <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
         
-        <div class="mb-6">
+<div class="mb-6">
           <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400">
-              <i class="fas fa-eye text-xl"></i>
-            </div>
             <span class="text-2xl font-bold text-cyan-400 brand-font">IVSS LAB</span>
           </div>
           <h2 class="text-3xl font-bold text-white mb-2">Selamat Datang!</h2>

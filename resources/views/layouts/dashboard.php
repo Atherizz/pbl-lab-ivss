@@ -115,13 +115,10 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
         x-init="$watch('sidebarOpen', value => { if (window.innerWidth >= 1024) $el.style.display = 'block'; })">
         
         <div class="flex flex-col h-full">
-
-        <!-- Logo Section -->
+<!-- Logo Section -->
         <div class="flex items-center justify-between h-20 px-6 border-b border-slate-700">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center shadow-lg">
-                    <i class="fas fa-eye text-cyan-400 text-xl"></i>
-                </div>
+                <img src="<?= BASE_URL . '/assets/logo.png'?>" alt="Logo IVSS Lab" class="w-14 h-14 object-contain">
                 <div class="text-white">
                     <div class="font-bold text-lg">IVSS Lab</div>
                     <div class="text-xs text-slate-300">
