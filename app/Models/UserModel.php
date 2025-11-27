@@ -54,10 +54,20 @@ class UserModel extends Model
         'password' => $password, 
         'id' => $id
     ]);
-}
+    }
+
+    public function createAnggotaLab($data) {
+        $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role) VALUES (:name, :reg_number, :password, :role)");
+        return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'anggota_lab']);
+    }
 
     public function createUser($data) {
         $query = $this->db->prepare("INSERT INTO users (name, reg_number, password, role, dospem_id) VALUES (:name, :reg_number, :password, :role, :dospem_id)");
         return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'password' => $data['password'], 'role' => 'mahasiswa', 'dospem_id' => $data['dospem_id']]);
+    }
+
+    public function deleteUser($id) {
+        $query = $this->db->prepare("DELETE FROM users WHERE id = :id");
+        return $query->execute(['id' => $id]);
     }
 }
