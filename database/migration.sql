@@ -265,5 +265,41 @@ ALTER TABLE users
 ALTER TABLE users
     DROP COLUMN research_focus;
 
+-- migration 7
+-- CEK DULU NAMA CONSTRAINTNYA, LALU SESUAIKAN 
+SELECT constraint_name 
+FROM information_schema.table_constraints 
+WHERE table_name = 'research_projects' 
+AND constraint_type = 'FOREIGN KEY';
+
+-- Untuk tabel news
+ALTER TABLE news 
+DROP CONSTRAINT news_author_id_fkey;  -- nama default biasanya: tablename_columnname_fkey
+
+ALTER TABLE news 
+ADD CONSTRAINT fk_news_author 
+    FOREIGN KEY (author_id) 
+    REFERENCES users(id) 
+    ON DELETE CASCADE;
+
+-- Untuk tabel research_projects
+ALTER TABLE research_projects 
+DROP CONSTRAINT research_projects_primary_investigator_id_fkey;
+
+ALTER TABLE research_projects 
+ADD CONSTRAINT research_projects_primary_investigator_id_fkey 
+    FOREIGN KEY (user_id) 
+    REFERENCES users(id) 
+    ON DELETE CASCADE;
+
+ALTER TABLE research_projects 
+DROP CONSTRAINT research_projects_dospem_id_fkey;
+
+ALTER TABLE research_projects 
+ADD CONSTRAINT research_projects_dospem_id_fkey
+    FOREIGN KEY (dospem_id) 
+    REFERENCES users(id) 
+    ON DELETE CASCADE;
+
 
 
