@@ -41,6 +41,7 @@ return [
         '/admin-lab/dataset/create' => ['controller' => DatasetController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/edit' => ['controller' => DatasetController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/' => ['controller' => HomeController::class, 'action' => 'index'],
+        '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
     ],
     'POST' => [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],
