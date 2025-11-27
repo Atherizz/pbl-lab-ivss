@@ -201,6 +201,15 @@
         </p>
       </div>
 
+      <?php 
+        // Ambil Kepala Lab (Misal data pertama)
+        $headOfLab = !empty($members) ? $members[0] : null;
+        
+        // Ambil sisanya sebagai peneliti
+        $researchers = !empty($members) ? array_slice($members, 1) : [];
+      ?>
+
+      <?php if($headOfLab): ?>
       <div class="mb-16">
         <div class="group relative bg-slate-800/50 border border-slate-700 hover:border-cyan-500/50 rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 max-w-2xl mx-auto backdrop-blur-sm">
           
@@ -208,8 +217,8 @@
             <div class="relative shrink-0">
               <div class="w-48 h-48 rounded-full p-1 bg-gradient-to-br from-slate-700 to-slate-800 group-hover:from-cyan-400 group-hover:to-blue-600 transition-all duration-500">
                 <img class="w-full h-full rounded-full object-cover border-4 border-slate-800" 
-                     src="Anggota_Lab/Ulla_Delfana.jpg" 
-                     alt="Ulla Delfana" />
+                     src="<?= !empty($headOfLab['photo_url']) ? BASE_URL . '/' . $headOfLab['photo_url'] : 'https://ui-avatars.com/api/?name=' . urlencode($headOfLab['name']) ?>" 
+                     alt="<?= htmlspecialchars($headOfLab['name']) ?>" />
               </div>
               <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-cyan-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-slate-900">
                 HEAD OF LAB
@@ -218,13 +227,13 @@
 
             <div class="text-center md:text-left flex-1">
               <h3 class="text-[20px] font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
-                Dr. Ulla Delfana Rosiani, ST., MT.
+                <?= htmlspecialchars($headOfLab['name']) ?>
               </h3>
               <p class="text-slate-400 mb-6 text-lg leading-relaxed">
-                Memimpin visi dan strategi riset laboratorium dalam pengembangan teknologi kecerdasan buatan terdepan.
+                NIP/NIDN: <?= htmlspecialchars($headOfLab['nip'] ?? '-') ?>
               </p>
               
-              <a href="./Peneliti/UllaDelfana.php" 
+              <a href="#" 
                  class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-700 text-white font-medium hover:bg-cyan-600 transition-all duration-300 group-hover:pl-8">
                 Lihat Profil Lengkap
                 <i class="fas fa-arrow-right text-sm"></i>
@@ -233,140 +242,38 @@
           </div>
         </div>
       </div>
+      <?php endif; ?>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
+        <?php foreach($researchers as $member): ?>
         <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
           <div class="flex items-center gap-4 mb-4">
             <div class="relative w-16 h-16 shrink-0">
                <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Mamluatul_Haniah.jpg" alt="Mamluatul Haniah" />
+                   src="<?= !empty($member['photo_url']) ? BASE_URL . '/' . $member['photo_url'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['name']) ?>" 
+                   alt="<?= htmlspecialchars($member['name']) ?>" />
             </div>
             <div>
               <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Mamluatul Hani'ah,
+                <?= htmlspecialchars($member['name']) ?>
               </h4>
-             <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
+              <p class="text-[14px] text-slate-400 uppercase tracking-wider font-semibold">
+                  <?= htmlspecialchars($member['major'] ?? 'Researcher') ?>
+              </p>
             </div>
           </div>
+          
           <div class="border-t border-slate-700/50 my-4"></div>
+          
           <div class="flex justify-between items-center">
             <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="./Peneliti/mamluatulHaniah.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
+            <a href="#" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
               Detail <i class="fas fa-chevron-right text-xs"></i>
             </a>
           </div>
         </div>
-
-        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="relative w-16 h-16 shrink-0">
-               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Rosa_Andrie_Asmara.jpg" alt="Rosa Andrie" />
-            </div>
-            <div>
-              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Prof. Rosa Andrie A.,
-              </h4>
-              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., MT., Dr. Eng</p>
-            </div>
-          </div>
-          <div class="border-t border-slate-700/50 my-4"></div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Professor</span>
-            <a href="./Peneliti/RosaAndrie.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
-              Detail <i class="fas fa-chevron-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="relative w-16 h-16 shrink-0">
-               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Mungki_Astiningrum.jpg" alt="Mungki Astiningrum" />
-            </div>
-            <div>
-              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Mungki Astiningrum,
-              </h4>
-              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., M.Kom.</p>
-            </div>
-          </div>
-          <div class="border-t border-slate-700/50 my-4"></div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="./Peneliti/MungkiAstiningrum.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
-              Detail <i class="fas fa-chevron-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="relative w-16 h-16 shrink-0">
-               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Vivi_Nur.jpg" alt="Vivi Nur" />
-            </div>
-            <div>
-              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Vivi Nur W.,
-              </h4>
-              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
-            </div>
-          </div>
-          <div class="border-t border-slate-700/50 my-4"></div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="./Peneliti/ViviNur.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
-              Detail <i class="fas fa-chevron-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="relative w-16 h-16 shrink-0">
-               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Ely_Setyo_Astuti.jpg" alt="Ely Setyo" />
-            </div>
-            <div>
-              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Dr. Ely Setyo Astuti,
-              </h4>
-             <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">ST., MT.</p>
-            </div>
-          </div>
-          <div class="border-t border-slate-700/50 my-4"></div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="./Peneliti/ElySetyo.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
-              Detail <i class="fas fa-chevron-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="relative w-16 h-16 shrink-0">
-               <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors" 
-                   src="Anggota_Lab/Wilda_Imama_Sabilla.jpg" alt="Wilda Imama" />
-            </div>
-            <div>
-              <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
-                Wilda Imama S.,
-              </h4>
-              <p class="text-[16px] text-slate-100 uppercase tracking-wider font-semibold">S.Kom., M.Kom.</p>
-            </div>
-          </div>
-          <div class="border-t border-slate-700/50 my-4"></div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">Researcher</span>
-            <a href="./Peneliti/WildaImama.php" class="text-cyan-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-1">
-              Detail <i class="fas fa-chevron-right text-xs"></i>
-            </a>
-          </div>
-        </div>
+        <?php endforeach; ?>
 
       </div>
     </div>
