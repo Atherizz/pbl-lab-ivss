@@ -99,7 +99,9 @@ class AuthController extends Controller
             $regNumber = $_POST['reg_number'];
             $password = $_POST['password'];
             $isLoggedIn = false;
+            $isSiakadLogged = false;
             $user = $this->userModel->getByRegNumber($regNumber);
+
 
             if ($user) {
                 if ($user['password'] == null) {
@@ -111,6 +113,13 @@ class AuthController extends Controller
                 } else {
                     $isLoggedIn = password_verify($password, $user['password']);
                 }
+            } else {
+                $isSiakadLogged = $this->siakadService->login($regNumber, $password);
+                if ($isSiakadLogged){
+                $_SESSION['error'] = 'Anda belum terdaftar sebagai anggota lab!';
+                $this->redirect('/login');
+                exit;
+            }
             }
 
             if ($isLoggedIn) {

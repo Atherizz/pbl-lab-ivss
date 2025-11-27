@@ -1,23 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - IVSS Lab</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, .brand-font { font-family: 'Poppins', sans-serif; }
-  </style>
-</head>
-
-<body class="min-h-screen bg-slate-900 flex flex-col">
-
   <?php include __DIR__ . '/layouts/navbar.php'; ?>
 
   <div class="flex-1 flex items-center justify-center p-4">
@@ -33,7 +13,7 @@
             <span class="text-2xl font-bold text-cyan-400 brand-font">IVSS LAB</span>
           </div>
           <h2 class="text-3xl font-bold text-white mb-2">Selamat Datang!</h2>
-          <p class="text-slate-400">Silakan masuk untuk mengakses dashboard.</p>
+          <p class="text-slate-400">Untuk mahasiswa login dengan username & password SIAKAD!</p>
         </div>
 
         <?php if (isset($_SESSION['error'])): ?>
@@ -57,11 +37,8 @@
           <div>
             <label for="reg_number" class="block text-sm font-medium text-slate-300 mb-2">NIM / NIP</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-id-card text-slate-500"></i>
-              </div>
               <input type="text" id="reg_number" name="reg_number" required placeholder="Nomor Induk Mahasiswa/Pegawai"
-                     class="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+                     class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
             </div>
           </div>
 
@@ -70,11 +47,11 @@
               <label for="password" class="block text-sm font-medium text-slate-300">Password</label>
             </div>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-lock text-slate-500"></i>
-              </div>
               <input type="password" id="password" name="password" required placeholder="••••••••"
-              class="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+              class="w-full px-4 pr-12 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+              <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 transition-colors">
+                <i class="fas fa-eye" id="togglePasswordIcon"></i>
+              </button>
             </div>
             <div class="mt-2 text-right">
                 <a href="#" class="text-xs font-medium text-cyan-400 hover:text-cyan-300 transition-colors">Lupa Password?</a>
@@ -90,7 +67,7 @@
 
         <div class="mt-8 text-center text-sm text-slate-400">
           Belum punya akun? 
-          <a href="register.php" class="font-medium text-cyan-400 hover:text-cyan-300 transition-colors underline">Daftar disini</a>
+          <a href="<?= BASE_URL ?? '.' ?>/register" class="font-medium text-cyan-400 hover:text-cyan-300 transition-colors underline">Daftar disini</a>
         </div>
       </div>
 
@@ -110,6 +87,23 @@
 
     </div>
   </div>
+
+<script>
+function togglePassword() {
+  const passwordInput = document.getElementById('password');
+  const toggleIcon = document.getElementById('togglePasswordIcon');
+  
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    toggleIcon.classList.remove('fa-eye');
+    toggleIcon.classList.add('fa-eye-slash');
+  } else {
+    passwordInput.type = 'password';
+    toggleIcon.classList.remove('fa-eye-slash');
+    toggleIcon.classList.add('fa-eye');
+  }
+}
+</script>
 
 </body>
 </html>

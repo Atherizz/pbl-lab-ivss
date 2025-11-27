@@ -259,5 +259,11 @@ ALTER TABLE registration_requests
 ALTER TABLE users
     ALTER COLUMN password DROP NOT NULL;
 
+ALTER TABLE users
+    DROP COLUMN profile_image_url;
+
+ALTER TABLE users
+    DROP COLUMN research_focus;
+
 
 
