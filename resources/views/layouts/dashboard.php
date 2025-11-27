@@ -168,8 +168,8 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Direktori Riset Lab</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/anggota"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'members') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-users w-5 text-center"></i>
                     <span class="font-medium">Anggota</span>
                 </a>
