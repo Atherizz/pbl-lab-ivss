@@ -1,9 +1,32 @@
 <?php
 require BASE_PATH . '/resources/views/layouts/navbar.php';
+
+// Data news dari controller
+$newsList = $newsList ?? [];
+
+// Ambil berita terbaru untuk featured (berita pertama)
+$featuredNews = !empty($newsList) ? $newsList[0] : null;
+
+// Sisa berita untuk grid
+$otherNews = !empty($newsList) ? array_slice($newsList, 1) : [];
+
+// Function untuk format tanggal
+function formatNewsDate($date) {
+    if (empty($date)) return '-';
+    $timestamp = strtotime($date);
+    $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    return date('d', $timestamp) . ' ' . $months[date('n', $timestamp) - 1] . ' ' . date('Y', $timestamp);
+}
+
+// Function untuk excerpt/ringkasan
+function getExcerpt($content, $length = 150) {
+    $content = strip_tags($content);
+    if (strlen($content) <= $length) return $content;
+    return substr($content, 0, $length) . '...';
+}
 ?>
 
 <body class="bg-slate-900 text-slate-300 selection:bg-cyan-500 selection:text-white">
-
 
   <section class="relative bg-slate-800 py-16 border-b border-slate-700 overflow-hidden">
     <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none"></div>
@@ -20,35 +43,43 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
 
   <main class="max-w-7xl mx-auto px-6 py-12">
 
+    <?php if ($featuredNews): ?>
+    <!-- Featured News (Berita Terbaru) -->
     <div class="mb-16">
       <div class="group relative bg-slate-800 border border-slate-700 rounded-3xl overflow-hidden hover:border-cyan-500/50 transition-all duration-300 shadow-lg hover:shadow-cyan-500/10">
         <div class="grid grid-cols-1 lg:grid-cols-2">
           
           <div class="relative h-64 lg:h-full overflow-hidden">
             <div class="absolute top-4 left-4 z-10">
-                <span class="bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">Featured</span>
+                <span class="bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">Terbaru</span>
             </div>
-            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1200" 
-                 alt="Featured News" 
-                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+            <?php if (!empty($featuredNews['image_url'])): ?>
+              <img src="<?= BASE_URL . '/' . htmlspecialchars($featuredNews['image_url']) ?>" 
+                   alt="<?= htmlspecialchars($featuredNews['title']) ?>" 
+                   class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+            <?php else: ?>
+              <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
+                <i class="fas fa-newspaper text-6xl text-slate-600"></i>
+              </div>
+            <?php endif; ?>
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent lg:bg-gradient-to-r"></div>
           </div>
 
           <div class="p-8 lg:p-12 flex flex-col justify-center">
             <div class="flex items-center gap-3 text-sm text-cyan-400 mb-3">
               <i class="far fa-calendar-alt"></i>
-              <span>24 November 2025</span>
+              <span><?= formatNewsDate($featuredNews['published_at']) ?></span>
               <span class="text-slate-600">•</span>
-              <span>Workshop</span>
+              <span>Riset</span>
             </div>
             <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 leading-tight group-hover:text-cyan-400 transition-colors">
-              Workshop Nasional: Penerapan Deep Learning untuk Deteksi Penyakit Tanaman
+              <?= htmlspecialchars($featuredNews['title']) ?>
             </h2>
             <p class="text-slate-400 mb-6 line-clamp-3">
-              Laboratorium IVSS sukses menyelenggarakan workshop nasional yang dihadiri oleh pakar teknologi pertanian. Workshop ini membahas implementasi algoritma CNN terbaru untuk meningkatkan hasil panen melalui deteksi dini.
+              <?= getExcerpt($featuredNews['content'], 200) ?>
             </p>
             <div>
-              <a href="#" class="inline-flex items-center gap-2 text-white bg-cyan-600 hover:bg-cyan-500 px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-cyan-500/20">
+              <a href="<?= BASE_URL ?>/berita/<?= $featuredNews['id'] ?>" class="inline-flex items-center gap-2 text-white bg-cyan-600 hover:bg-cyan-500 px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-cyan-500/20">
                 Baca Selengkapnya
                 <i class="fas fa-arrow-right text-sm"></i>
               </a>
@@ -58,7 +89,9 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
         </div>
       </div>
     </div>
+    <?php endif; ?>
 
+    <!-- Filter Section -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-10 pb-8 border-b border-slate-800">
       
       <div class="flex flex-wrap gap-2">
@@ -77,149 +110,66 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
       </div>
     </div>
 
+    <!-- News Grid -->
+    <?php if (!empty($otherNews)): ?>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-
+      <?php foreach ($otherNews as $news): ?>
       <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
         <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800" alt="News 1" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <?php if (!empty($news['image_url'])): ?>
+            <img src="<?= BASE_URL . '/' . htmlspecialchars($news['image_url']) ?>" 
+                 alt="<?= htmlspecialchars($news['title']) ?>" 
+                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+          <?php else: ?>
+            <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
+              <i class="fas fa-newspaper text-4xl text-slate-600"></i>
+            </div>
+          <?php endif; ?>
           <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-cyan-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            Teknologi
+            Riset
           </div>
         </div>
         <div class="p-6 flex flex-col flex-grow">
           <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 20 Nov 2025
+            <i class="far fa-clock"></i> <?= formatNewsDate($news['published_at']) ?>
           </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Pengembangan Drone Cerdas untuk Pemetaan Lahan Gambut
+          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors line-clamp-2">
+            <?= htmlspecialchars($news['title']) ?>
           </h3>
           <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Tim peneliti IVSS Lab berhasil mengembangkan prototipe drone yang mampu memetakan lahan gambut dengan akurasi tinggi menggunakan sensor LiDAR.
+            <?= getExcerpt($news['content'], 120) ?>
           </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
+          <a href="<?= BASE_URL ?>/news/<?= $news['id'] ?>" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
             Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
           </a>
         </div>
       </article>
-
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
-        <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800" alt="News 2" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-purple-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            Prestasi
-          </div>
-        </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 15 Nov 2025
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Mahasiswa Bimbingan IVSS Raih Gold Medal di GEMASTIK 2025
-          </h3>
-          <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Selamat kepada tim mahasiswa yang telah mengharumkan nama kampus dengan inovasi sistem deteksi kantuk pengemudi berbasis IoT.
-          </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
-            Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
-        <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=800" alt="News 3" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-green-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            Tutorial
-          </div>
-        </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 10 Nov 2025
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Tutorial Instalasi dan Konfigurasi TensorFlow pada Jetson Nano
-          </h3>
-          <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Panduan lengkap langkah demi langkah untuk mengatur lingkungan pengembangan Deep Learning pada perangkat edge Jetson Nano.
-          </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
-            Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
-        <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800" alt="News 4" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-cyan-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            Kegiatan
-          </div>
-        </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 05 Nov 2025
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Rapat Koordinasi Riset Semester Ganjil 2025/2026
-          </h3>
-          <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Agenda rapat membahas roadmap penelitian laboratorium untuk satu semester ke depan serta pembagian tugas asisten peneliti.
-          </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
-            Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
-        <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800" alt="News 5" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-blue-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            Keamanan
-          </div>
-        </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 01 Nov 2025
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Analisis Keamanan Jaringan Menggunakan Metode Penetration Testing
-          </h3>
-          <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Studi kasus keamanan jaringan kampus untuk mengidentifikasi kerentanan sistem sebelum dieksploitasi oleh pihak tidak bertanggung jawab.
-          </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
-            Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
-        <div class="relative h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1535378437527-95498619047e?q=80&w=800" alt="News 6" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-cyan-400 text-xs font-bold px-3 py-1 rounded-md border border-slate-700">
-            AI
-          </div>
-        </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-            <i class="far fa-clock"></i> 28 Oct 2025
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-400 transition-colors">
-            Mengenal Generative AI dan Potensinya di Masa Depan
-          </h3>
-          <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
-            Artikel opini mengenai bagaimana Generative AI mengubah lanskap industri kreatif dan pemrograman dalam 5 tahun terakhir.
-          </p>
-          <a href="#" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
-            Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          </a>
-        </div>
-      </article>
-
+      <?php endforeach; ?>
     </div>
+    <?php else: ?>
+    <!-- Empty State jika tidak ada berita lain -->
+    <div class="text-center py-20">
+      <div class="bg-slate-800/30 border border-slate-700 rounded-3xl p-12 max-w-2xl mx-auto">
+        <i class="fas fa-newspaper text-6xl text-slate-600 mb-6"></i>
+        <h3 class="text-2xl font-semibold text-white mb-3">Belum Ada Berita Lainnya</h3>
+        <p class="text-slate-400">Nantikan berita dan artikel menarik lainnya dari IVSS Lab.</p>
+      </div>
+    </div>
+    <?php endif; ?>
 
-    <div class="flex justify-center items-center gap-2">
+    <?php if (empty($newsList)): ?>
+    <!-- Empty State jika tidak ada berita sama sekali -->
+    <div class="text-center py-20">
+      <div class="bg-slate-800/30 border border-slate-700 rounded-3xl p-12 max-w-2xl mx-auto">
+        <i class="fas fa-newspaper text-6xl text-slate-600 mb-6"></i>
+        <h3 class="text-2xl font-semibold text-white mb-3">Belum Ada Berita</h3>
+        <p class="text-slate-400">Belum ada berita yang dipublikasikan saat ini.</p>
+      </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Pagination (akan diaktifkan nanti setelah implementasi pagination) -->
+    <!-- <div class="flex justify-center items-center gap-2">
       <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors disabled:opacity-50">
         <i class="fas fa-chevron-left"></i>
       </a>
@@ -230,7 +180,7 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
       <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
         <i class="fas fa-chevron-right"></i>
       </a>
-    </div>
+    </div> -->
 
   </main>
 

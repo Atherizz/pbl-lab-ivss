@@ -8,20 +8,65 @@ use PDO;
 class NewsModel extends Model
 {
 
-    public function getAllNews()
-    {
-        $query = $this->db->prepare("SELECT * FROM news ORDER BY published_at DESC");
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+public function getAllNews()
+{
+    $sql = "SELECT n.*, 
+                   u.name as author_name
+            FROM news n
+            LEFT JOIN users u ON n.author_id = u.id
+            WHERE n.published_at IS NOT NULL
+            ORDER BY n.published_at DESC";
+    
+    try {
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        error_log("Database Error in getAllNews: " . $e->getMessage());
+        return [];
     }
+}
+public function getById($id)
+{
+    $sql = "SELECT n.*, 
+                   u.name as author_name
+            FROM news n
+            LEFT JOIN users u ON n.author_id = u.id
+            WHERE n.id = :id AND n.published_at IS NOT NULL";
+    
+    try {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        error_log("Database Error in getNewsById: " . $e->getMessage());
+        return null;
+    }
+}
 
-    public function getById($id)
-    {
-        $query = $this->db->prepare("SELECT * FROM news WHERE id = :id");
-        $query->execute(['id' => $id]);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-        return $result;
+public function getRecentNews($limit = 3, $excludeId = null)
+{
+    $excludeClause = $excludeId ? "AND n.id != :exclude_id" : "";
+    
+    $sql = "SELECT n.id, n.title, n.image_url, n.published_at
+            FROM news n
+            WHERE n.published_at IS NOT NULL {$excludeClause}
+            ORDER BY n.published_at DESC
+            LIMIT :limit";
+    
+    try {
+        $stmt = $this->db->prepare($sql);
+        if ($excludeId) {
+            $stmt->bindValue(':exclude_id', $excludeId, \PDO::PARAM_INT);
+        }
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        error_log("Database Error in getRecentNews: " . $e->getMessage());
+        return [];
     }
+}
+
 
     public function createNews($data)
     {

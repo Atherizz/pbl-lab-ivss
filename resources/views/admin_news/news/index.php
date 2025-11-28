@@ -90,7 +90,7 @@ $errorMessage = flash('error');
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        <?= htmlspecialchars($row['author_username'] ?? $row['author_id'] ?? 'Tidak Diketahui') ?>
+                                        <?= htmlspecialchars($row['author_name'] ?? $row['author_id'] ?? 'Tidak Diketahui') ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                         <?= date('d M Y, H:i', strtotime($row['published_at'])) ?>
