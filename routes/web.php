@@ -47,6 +47,7 @@ return [
         '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
         '/publikasi' => ['controller' => HomeController::class, 'action' => 'publication'],
         '/berita' => ['controller' => HomeController::class, 'action' => 'news'],
+        '/berita/{id}' => ['controller' => HomeController::class, 'action' => 'newsDetail'],
         '/profile/{id}' => ['controller' => HomeController::class, 'action' => 'profile'],
         '/' => ['controller' => HomeController::class, 'action' => 'index'],
     ],
