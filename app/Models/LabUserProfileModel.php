@@ -12,6 +12,19 @@ class LabUserProfileModel extends Model
         return $this->profileQuery($sql, $userId);
     }
 
+    public function getScholarUrlByUserId(int $userId)
+    {
+        $sql = "SELECT social_links->>'google_scholar' as scholar_url 
+            FROM {$this->table} 
+            WHERE user_id = ?";
+
+        $query = $this->db->prepare($sql);
+        $query->execute([$userId]);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+
+        return $result['scholar_url'] ?? null;
+    }
+
     public function getProfileBySlug(string $slug)
     {
         $sql = "SELECT * FROM {$this->table} WHERE slug = ?";

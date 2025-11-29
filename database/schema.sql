@@ -99,7 +99,6 @@ CREATE TABLE datasets (
     title VARCHAR(255) NOT NULL,
     description TEXT NULL,
     urls JSONB NOT NULL DEFAULT '[]',
-    file_url TEXT NOT NULL,
     tags TEXT[] NULL
 );
 
@@ -161,4 +160,28 @@ CREATE TABLE lab_user_profiles (
   CONSTRAINT chk_focus_array         CHECK (jsonb_typeof(research_focus) = 'array'),
   CONSTRAINT chk_edu_array           CHECK (jsonb_typeof(educations)     = 'array'),
   CONSTRAINT chk_cert_array          CHECK (jsonb_typeof(certifications) = 'array')
+);
+
+CREATE TABLE publications (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    
+    -- Data dari Scholar
+    title VARCHAR(500) NOT NULL,
+    authors TEXT NOT NULL,
+    publication_venue TEXT NULL,  -- "Genome biology 9 (9), 1-9, 2008"
+    year INTEGER NULL,
+    
+    -- Scholar identifiers
+    citation_id VARCHAR(100) UNIQUE NULL,  
+    scholar_link TEXT NULL,
+    
+    -- Citation metrics
+    cited_by_count INTEGER DEFAULT 0,
+    cited_by_link TEXT NULL,
+
+    CONSTRAINT fk_publications_user
+        FOREIGN KEY (user_id) 
+        REFERENCES users(id) 
+        ON DELETE CASCADE
 );

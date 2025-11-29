@@ -320,3 +320,27 @@ SELECT
     LOWER(REGEXP_REPLACE(REGEXP_REPLACE(u.name, '[^a-zA-Z0-9\s-]', '', 'g'), '\s+', '-', 'g')) as slug
 FROM users u
 WHERE u.reg_number IN ('140001', '140002', '140003', '2441720001');
+
+CREATE TABLE publications (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    
+    -- Data dari Scholar
+    title VARCHAR(500) NOT NULL,
+    authors TEXT NOT NULL,
+    publication_venue TEXT NULL,  -- "Genome biology 9 (9), 1-9, 2008"
+    year INTEGER NULL,
+    
+    -- Scholar identifiers
+    citation_id VARCHAR(100) UNIQUE NULL,  
+    scholar_link TEXT NULL,
+    
+    -- Citation metrics
+    cited_by_count INTEGER DEFAULT 0,
+    cited_by_link TEXT NULL,
+
+    CONSTRAINT fk_publications_user
+        FOREIGN KEY (user_id) 
+        REFERENCES users(id) 
+        ON DELETE CASCADE
+);
