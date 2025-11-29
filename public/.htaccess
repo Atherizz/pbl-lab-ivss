@@ -1,8 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Ini base path untuk folder public-mu
-    RewriteBase /pbl-lab-ivss/public/
+    # Redirect dari folder public ke root (jika ada yang akses public langsung)
+    RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+    RewriteRule ^(.*)$ /%1 [L,R=301]
 
     # Jika file atau folder yang diminta tidak ada...
     RewriteCond %{REQUEST_FILENAME} !-f
@@ -10,4 +11,4 @@
 
     # ...alihkan semua ke index.php
     RewriteRule ^(.*)$ index.php [QSA,L]
-</IfModule>
+</IfModule> 

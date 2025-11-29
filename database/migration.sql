@@ -303,3 +303,20 @@ ADD CONSTRAINT research_projects_dospem_id_fkey
 
 
 
+-- MIGRATION 7
+truncate news, lab_user_profiles;
+
+ALTER TABLE news 
+ADD COLUMN slug VARCHAR(255) UNIQUE NOT NULL;
+CREATE INDEX idx_news_slug ON news(slug);
+
+ALTER TABLE lab_user_profiles 
+ADD COLUMN slug VARCHAR(255) UNIQUE NOT NULL;
+
+-- Insert lab_user_profiles dengan slug dari nama user
+INSERT INTO lab_user_profiles (user_id, slug)
+SELECT 
+    u.id,
+    LOWER(REGEXP_REPLACE(REGEXP_REPLACE(u.name, '[^a-zA-Z0-9\s-]', '', 'g'), '\s+', '-', 'g')) as slug
+FROM users u
+WHERE u.reg_number IN ('140001', '140002', '140003', '2441720001');

@@ -7,6 +7,7 @@ if (!is_array($profile)) {
     $profile = [];
 }
 
+
 $fullName = $user['name'] ?? 'Peneliti';
 $email = $profile['email'] ?? '-';
 $photo_url = htmlspecialchars($profile['profile_photo'] ?? 'https://placehold.co/220x300/e5e7eb/4b5563?text=No+Photo');
@@ -247,9 +248,6 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
                 <?php foreach($research as $item): ?>
                 <div class="bg-slate-800/50 border border-slate-700 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
                     <div class="flex items-start justify-between mb-4">
-                        <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-bold px-3 py-1 rounded-full">
-                            <?= htmlspecialchars($item['status'] === 'completed' ? 'Selesai' : 'Disetujui') ?>
-                        </span>
                         <span class="text-xs text-slate-400 font-bold group-hover:text-cyan-400 transition-colors">
                             <?= getYear($item['start_date']) ?>
                         </span>

@@ -1,43 +1,54 @@
 <?php
+
 namespace App\Models;
 
-class LabUserProfileModel extends Model 
+class LabUserProfileModel extends Model
 {
     protected $table = 'lab_user_profiles';
-    
-    /**
-     * Mengambil profil lengkap berdasarkan user_id
-     */
+
     public function getProfileByUserId(int $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE user_id = ?";
-        
+        return $this->profileQuery($sql, $userId);
+    }
+
+    public function getProfileBySlug(string $slug)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE slug = ?";
+        return $this->profileQuery($sql, $slug);
+    }
+    private function profileQuery(string $sql, $value)
+    {
         try {
-            $stmt = $this->db->prepare($sql); 
-            $stmt->execute([$userId]);
-            $profile = $stmt->fetch(\PDO::FETCH_ASSOC); 
-            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$value]);
+            $profile = $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            error_log("Database Error in getProfileByUserId: " . $e->getMessage());
-            return null; 
+            error_log("Database Error in getProfile: " . $e->getMessage());
+            return null;
         }
 
         if ($profile) {
-            // Decode JSON columns agar bisa dipakai sebagai array di PHP
             $profile['social_links']   = json_decode($profile['social_links'] ?? '{}', true);
             $profile['research_focus'] = json_decode($profile['research_focus'] ?? '[]', true);
             $profile['educations']     = json_decode($profile['educations'] ?? '[]', true);
             $profile['certifications'] = json_decode($profile['certifications'] ?? '[]', true);
         }
-        
+
         return $profile ?: null;
     }
 
-public function getAllMembers()
-{
-    // Join tabel users dan lab_user_profiles dengan alias
-    // Mengambil user dengan role 'anggota_lab' atau 'admin_lab'
-    $sql = "SELECT 
+    public function isSlugExists($slug)
+    {
+        $query = $this->db->prepare("SELECT user_id FROM lab_user_profiles WHERE slug = :slug");
+        $query->execute(['slug' => $slug]);
+        return $query->fetch() !== false;
+    }
+    public function getAllMembers()
+    {
+        // Join tabel users dan lab_user_profiles dengan alias
+        // Mengambil user dengan role 'anggota_lab' atau 'admin_lab'
+        $sql = "SELECT 
                 u.id AS user_id, 
                 u.name AS user_name, 
                 u.role AS user_role, 
@@ -45,38 +56,39 @@ public function getAllMembers()
                 u.reg_number AS nip, 
                 p.nidn AS nidn, 
                 p.major AS major,
+                p.slug AS slug,
                 p.research_focus AS research_focus
             FROM users u 
             LEFT JOIN {$this->table} p ON u.id = p.user_id 
             WHERE u.role IN ('anggota_lab', 'admin_lab') 
             ORDER BY 
                 CASE WHEN u.role = 'admin_lab' THEN 1 ELSE 2 END, -- Admin/Kepala Lab di urutan pertama
-                u.name ASC"; 
-    
-    try {
-        $stmt = $this->db->query($sql);
-        $members = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                u.name ASC";
 
-        // Decode research_focus jika ingin menampilkan tag keahlian
-        foreach ($members as &$member) {
-            $member['research_focus'] = json_decode($member['research_focus'] ?? '[]', true);
+        try {
+            $stmt = $this->db->query($sql);
+            $members = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            // Decode research_focus jika ingin menampilkan tag keahlian
+            foreach ($members as &$member) {
+                $member['research_focus'] = json_decode($member['research_focus'] ?? '[]', true);
+            }
+
+            return $members;
+        } catch (\PDOException $e) {
+            error_log("Database Error in getAllMembers: " . $e->getMessage());
+            return [];
         }
-
-        return $members;
-    } catch (\PDOException $e) {
-        error_log("Database Error in getAllMembers: " . $e->getMessage());
-        return [];
     }
-}
     // end of getAllMembers
-    
+
     /**
      * Helper untuk menyiapkan data sebelum insert/update
      */
     private function prepareData(array $data, int $userId): array
     {
         $prepared = ['user_id' => $userId];
-        
+
         if (array_key_exists('nip', $data)) {
             $prepared['nip'] = $data['nip'];
         }
@@ -107,31 +119,7 @@ public function getAllMembers()
 
         return $prepared;
     }
-    
-    /**
-     * Membuat profil baru
-     */
-    public function createProfile(array $data, int $userId): bool
-    {
-        $preparedData = $this->prepareData($data, $userId);
-        $keys = array_keys($preparedData);
-        $fields = implode(', ', $keys);
-        $placeholders = implode(', ', array_fill(0, count($keys), '?'));
-        
-        $sql = "INSERT INTO {$this->table} ({$fields}) VALUES ({$placeholders})";
-        
-        try {
-            $stmt = $this->db->prepare($sql);
-            return $stmt->execute(array_values($preparedData));
-        } catch (\PDOException $e) {
-            error_log("Database Error in createProfile: " . $e->getMessage());
-            return false;
-        }
-    }
 
-    /**
-     * Update profil yang sudah ada
-     */
     public function updateProfile(array $data, int $userId): bool
     {
         $preparedData = $this->prepareData($data, $userId);
@@ -142,12 +130,12 @@ public function getAllMembers()
             $setParts[] = "{$key} = ?";
         }
         $setClause = implode(', ', $setParts);
-        
+
         $sql = "UPDATE {$this->table} SET {$setClause} WHERE user_id = ?";
-        
+
         $values = array_values($preparedData);
         $values[] = $userId;
-        
+
         try {
             $stmt = $this->db->prepare($sql);
             return $stmt->execute($values);
