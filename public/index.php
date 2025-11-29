@@ -9,14 +9,14 @@ require BASE_PATH . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
 $dotenv->load();
 
-define('BASE_URL', '/pbl-lab-ivss/public');
+define('BASE_URL', '/pbl-lab-ivss');
 
 
 $routes = require BASE_PATH . '/routes/web.php';
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
 
-$base_path = '/pbl-lab-ivss/public';
+$base_path = '/pbl-lab-ivss';
 
 if (strpos($request_uri, $base_path) === 0) {
     $request_uri = substr($request_uri, strlen($base_path));
@@ -44,7 +44,7 @@ foreach ($routesForMethod as $routePath => $routeInfo) {
     $action = $routeInfo['action'];
     // Ubah route path (e.g., /ekskul/detail/{id}) menjadi pola Regex
     // Ini akan mengubah {id} menjadi ([a-zA-Z0-9_]+)
-    $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $routePath);
+    $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_\-\.]+)', $routePath);
     
     // Buat pola Regex yang utuh (tambahkan ^ dan $ agar cocok persis)
     $pattern = "#^" . $pattern . "$#";

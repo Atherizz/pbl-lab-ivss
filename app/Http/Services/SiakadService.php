@@ -2,9 +2,6 @@
 
 namespace App\Http\Services;
 
-use App\Exception\SiakadException;
-
-
 class SiakadService
 {
     private string $siakadUrl;

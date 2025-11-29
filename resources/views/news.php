@@ -79,7 +79,7 @@ function getExcerpt($content, $length = 150) {
               <?= getExcerpt($featuredNews['content'], 200) ?>
             </p>
             <div>
-              <a href="<?= BASE_URL ?>/berita/<?= $featuredNews['id'] ?>" class="inline-flex items-center gap-2 text-white bg-cyan-600 hover:bg-cyan-500 px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-cyan-500/20">
+              <a href="<?= BASE_URL ?>/berita/<?= $featuredNews['slug'] ?>" class="inline-flex items-center gap-2 text-white bg-cyan-600 hover:bg-cyan-500 px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-cyan-500/20">
                 Baca Selengkapnya
                 <i class="fas fa-arrow-right text-sm"></i>
               </a>
@@ -102,7 +102,7 @@ function getExcerpt($content, $length = 150) {
       </div>
 
       <div class="relative w-full md:w-80">
-        <input type="text" placeholder="Cari artikel..." 
+        <input type="text" id="searchInput" placeholder="Cari artikel..." 
                class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
           <i class="fas fa-search"></i>
@@ -112,9 +112,9 @@ function getExcerpt($content, $length = 150) {
 
     <!-- News Grid -->
     <?php if (!empty($otherNews)): ?>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
       <?php foreach ($otherNews as $news): ?>
-      <article class="group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
+      <article class="news-card group bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full" data-title="<?= strtolower(htmlspecialchars($news['title'])) ?>">
         <div class="relative h-48 overflow-hidden">
           <?php if (!empty($news['image_url'])): ?>
             <img src="<?= BASE_URL . '/' . htmlspecialchars($news['image_url']) ?>" 
@@ -139,7 +139,7 @@ function getExcerpt($content, $length = 150) {
           <p class="text-slate-400 text-sm line-clamp-3 mb-4 flex-grow">
             <?= getExcerpt($news['content'], 120) ?>
           </p>
-          <a href="<?= BASE_URL ?>/news/<?= $news['id'] ?>" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
+          <a href="<?= BASE_URL ?>/berita/<?= $news['slug'] ?>" class="inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-auto">
             Baca Artikel <i class="fas fa-arrow-right ml-2 text-xs"></i>
           </a>
         </div>
@@ -189,6 +189,57 @@ function getExcerpt($content, $length = 150) {
       &copy; 2025 Laboratorium Intelligent Vision and Smart System (IVSS). <br>Politeknik Negeri Malang.
     </p>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const newsCards = document.querySelectorAll('.news-card');
+      const newsGrid = document.getElementById('newsGrid');
+      
+      let debounceTimeout;
+      
+      searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+          const searchTerm = searchInput.value.toLowerCase().trim();
+          let visibleCount = 0;
+          
+          newsCards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            
+            if (title.includes(searchTerm)) {
+              card.style.display = 'flex';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          // Tampilkan pesan jika tidak ada hasil
+          let noResultMsg = document.getElementById('noResultMessage');
+          if (visibleCount === 0 && searchTerm !== '') {
+            if (!noResultMsg) {
+              noResultMsg = document.createElement('div');
+              noResultMsg.id = 'noResultMessage';
+              noResultMsg.className = 'col-span-1 md:col-span-2 lg:col-span-3 text-center py-20';
+              noResultMsg.innerHTML = `
+                <div class="bg-slate-800/30 border border-slate-700 rounded-3xl p-12 max-w-2xl mx-auto">
+                  <i class="fas fa-search text-6xl text-slate-600 mb-6"></i>
+                  <h3 class="text-2xl font-semibold text-white mb-3">Tidak Ada Hasil</h3>
+                  <p class="text-slate-400">Tidak ditemukan artikel dengan kata kunci "${searchTerm}"</p>
+                </div>
+              `;
+              newsGrid.appendChild(noResultMsg);
+            } else {
+              noResultMsg.querySelector('p').textContent = `Tidak ditemukan artikel dengan kata kunci "${searchTerm}"`;
+            }
+          } else if (noResultMsg) {
+            noResultMsg.remove();
+          }
+        }, 300);
+      });
+    });
+  </script>
 
 </body>
 </html>

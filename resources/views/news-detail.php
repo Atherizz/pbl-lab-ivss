@@ -126,18 +126,6 @@ if (!$news) {
       <aside class="lg:col-span-1 space-y-8">
         
         <!-- Search Box -->
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg">
-            <h3 class="text-lg font-bold text-white mb-4">Cari Artikel</h3>
-            <form action="<?= BASE_URL ?>/news" method="GET">
-                <div class="relative">
-                    <input type="text" name="search" placeholder="Kata kunci..." 
-                           class="w-full bg-slate-900 border border-slate-600 text-slate-200 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
-                    <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-400">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
 
         <!-- Categories (Static untuk sementara) -->
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg">

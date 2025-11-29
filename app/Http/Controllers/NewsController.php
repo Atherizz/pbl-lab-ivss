@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\SlugService;
 use App\Http\Services\UploadService;
 
 class NewsController extends Controller
@@ -11,6 +12,7 @@ class NewsController extends Controller
     private $uploadDir;
     private $itemsPerPage = 5;
     public $uploadService;
+    public $slugService;
     public $error = '';
 
     public function __construct()
@@ -19,6 +21,7 @@ class NewsController extends Controller
         $this->model = $this->model('NewsModel');
         $this->uploadDir = __DIR__ . '/../../../public/uploads/news/';
         $this->uploadService = new UploadService();
+        $this->slugService = new SlugService('NewsModel');
         
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
@@ -106,13 +109,16 @@ class NewsController extends Controller
                 return;
             }
 
+            $slug = $this->slugService->generateUniqueSlug($title);
+
             // Siapkan data
             $data = [
                 'title'        => $title,
                 'content'      => $content,
                 'image_url'    => 'uploads/news/' . $imageFileName,
                 'author_id'    => $authorId,
-                'published_at' => date('Y-m-d H:i:s') 
+                'published_at' => date('Y-m-d H:i:s'),
+                'slug'         => $slug
             ];
 
             $this->model->createNews($data);
@@ -160,11 +166,14 @@ class NewsController extends Controller
                 $imageUrl = 'uploads/news/' . $newImageFileName;
             }
 
+            $slug = $this->slugService->generateUniqueSlug($_POST['title'], $id);
+
             $data = [
                 'title'        => trim($_POST['title']),
                 'content'      => trim($_POST['content']),
                 'image_url'    => $imageUrl,
-                'published_at' => $_POST['published_at'] ?? date('Y-m-d H:i:s')
+                'published_at' => $_POST['published_at'] ?? date('Y-m-d H:i:s'),
+                'slug'         => $slug
             ];
             
             $this->model->updateNews($id, $data);

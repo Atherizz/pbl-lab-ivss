@@ -118,7 +118,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 <!-- Logo Section -->
         <div class="flex items-center justify-between h-20 px-6 border-b border-slate-700">
             <div class="flex items-center gap-3">
-                <img src="<?= BASE_URL . '/assets/logo.png'?>" alt="Logo IVSS Lab" class="w-14 h-14 object-contain">
+                <img src="<?= BASE_URL . '/assets/logo.webp'?>" alt="Logo IVSS Lab" class="w-14 h-14 object-contain">
                 <div class="text-white">
                     <div class="font-bold text-lg">IVSS Lab</div>
                     <div class="text-xs text-slate-300">

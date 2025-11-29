@@ -3,17 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\SlugService;
 use App\Models\UserModel; 
+
 
 class MemberController extends Controller
 {
     private $model;
+    private $profileModel;
+    private $slugService;
     private $itemsPerPage = 5; 
 
     public function __construct()
     {
         parent::__construct(); 
         $this->model = $this->model('UserModel'); 
+        $this->profileModel = $this->model('LabUserProfileModel'); 
+        $this->slugService = new SlugService('LabUserProfileModel');
     }
 
     public function index()
@@ -88,19 +94,20 @@ class MemberController extends Controller
             }
         }
 
-
             if (!empty($errors)) {
                 view('admin_lab.members.create', ['errors' => $errors, 'old' => $_POST]);
                 return;
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $slug = $this->slugService->generateUniqueSlug($name);
             
             $data = [
                 'name' => $name,
                 'reg_number' => $regNumber,
                 'password' => $hashedPassword,
-                'role' => $role
+                'role' => $role,
+                'slug' => $slug
             ];
 
             $this->model->createMember($data); 

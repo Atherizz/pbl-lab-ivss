@@ -32,12 +32,11 @@ class HomeController extends Controller
         view('publications', []);
     }
 
-    public function profile($id)
+    public function profile($slug)
     {
-
-        $profile = $this->userProfileModel->getProfileByUserId($id);
-        $user = $this->model('UserModel')->getById($id);
-        $research = $this->model('ResearchModel')->getResearchByUserId($id);
+        $profile = $this->userProfileModel->getProfileBySlug($slug);
+        $user = $this->model('UserModel')->getById($profile['user_id']);
+        $research = $this->model('ResearchModel')->getResearchByUserId($profile['user_id']);
 
         view('profile', [
             'profile' => $profile,
@@ -53,19 +52,18 @@ class HomeController extends Controller
         ]);
     }
 
-    public function newsDetail($id)
+    public function newsDetail($slug)
     {
         $newsModel = $this->model('NewsModel');
 
-
-        $news = $newsModel->getById($id);
+        $news = $newsModel->getBySlug($slug);
 
         if (!$news) {
-            header('Location: ' . BASE_URL . '/news');
+            header('Location: ' . BASE_URL . '/berita');
             exit;
         }
 
-        $recentNews = $newsModel->getRecentNews(3, $id);
+        $recentNews = $newsModel->getRecentNews(3, $news['id']);
 
         view('news-detail', [
             'news' => $news,
