@@ -8,7 +8,7 @@ use PDO;
 class PublicationModel extends Model
 {
     protected $table = 'publications';
-    public function getAll(int $userId = null, string $searchQuery = null)
+    public function getAllByUserId(int $userId = null, string $searchQuery = null)
     {
         $sql = "SELECT 
             p.*, 
@@ -35,6 +35,22 @@ class PublicationModel extends Model
         $query = $this->db->prepare($sql);
         $query->execute($params);
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countByUserId(int $userId): int
+    {
+        $sql = "SELECT COUNT(*) AS total
+            FROM {$this->table}
+            WHERE user_id = :user_id";
+
+        $query = $this->db->prepare($sql);
+        $query->execute([
+            'user_id' => $userId
+        ]);
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        return (int) ($result['total'] ?? 0);
     }
 
     /**
@@ -74,9 +90,9 @@ class PublicationModel extends Model
                 VALUES
                     (:user_id, :title, :authors, :publication_venue, :year,
                      :citation_id, :scholar_link, :cited_by_count, :cited_by_link)";
-        
+
         $query = $this->db->prepare($sql);
-        
+
         return $query->execute([
             'user_id' => $data['user_id'],
             'title' => $data['title'],
@@ -138,5 +154,20 @@ class PublicationModel extends Model
         $sql = "DELETE FROM {$this->table} WHERE user_id = :user_id";
         $query = $this->db->prepare($sql);
         return $query->execute(['user_id' => $userId]);
+    }
+
+    public function deleteAllByUserId(int $userId): int
+    {
+        $countSql = "SELECT COUNT(*) as total FROM {$this->table} WHERE user_id = :user_id";
+        $countQuery = $this->db->prepare($countSql);
+        $countQuery->execute(['user_id' => $userId]);
+        $result = $countQuery->fetch(PDO::FETCH_ASSOC);
+        $count = (int)($result['total'] ?? 0);
+        
+        $deleteSql = "DELETE FROM {$this->table} WHERE user_id = :user_id";
+        $deleteQuery = $this->db->prepare($deleteSql);
+        $deleteQuery->execute(['user_id' => $userId]);
+        
+        return $count;
     }
 }

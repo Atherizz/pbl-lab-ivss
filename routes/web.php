@@ -74,6 +74,8 @@ return [
         '/anggota-lab/approval/{type}/approve/{id}' => ['controller' => ApprovalController::class, 'action' => 'approveRequestDospem', 'middleware' => 'anggota_lab'],
         '/anggota-lab/approval/{type}/reject/{id}' => ['controller' => ApprovalController::class, 'action' => 'rejectRequestDospem', 'middleware' => 'anggota_lab'],
         '/anggota-lab/publikasi/setup' => ['controller' => PublicationController::class, 'action' => 'setup', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/publikasi/synchronize' => ['controller' => PublicationController::class, 'action' => 'synchronize', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/publikasi/destroy-all' => ['controller' => PublicationController::class, 'action' => 'destroyAllPublications', 'middleware' => 'anggota_lab'],
         '/admin-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}' => ['controller' => DatasetController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/delete' => ['controller' => DatasetController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
