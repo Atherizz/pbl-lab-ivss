@@ -153,10 +153,10 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Equipment</span>
                 </a>
 
-                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-flask w-5 text-center"></i>
-                    <span class="font-medium">Riset Saya</span>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-book-open w-5 text-center"></i>
+                    <span class="font-medium">Publikasi Saya</span>
                 </a>
 
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
@@ -171,7 +171,6 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Anggota</span>
                 </a>
 
-                <!-- TAMBAHAN: DATASET (ADMIN) -->
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder w-5 text-center"></i>
@@ -229,6 +228,18 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 <div class="my-4 border-t border-slate-700"></div>
 
                 <div class="px-4 py-2">
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Publikasi</span>
+                </div>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-book-open w-5 text-center"></i>
+                    <span class="font-medium">Publikasi Saya</span>
+                </a>
+
+                <div class="my-4 border-t border-slate-700"></div>
+
+                <div class="px-4 py-2">
                     <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Riset</span>
                 </div>
 
@@ -258,6 +269,8 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 </a>
 
                 <?php if ($userRole === 'anggota_lab'): ?>
+                    <div class="my-4 border-t border-slate-700"></div>
+                    
                     <div class="px-4 py-2">
                         <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
                     </div>

@@ -17,24 +17,26 @@ class DatasetController extends Controller
 
     public function direktori()
     {
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $searchQuery = $_GET['search'] ?? null;
-        $datasets = $this->model->getAll($searchQuery);
+        $allDatasets = $this->model->getAll($searchQuery);
+        $paginationData = pagination(6, $currentPage, $allDatasets, 'datasets');
         
-        view('dataset.direktori', [
-            'datasets' => $datasets,
-            'currentSearch' => $searchQuery
-        ]);
+        $paginationData['currentSearch'] = $searchQuery;
+        
+        view('dataset.direktori', $paginationData);
     }
 
     public function index()
     {
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $searchQuery = $_GET['search'] ?? null;
-        $datasets = $this->model->getAll($searchQuery);
+        $allDatasets = $this->model->getAll($searchQuery);
+        $paginationData = pagination(6, $currentPage, $allDatasets, 'datasets');
         
-        view('admin_lab.dataset.index', [
-            'datasets' => $datasets,
-            'currentSearch' => $searchQuery
-        ]);
+        $paginationData['currentSearch'] = $searchQuery;
+        
+        view('admin_lab.dataset.index', $paginationData);
     }
 
     public function create()
@@ -48,7 +50,7 @@ class DatasetController extends Controller
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/admin-lab/dataset');
+            $this->redirect('/anggota-lab/dataset');
             return;
         }
 
@@ -82,14 +84,14 @@ class DatasetController extends Controller
         ];
 
         $this->model->create($datasetData);
-        $this->redirect('/admin-lab/dataset');
+        $this->redirect('/anggota-lab/dataset');
     }
     
     public function edit($id)
     {
         $dataset = $this->model->getById($id);
         if (!$dataset) {
-            $this->redirect('/admin-lab/dataset');
+            $this->redirect('/anggota-lab/dataset');
             return;
         }
 
@@ -117,7 +119,7 @@ class DatasetController extends Controller
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/admin-lab/dataset');
+            $this->redirect('/anggota-lab/dataset');
             return;
         }
 
@@ -155,18 +157,18 @@ class DatasetController extends Controller
         ];
 
         $this->model->update($id, $datasetData);
-        $this->redirect('/admin-lab/dataset');
+        $this->redirect('/anggota-lab/dataset');
     }
 
     public function destroy($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/admin-lab/dataset');
+            $this->redirect('/anggota-lab/dataset');
             return;
         }
 
         $this->model->delete($id);
-        $this->redirect('/admin-lab/dataset');
+        $this->redirect('/anggota-lab/dataset');
     }
 
     private function validateDataset($data)

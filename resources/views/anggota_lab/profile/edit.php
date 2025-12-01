@@ -66,12 +66,12 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                 <input name="email" type="email" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="nama@kampus.ac.id" value="<?= htmlspecialchars($profile['email'] ?? ($_SESSION['user']['email'] ?? '')) ?>" required/>
             </div>
             <div>
-                <label class="block text-sm font-medium mb-1 text-slate-700">NIP</label>
-                <input name="nip" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="1990..." value="<?= htmlspecialchars($nip) ?>" disabled/>
+                <label class="block text-sm font-medium mb-1 text-slate-700">NIDN</label>
+                <input name="nidn" type="text" class="w-full rounded-md border border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed" placeholder="1990..." value="<?= htmlspecialchars($nidn) ?>" readonly/>
             </div>
             <div>
-                <label class="block text-sm font-medium mb-1 text-slate-700">NIDN</label>
-                <input name="nidn" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="000..." value="<?= htmlspecialchars($profile['nidn'] ?? '') ?>"/>
+                <label class="block text-sm font-medium mb-1 text-slate-700">NIP</label>
+                <input name="nip" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="000..." value="<?= htmlspecialchars($profile['nip'] ?? '') ?>"/>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-700">Program Studi / Major</label>

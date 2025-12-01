@@ -144,16 +144,41 @@ $statuses = [
                         </div>
                     <?php endif; ?>
                 </div>
+                <!-- Pagination -->
+                <?php if (($totalPages ?? 1) > 1): ?>
                 <div class="mt-4">
                     <nav class="flex justify-between items-center text-sm text-gray-500">
-                        <span>Showing <?= !empty($research) ? '1 to ' . count($research) . ' of ' . count($research) : '0' ?> entries</span>
+                        <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
                         <div class="flex space-x-1">
-                            <button class="px-3 py-1 border rounded-md" disabled>Previous</button>
-                            <button class="px-3 py-1 border rounded-md bg-blue-600 text-white">1</button>
-                            <button class="px-3 py-1 border rounded-md" disabled>Next</button>
+                            <?php if ($currentPage > 1): ?>
+                                <a href="?page=<?= $currentPage - 1 ?>&status=<?= $currentStatus ?>&search=<?= urlencode($currentSearch) ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Previous</a>
+                            <?php else: ?>
+                                <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Previous</button>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <?php if ($i == $currentPage): ?>
+                                    <button class="px-3 py-1 border rounded-md bg-blue-600 text-white"><?= $i ?></button>
+                                <?php else: ?>
+                                    <a href="?page=<?= $i ?>&status=<?= $currentStatus ?>&search=<?= urlencode($currentSearch) ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100"><?= $i ?></a>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                            
+                            <?php if ($currentPage < $totalPages): ?>
+                                <a href="?page=<?= $currentPage + 1 ?>&status=<?= $currentStatus ?>&search=<?= urlencode($currentSearch) ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Next</a>
+                            <?php else: ?>
+                                <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Next</button>
+                            <?php endif; ?>
                         </div>
                     </nav>
                 </div>
+                <?php else: ?>
+                <div class="mt-4">
+                    <nav class="flex justify-between items-center text-sm text-gray-500">
+                        <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
+                    </nav>
+                </div>
+                <?php endif; ?>
 
             </div>
         </div>

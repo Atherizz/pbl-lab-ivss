@@ -11,6 +11,7 @@ use App\Http\Controllers\EquipmentBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DatasetController; 
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PublicationController;
 
 return [
     'GET' => [
@@ -40,12 +41,13 @@ return [
         '/anggota-lab/profile/photo' => ['controller' => ProfileController::class, 'action' => 'photoManager', 'middleware' => 'anggota_lab'],
         '/dataset/direktori' => ['controller' => DatasetController::class, 'action' => 'direktori', 'middleware' => 'auth'],
         '/anggota-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'index', 'middleware' => 'pengguna_lab'],
+        '/anggota-lab/publikasi' => ['controller' => PublicationController::class, 'action' => 'index', 'middleware' => 'anggota_lab'],
         '/admin-lab/dataset/create' => ['controller' => DatasetController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/edit' => ['controller' => DatasetController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
         '/admin-lab/members/create' => ['controller' => MemberController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
-        '/publikasi' => ['controller' => HomeController::class, 'action' => 'publication'],
+        '/publikasi' => ['controller' => HomeController::class, 'action' => 'publications'],
         '/berita/{slug}' => ['controller' => HomeController::class, 'action' => 'newsDetail'],
         '/berita' => ['controller' => HomeController::class, 'action' => 'news'],
         '/profile/{slug}' => ['controller' => HomeController::class, 'action' => 'profile'],
@@ -71,6 +73,9 @@ return [
         '/anggota-lab/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'store', 'middleware' => 'mahasiswa'],
         '/anggota-lab/approval/{type}/approve/{id}' => ['controller' => ApprovalController::class, 'action' => 'approveRequestDospem', 'middleware' => 'anggota_lab'],
         '/anggota-lab/approval/{type}/reject/{id}' => ['controller' => ApprovalController::class, 'action' => 'rejectRequestDospem', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/publikasi/setup' => ['controller' => PublicationController::class, 'action' => 'setup', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/publikasi/synchronize' => ['controller' => PublicationController::class, 'action' => 'synchronize', 'middleware' => 'anggota_lab'],
+        '/anggota-lab/publikasi/destroy-all' => ['controller' => PublicationController::class, 'action' => 'destroyAllPublications', 'middleware' => 'anggota_lab'],
         '/admin-lab/dataset' => ['controller' => DatasetController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}' => ['controller' => DatasetController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/dataset/{id}/delete' => ['controller' => DatasetController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],

@@ -32,86 +32,18 @@ class EquipmentBookingController extends Controller
     public function index()
     {
         $userId = $_SESSION['user']['id'];
-        $allBookings = $this->model->getMyBookings($userId);
-        $totalItems = count($allBookings);
-
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $currentPage = max(1, $currentPage);
-
-        $itemsPerPage = $this->itemsPerPage;
-
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1;
-        }
-
-        $totalPages = ceil($totalItems / $itemsPerPage);
-
-        if ($currentPage > $totalPages && $totalPages > 0) {
-            $currentPage = (int)$totalPages;
-        }
-
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $bookings = array_slice($allBookings, $offset, $itemsPerPage);
-
-        $startItem = 0;
-        $endItem = 0;
-        if ($totalItems > 0) {
-            $startItem = $offset + 1;
-            $endItem = min($offset + count($bookings), $totalItems);
-        }
-
-        $paginationData = [
-            'bookings'      => $bookings,
-            'currentPage'   => $currentPage,
-            'totalPages'    => (int)$totalPages,
-            'totalItems'    => $totalItems,
-            'startItem'     => $startItem,
-            'endItem'       => $endItem,
-        ];
+        $allBookings = $this->model->getMyBookings($userId);
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allBookings, 'bookings');
 
         view('anggota_lab.equipment.bookings.index', $paginationData);
     }
 
     public function katalog()
     {
-        $allEquipments = $this->equipmentModel->getAllEquipments();
-        $totalItems = count($allEquipments);
-
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $currentPage = max(1, $currentPage);
-
-        $itemsPerPage = $this->itemsPerPage;
-
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1;
-        }
-
-        $totalPages = (int)ceil($totalItems / $itemsPerPage);
-
-        if ($currentPage > $totalPages && $totalPages > 0) {
-            $currentPage = $totalPages;
-        } elseif ($totalItems === 0) {
-            $currentPage = 1;
-        }
-
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $equipments = array_slice($allEquipments, $offset, $itemsPerPage);
-
-        $startItem = 0;
-        $endItem = 0;
-        if ($totalItems > 0) {
-            $startItem = $offset + 1;
-            $endItem = min($offset + count($equipments), $totalItems);
-        }
-
-        $paginationData = [
-            'equipments'    => $equipments,
-            'currentPage'   => $currentPage,
-            'totalPages'    => $totalPages,
-            'totalItems'    => $totalItems,
-            'startItem'     => $startItem,
-            'endItem'       => $endItem,
-        ];
+        $allEquipments = $this->equipmentModel->getAllEquipments();
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allEquipments, 'equipments');
 
         view('anggota_lab.equipment.bookings.katalog', $paginationData);
     }

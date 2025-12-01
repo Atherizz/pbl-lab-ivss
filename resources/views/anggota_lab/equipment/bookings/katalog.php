@@ -66,6 +66,42 @@ $activeMenu = 'katalog-equipment';
                     <p class="text-gray-500">Saat ini tidak ada peralatan yang terdaftar.</p>
                 <?php endif; ?>
                 
+                <!-- Pagination -->
+                <?php if (($totalPages ?? 1) > 1): ?>
+                <div class="mt-6">
+                    <nav class="flex justify-between items-center text-sm text-gray-500">
+                        <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
+                        <div class="flex space-x-1">
+                            <?php if ($currentPage > 1): ?>
+                                <a href="?page=<?= $currentPage - 1 ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Previous</a>
+                            <?php else: ?>
+                                <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Previous</button>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <?php if ($i == $currentPage): ?>
+                                    <button class="px-3 py-1 border rounded-md bg-blue-600 text-white"><?= $i ?></button>
+                                <?php else: ?>
+                                    <a href="?page=<?= $i ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100"><?= $i ?></a>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                            
+                            <?php if ($currentPage < $totalPages): ?>
+                                <a href="?page=<?= $currentPage + 1 ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Next</a>
+                            <?php else: ?>
+                                <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Next</button>
+                            <?php endif; ?>
+                        </div>
+                    </nav>
+                </div>
+                <?php elseif (($totalItems ?? 0) > 0): ?>
+                <div class="mt-6">
+                    <nav class="flex justify-between items-center text-sm text-gray-500">
+                        <span>Showing <?= $startItem ?> to <?= $endItem ?> of <?= $totalItems ?> entries</span>
+                    </nav>
+                </div>
+                <?php endif; ?>
+                
             </div>
         </div>
     </div>

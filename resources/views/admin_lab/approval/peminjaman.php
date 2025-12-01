@@ -87,12 +87,31 @@ $errorMessage = flash('error');
                     </table>
                 </div>
 
-                <?php if (isset($totalPages) && $totalPages > 1) : ?>
+                <?php if (($totalPages ?? 1) > 1): ?>
                     <div class="mt-6">
                         <nav class="flex justify-between items-center text-sm text-gray-500">
-                            <span>Menampilkan <?= $startItem ?? 0 ?> hingga <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
+                            <span>Menampilkan <?= $startItem ?> hingga <?= $endItem ?> dari total <?= $totalItems ?> entri</span>
                             
                             <div class="flex space-x-1">
+                                <?php if ($currentPage > 1): ?>
+                                    <a href="?page=<?= $currentPage - 1 ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Previous</a>
+                                <?php else: ?>
+                                    <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Previous</button>
+                                <?php endif; ?>
+                                
+                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                    <?php if ($i == $currentPage): ?>
+                                        <button class="px-3 py-1 border rounded-md bg-blue-600 text-white"><?= $i ?></button>
+                                    <?php else: ?>
+                                        <a href="?page=<?= $i ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100"><?= $i ?></a>
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+                                
+                                <?php if ($currentPage < $totalPages): ?>
+                                    <a href="?page=<?= $currentPage + 1 ?>" class="px-3 py-1 border rounded-md hover:bg-gray-100">Next</a>
+                                <?php else: ?>
+                                    <button class="px-3 py-1 border rounded-md text-gray-400 cursor-not-allowed" disabled>Next</button>
+                                <?php endif; ?>
                                 <?php if ($currentPage > 1) : ?>
                                     <a href="<?= BASE_URL . '/admin-lab/approval/peminjaman' ?>?page=<?= $currentPage - 1 ?>" 
                                         class="px-3 py-2 border rounded-md hover:bg-gray-100 transition">

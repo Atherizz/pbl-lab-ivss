@@ -32,9 +32,9 @@
         <form action="<?= BASE_URL ?? '.' ?>/login" method="POST" class="space-y-5">
           
           <div>
-            <label for="reg_number" class="block text-sm font-medium text-slate-300 mb-2">NIM / NIP</label>
+            <label for="reg_number" class="block text-sm font-medium text-slate-300 mb-2">NIM / NIDN</label>
             <div class="relative">
-              <input type="text" id="reg_number" name="reg_number" required placeholder="Nomor Induk Mahasiswa/Pegawai"
+              <input type="text" id="reg_number" name="reg_number" required placeholder="Nomor Induk Mahasiswa/Dosen"
                      class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
             </div>
           </div>
