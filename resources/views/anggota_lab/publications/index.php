@@ -35,13 +35,6 @@ $currentSearch = $currentSearch ?? '';
 <?php endif; ?>
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-white mb-2">Publikasi Saya</h1>
-            <p class="text-slate-400">Kelola publikasi akademik Anda melalui integrasi Google Scholar</p>
-        </div>
-
         <?php if (empty($scholarUrl)): ?>
             <!-- Empty State - Belum Setup Google Scholar -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-12 text-center shadow-xl">

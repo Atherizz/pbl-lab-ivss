@@ -98,7 +98,7 @@ $userRole = $_SESSION['user']['role'];
                     </table>
                 </div>
 
-                <?php if (isset($totalPages) && $totalPages > 1) : ?>
+                <?php if (($totalPages ?? 1) > 1): ?>
                     <?php 
                         $baseApprovalPath = BASE_URL . '/' . (match ($userRole) {
                             'admin_lab'   => 'admin-lab',
@@ -108,7 +108,7 @@ $userRole = $_SESSION['user']['role'];
                     ?>
                     <div class="mt-6">
                         <nav class="flex justify-between items-center text-sm text-gray-500">
-                            <span>Menampilkan <?= $startItem ?? 0 ?> hingga <?= $endItem ?? 0 ?> dari total <?= $totalItems ?? 0 ?> entri</span>
+                            <span>Menampilkan <?= $startItem ?> hingga <?= $endItem ?> dari total <?= $totalItems ?> entri</span>
                             
                             <div class="flex space-x-1">
                                 <?php if ($currentPage > 1) : ?>

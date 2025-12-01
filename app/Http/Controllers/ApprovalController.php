@@ -24,15 +24,7 @@ class ApprovalController extends Controller
 
     public function approvalAdminView($type)
     {
-        $allData = [];
-
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $currentPage = max(1, $currentPage);
-        $itemsPerPage = $this->itemsPerPage;
-
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1;
-        }
 
         if ($type === 'anggota') {
             $allData = $this->registrationRequestModel->getAllRequestsAdmin();
@@ -45,50 +37,15 @@ class ApprovalController extends Controller
             $dataKey = 'publication';
         }
 
-        $totalItems = count($allData);
-        $totalPages = (int)ceil($totalItems / $itemsPerPage);
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allData, $dataKey);
         
-        if ($currentPage > $totalPages && $totalPages > 0) {
-            $currentPage = $totalPages;
-        } elseif ($totalItems === 0) {
-            $currentPage = 1;
-        }
-
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $paginatedData = array_slice($allData, $offset, $itemsPerPage);
-        
-        $startItem = 0;
-        $endItem = 0;
-        if ($totalItems > 0) {
-            $startItem = $offset + 1;
-            $endItem = min($offset + count($paginatedData), $totalItems);
-        }
-
-        $data = [
-            $dataKey       => $paginatedData,
-            'currentPage'  => $currentPage,
-            'totalPages'   => $totalPages,
-            'totalItems'   => $totalItems,
-            'startItem'    => $startItem,
-            'endItem'      => $endItem,
-        ];
-        
-        view('admin_lab.approval.' . $type, $data);
+        view('admin_lab.approval.' . $type, $paginationData);
     }
     
     public function approvalDospemView($type) 
     {
-        $allData = [];
-
         $userId = $_SESSION['user']['id'];
-
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $currentPage = max(1, $currentPage);
-        $itemsPerPage = $this->itemsPerPage;
-
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1;
-        }
 
         if ($type === 'anggota') {
             $allData = $this->registrationRequestModel->getRequestsByDospem($userId);
@@ -98,36 +55,9 @@ class ApprovalController extends Controller
             $dataKey = 'publication';
         }
 
-        $totalItems = count($allData);
-        $totalPages = (int)ceil($totalItems / $itemsPerPage);
-
-        if ($currentPage > $totalPages && $totalPages > 0) {
-            $currentPage = $totalPages;
-        } elseif ($totalItems === 0) {
-            $currentPage = 1;
-        }
-
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $paginatedData = array_slice($allData, $offset, $itemsPerPage);
-
-        $startItem = 0;
-        $endItem = 0;
-        if ($totalItems > 0) {
-            $startItem = $offset + 1;
-            $endItem = min($offset + count($paginatedData), $totalItems);
-        }
-
-        $data = [
-            $dataKey       => $paginatedData,
-            'currentPage'  => $currentPage,
-            'totalPages'   => $totalPages,
-            'totalItems'   => $totalItems,
-            'startItem'    => $startItem,
-            'endItem'      => $endItem,
-        ];
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allData, $dataKey);
     
-        view('admin_lab.approval.' . $type, $data);
-    
+        view('admin_lab.approval.' . $type, $paginationData);
     }
     
     // Fungsi Aksi Persetujuan (Approval)

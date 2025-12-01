@@ -31,38 +31,9 @@ class NewsController extends Controller
 
     public function index()
     {
-        // Ambil halaman dari query string
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $page = $page < 1 ? 1 : $page;
-
-        // Ambil semua news
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $allNews = $this->model->getAllNews();
-        $totalItems = count($allNews);
-        
-        // Hitung total halaman
-        $totalPages = ceil($totalItems / $this->itemsPerPage);
-        
-        // Pastikan halaman valid
-        if ($page > $totalPages && $totalPages > 0) {
-            $page = $totalPages;
-        }
-
-        // Hitung offset
-        $offset = ($page - 1) * $this->itemsPerPage;
-        
-        // Ambil news untuk halaman saat ini
-        $news = array_slice($allNews, $offset, $this->itemsPerPage);
-
-        // Data untuk view
-        $paginationData = [
-            'news'         => $news,
-            'currentPage'  => $page,
-            'totalPages'   => $totalPages,
-            'totalItems'   => $totalItems,
-            'itemsPerPage' => $this->itemsPerPage,
-            'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
-            'endItem'      => min($offset + $this->itemsPerPage, $totalItems)
-        ];
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allNews, 'news');
 
         view('admin_news.news.index', $paginationData);
     }

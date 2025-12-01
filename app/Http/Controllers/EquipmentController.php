@@ -17,44 +17,9 @@ class EquipmentController extends Controller
 
     public function index()
     { 
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $availableEquipments = $this->model->getAllEquipments();
-        $totalItems = count($availableEquipments);
-        
-        $itemsPerPage = $this->itemsPerPage; 
-
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $page = max(1, $page);
-
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1; 
-        }
-        
-        $totalPages = ceil($totalItems / $itemsPerPage);
-        
-        if ($page > $totalPages && $totalPages > 0) {
-            $page = (int)$totalPages;
-        }
-
-        $offset = ($page - 1) * $itemsPerPage;
-        
-        $equipments = array_slice($availableEquipments, $offset, $itemsPerPage);
-
-        $startItem = 0;
-        $endItem = 0;
-        if ($totalItems > 0) {
-            $startItem = $offset + 1;
-            $endItem = min($offset + count($equipments), $totalItems);
-        }
-
-        $paginationData = [
-            'equipments'   => $equipments,
-            'currentPage'  => $page,
-            'totalPages'   => (int)$totalPages,
-            'totalItems'   => $totalItems,
-            'itemsPerPage' => $itemsPerPage,
-            'startItem'    => $startItem, 
-            'endItem'      => $endItem,
-        ];
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $availableEquipments, 'equipments');
 
         view('admin_lab.equipments.index', $paginationData);
     }

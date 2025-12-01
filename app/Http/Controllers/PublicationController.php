@@ -32,32 +32,17 @@ class PublicationController extends Controller
 
         $allPublications = $this->model->getAllByUserId($this->userId, $currentSearch) ?? [];
         
-        // Get all publications without search filter for stats
         $allPublicationsForStats = $this->model->getAllByUserId($this->userId, null) ?? [];
 
-        $totalItems = count($allPublications);
-        $totalPages = max(1, ceil($totalItems / $itemsPerPage));
-        $currentPage = min($currentPage, $totalPages);
-
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $publications = array_slice($allPublications, $offset, $itemsPerPage);
-
-        $startItem = $totalItems > 0 ? $offset + 1 : 0;
-        $endItem = min($offset + $itemsPerPage, $totalItems);
+        $paginationData = pagination($itemsPerPage, $currentPage, $allPublications, 'publications');
 
         view(
             'anggota_lab.publications.index',
             [
                 'scholarUrl' => $scholarUrl,
-                'publications' => $publications,
                 'allPublications' => $allPublicationsForStats,
-                'currentPage' => $currentPage,
-                'totalPages' => $totalPages,
-                'totalItems' => $totalItems,
-                'itemsPerPage' => $itemsPerPage,
-                'startItem' => $startItem,
-                'endItem' => $endItem,
-                'currentSearch' => $currentSearch
+                'currentSearch' => $currentSearch,
+                ...$paginationData 
             ]
         );
     }

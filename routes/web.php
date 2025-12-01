@@ -47,7 +47,7 @@ return [
         '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
         '/admin-lab/members/create' => ['controller' => MemberController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/fasilitas' => ['controller' => HomeController::class, 'action' => 'fasilitas'],
-        '/publikasi' => ['controller' => HomeController::class, 'action' => 'publication'],
+        '/publikasi' => ['controller' => HomeController::class, 'action' => 'publications'],
         '/berita/{slug}' => ['controller' => HomeController::class, 'action' => 'newsDetail'],
         '/berita' => ['controller' => HomeController::class, 'action' => 'news'],
         '/profile/{slug}' => ['controller' => HomeController::class, 'action' => 'profile'],

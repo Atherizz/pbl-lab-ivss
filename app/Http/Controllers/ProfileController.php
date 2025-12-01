@@ -65,7 +65,7 @@ class ProfileController extends Controller
             'mode'       => $isUpdate ? 'edit' : 'create', 
             'pageTitle'  => $isUpdate ? 'Edit Profil Anggota Lab' : 'Buat Profil Anggota Lab Baru',
             'activeMenu' => 'profile-user-lab',
-            'nip'        => $_SESSION['user']['reg_number'],
+            'nidn'        => $_SESSION['user']['reg_number'],
             'fullName'   => $_SESSION['user']['name'] ?? 'Pengguna Lab',
             'BASE_URL'   => BASE_URL ?? '/', 
             'userId'     => $this->userId 

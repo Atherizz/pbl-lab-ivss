@@ -229,55 +229,77 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
             </div>
         </div>
 
-        <!-- Penelitian Terkait -->
+        <!-- Publikasi -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-3xl font-bold text-white flex items-center">
-                    <i class="fas fa-file-alt mr-3 text-cyan-400"></i>
-                    Penelitian Terkait
+                    <i class="fas fa-graduation-cap mr-3 text-cyan-400"></i>
+                    Publikasi (<?= $totalPublications ?? 0 ?>)
                 </h2>
-                <?php if (count($research) > 3): ?>
-                <a href="<?= BASE_URL ?>/research?user_id=<?= $profile['user_id'] ?>" class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
-                    Lihat Semua <i class="fas fa-arrow-right ml-1"></i>
-                </a>
-                <?php endif; ?>
             </div>
             
-            <?php if (!empty($research)): ?>
-            <div class="grid md:grid-cols-3 gap-6">
-                <?php foreach($research as $item): ?>
+            <?php if (!empty($publications)): ?>
+            <!-- Filtering Buttons -->
+            <div class="flex gap-2 mb-6 flex-wrap">
+                <a href="?sort=citations" class="px-4 py-2 rounded-lg text-sm font-medium transition-all <?= ($sortBy ?? 'citations') === 'citations' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600' ?>">
+                    Most Cited
+                </a>
+                <a href="?sort=latest" class="px-4 py-2 rounded-lg text-sm font-medium transition-all <?= ($sortBy ?? '') === 'latest' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600' ?>">
+                    Latest
+                </a>
+                <a href="?sort=oldest" class="px-4 py-2 rounded-lg text-sm font-medium transition-all <?= ($sortBy ?? '') === 'oldest' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600' ?>">
+                    Oldest
+                </a>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <?php foreach($publications as $item): ?>
                 <div class="bg-slate-800/50 border border-slate-700 rounded-2xl shadow-lg p-6 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-500/30 transition-all group">
-                    <div class="flex items-start justify-between mb-4">
-                        <span class="text-xs text-slate-400 font-bold group-hover:text-cyan-400 transition-colors">
-                            <?= getYear($item['start_date']) ?>
-                        </span>
-                    </div>
                     <h3 class="text-lg font-semibold text-slate-100 leading-snug mb-3 group-hover:text-cyan-400 transition-colors min-h-[60px] line-clamp-3">
-                        <?= htmlspecialchars($item['title']) ?>
+                        <?= htmlspecialchars($item['title'] ?? 'Untitled') ?>
                     </h3>
-                    <p class="text-sm text-slate-400 mb-4 line-clamp-2">
-                        <?= htmlspecialchars(substr($item['description'], 0, 100)) . (strlen($item['description']) > 100 ? '...' : '') ?>
-                    </p>
-                    <div class="flex items-center gap-2 text-slate-400 mb-4 text-xs">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span><?= formatDate($item['start_date']) ?> - <?= formatDate($item['end_date']) ?></span>
+                    <div class="flex items-center justify-between text-sm text-slate-400 mb-4">
+                        <span class="font-bold"><?= $item['year'] ?? '-' ?></span>
+                        <span><?= number_format($item['cited_by_count'] ?? 0) ?> citations</span>
                     </div>
-                    <?php if (!empty($item['publication_url'])): ?>
-                    <a href="<?= htmlspecialchars($item['publication_url']) ?>" target="_blank" class="block text-center bg-slate-700 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">
-                        Baca Publikasi
+                    <?php if (!empty($item['scholar_link'])): ?>
+                    <a href="<?= htmlspecialchars($item['scholar_link']) ?>" target="_blank" class="block text-center bg-slate-700 text-slate-200 py-2.5 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-all shadow-sm">
+                        Baca
                     </a>
                     <?php else: ?>
                     <div class="block text-center bg-slate-700/50 text-slate-400 py-2.5 rounded-lg font-semibold cursor-not-allowed">
-                        Belum Ada Publikasi
+                        Tidak Tersedia
                     </div>
                     <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>
+            
+            <!-- Pagination -->
+            <?php if (($totalPages ?? 1) > 1): ?>
+            <div class="flex items-center justify-center gap-2 pt-6 border-t border-slate-700">
+                <?php if ($currentPage > 1): ?>
+                <a href="?page=<?= $currentPage - 1 ?>&sort=<?= $sortBy ?>" class="px-3 py-2 rounded-lg bg-slate-700 text-white hover:bg-slate-600 transition-all">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
+                <?php endif; ?>
+                
+                <span class="px-4 py-2 text-slate-300">
+                    <?= $startItem ?>-<?= $endItem ?> of <?= $totalPublications ?>
+                </span>
+                
+                <?php if ($currentPage < $totalPages): ?>
+                <a href="?page=<?= $currentPage + 1 ?>&sort=<?= $sortBy ?>" class="px-3 py-2 rounded-lg bg-slate-700 text-white hover:bg-slate-600 transition-all">
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            
             <?php else: ?>
             <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-12 text-center">
                 <i class="fas fa-folder-open text-6xl text-slate-600 mb-4"></i>
-                <p class="text-slate-400 text-lg">Belum ada penelitian yang dipublikasikan.</p>
+                <p class="text-slate-400 text-lg">Belum ada publikasi yang ditambahkan.</p>
             </div>
             <?php endif; ?>
         </div>

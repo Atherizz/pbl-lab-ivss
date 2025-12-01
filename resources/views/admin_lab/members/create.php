@@ -49,7 +49,7 @@ $errors = $errors ?? [];
                         ?>
                         <div>
                             <label for="reg_number" class="block text-sm font-medium text-gray-700">
-                                NIM / NIP <span class="text-red-500">*</span>
+                                NIDN / NIP <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="reg_number" name="reg_number" required 
                                 value="<?= htmlspecialchars($old['reg_number'] ?? '') ?>" 
@@ -60,7 +60,7 @@ $errors = $errors ?? [];
                             <?php endif; ?>
 
                             <p class="mt-2 text-xs text-gray-500">
-                                Password awal untuk anggota ini akan otomatis diatur sama dengan NIM / NIP.
+                                Password awal untuk anggota ini akan otomatis diatur sama dengan NIDN / NIP.
                             </p>
                         </div>
 

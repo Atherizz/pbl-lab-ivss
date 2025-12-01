@@ -26,36 +26,9 @@ class ResearchController extends Controller
             $this->redirect('/login');
         }
 
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $page = $page < 1 ? 1 : $page;
-
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $allResearch = $this->model->getByUserId($userId);
-        $totalItems = count($allResearch);
-        
-        $itemsPerPage = $this->itemsPerPage;
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1; 
-        }
-
-        $totalPages = ceil($totalItems / $itemsPerPage);
-        
-        if ($page > $totalPages && $totalPages > 0) {
-            $page = $totalPages;
-        }
-
-        $offset = ($page - 1) * $itemsPerPage;
-        
-        $researchList = array_slice($allResearch, $offset, $itemsPerPage);
-
-        $paginationData = [
-            'researchList' => $researchList,
-            'currentPage'  => $page,
-            'totalPages'   => (int)$totalPages,
-            'totalItems'   => $totalItems,
-            'itemsPerPage' => $itemsPerPage,
-            'startItem'    => $totalItems > 0 ? $offset + 1 : 0,
-            'endItem'      => min($offset + $itemsPerPage, $totalItems),
-        ];
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allResearch, 'researchList');
 
         view('anggota_lab.research.index', $paginationData);
     }
@@ -67,41 +40,15 @@ class ResearchController extends Controller
             $this->redirect('/login');
         }
         
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $page = $page < 1 ? 1 : $page;
-        
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $statusFilter = $_GET['status'] ?? 'all';
         $searchQuery = $_GET['search'] ?? '';
         
         $allResearch = $this->model->getAll($statusFilter, $searchQuery);
-        $totalItems = count($allResearch);
+        $paginationData = pagination($this->itemsPerPage, $currentPage, $allResearch, 'research');
         
-        $itemsPerPage = $this->itemsPerPage;
-        if ($itemsPerPage === 0) {
-            $itemsPerPage = 1; 
-        }
-
-        $totalPages = ceil($totalItems / $itemsPerPage); 
-        
-        if ($page > $totalPages && $totalPages > 0) {
-            $page = $totalPages;
-        }
-
-        $offset = ($page - 1) * $itemsPerPage;
-        
-        $research = array_slice($allResearch, $offset, $itemsPerPage);
-        
-        $paginationData = [
-            'research'      => $research,
-            'currentPage'   => $page,
-            'totalPages'    => (int)$totalPages,
-            'totalItems'    => $totalItems,
-            'itemsPerPage'  => $itemsPerPage,
-            'startItem'     => $totalItems > 0 ? $offset + 1 : 0,
-            'endItem'       => min($offset + $itemsPerPage, $totalItems),
-            'currentStatus' => $statusFilter,
-            'currentSearch' => $searchQuery,
-        ];
+        $paginationData['currentStatus'] = $statusFilter;
+        $paginationData['currentSearch'] = $searchQuery;
         
         view('anggota_lab.research.direktori', $paginationData);
     }

@@ -17,24 +17,26 @@ class DatasetController extends Controller
 
     public function direktori()
     {
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $searchQuery = $_GET['search'] ?? null;
-        $datasets = $this->model->getAll($searchQuery);
+        $allDatasets = $this->model->getAll($searchQuery);
+        $paginationData = pagination(6, $currentPage, $allDatasets, 'datasets');
         
-        view('dataset.direktori', [
-            'datasets' => $datasets,
-            'currentSearch' => $searchQuery
-        ]);
+        $paginationData['currentSearch'] = $searchQuery;
+        
+        view('dataset.direktori', $paginationData);
     }
 
     public function index()
     {
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $searchQuery = $_GET['search'] ?? null;
-        $datasets = $this->model->getAll($searchQuery);
+        $allDatasets = $this->model->getAll($searchQuery);
+        $paginationData = pagination(6, $currentPage, $allDatasets, 'datasets');
         
-        view('admin_lab.dataset.index', [
-            'datasets' => $datasets,
-            'currentSearch' => $searchQuery
-        ]);
+        $paginationData['currentSearch'] = $searchQuery;
+        
+        view('admin_lab.dataset.index', $paginationData);
     }
 
     public function create()
