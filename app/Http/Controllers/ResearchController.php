@@ -98,7 +98,6 @@ class ResearchController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
-            $userRole = $_SESSION['user']['role'] ?? null;
             $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {

@@ -48,6 +48,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                                     </div>
                                     <h3 class="text-lg font-semibold text-white">Rekomendasi Dosen Pembimbing dengan AI</h3>
                                 </div>
+                                <form action="<?= BASE_URL ?? '.' ?>/anggota-lab/research/get-recommendation" method="POST">
                                 <button type="button" id="analyzeBtn" 
                                         class="px-5 py-2.5 bg-cyan-600 text-white font-semibold rounded-lg hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/20">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,6 +56,7 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                                     </svg>
                                     <span>Analisis dengan AI</span>
                                 </button>
+                                </form>
                             </div>
 
                             <p class="text-sm text-slate-300 mb-4">
@@ -158,6 +160,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('title');
     const dospemSelect = document.getElementById('dospem_id');
 
+    function showErrorNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 max-w-md bg-red-600 text-white px-6 py-4 rounded-lg shadow-2xl z-50 border-l-4 border-red-800';
+        notification.innerHTML = `
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <h3 class="text-sm font-bold">Kesalahan AI Service</h3>
+                    <p class="mt-1 text-sm whitespace-pre-line">${message}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-4 flex-shrink-0 text-white hover:text-red-200">
+                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.transition = 'opacity 0.5s';
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 500);
+        }, 7000);
+    }
+
     analyzeBtn.addEventListener('click', function() {
         const title = titleInput.value.trim();
 
@@ -179,7 +211,12 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
         .then(result => {
             loadingState.classList.add('hidden');
             
@@ -187,7 +224,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayResults(title, result.data);
                 aiResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else {
-                alert(result.error || 'Tidak ada rekomendasi dosen ditemukan.');
+                const errorMsg = result.error || 'Tidak ada rekomendasi dosen ditemukan.';
+                showErrorNotification(errorMsg);
             }
             
             analyzeBtn.disabled = false;
@@ -195,7 +233,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error:', error);
             loadingState.classList.add('hidden');
-            alert('Terjadi kesalahan saat menganalisis. Silakan coba lagi.');
+            
+            let errorMessage = 'Terjadi kesalahan saat menganalisis.';
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                errorMessage = '❌ Layanan AI tidak dapat dijangkau.\n\nPastikan service AI sudah berjalan di port 8000.';
+            } else if (error.message.includes('Server error')) {
+                errorMessage = '❌ Server mengalami kesalahan. Silakan coba lagi.';
+            }
+            
+            showErrorNotification(errorMessage);
             analyzeBtn.disabled = false;
         });
     });

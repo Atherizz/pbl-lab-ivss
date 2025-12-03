@@ -40,14 +40,25 @@ class AIService
         curl_close($ch);
 
         if ($error) {
-            return ['error' => "cURL Error: $error"];
+            if (strpos($error, 'Failed to connect') !== false || strpos($error, 'Connection refused') !== false) {
+                return ['error' => 'Layanan AI tidak dapat dijangkau. Pastikan service AI sedang berjalan.'];
+            }
+            return ['error' => "Kesalahan koneksi: $error"];
         }
 
         if ($httpCode !== 200) {
-            return ['error' => "HTTP Error: $httpCode", 'response' => $response];
+            if ($httpCode === 0) {
+                return ['error' => 'Layanan AI tidak tersedia. Silakan hubungi administrator.'];
+            }
+            return ['error' => "Layanan AI mengembalikan error (HTTP $httpCode)", 'response' => $response];
         }
 
-        return json_decode($response, true);
+        $result = json_decode($response, true);
+        if ($result === null) {
+            return ['error' => 'Respons dari layanan AI tidak valid.'];
+        }
+        
+        return $result;
     }
 
     public function upsertVector(array $publications): array
@@ -89,7 +100,7 @@ class AIService
         if ($title === '' || empty($title)) {
             return [
                 'success' => false,
-                'error' => 'No title provided'
+                'error' => 'Judul riset tidak boleh kosong'
             ];
         }
 
@@ -109,7 +120,7 @@ class AIService
         if (!isset($result['success']) || $result['success'] !== true) {
             return [
                 'success' => false,
-                'error' => $result['message'] ?? 'Unknown error from AI service'
+                'error' => $result['message'] ?? 'Layanan AI tidak memberikan respons yang valid'
             ];
         }
 
