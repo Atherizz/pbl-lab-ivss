@@ -1,113 +1,27 @@
 <?php require BASE_PATH . '/resources/views/layouts/navbar.php'; ?>
 
 <style>
-  @keyframes float {
-
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  @keyframes pulse-glow {
-
-    0%,
-    100% {
-      opacity: 0.5;
-      transform: scale(1);
-    }
-
-    50% {
-      opacity: 0.8;
-      transform: scale(1.05);
-    }
-  }
-
-  @keyframes scan-line {
-    0% {
-      transform: translateY(-100%);
-    }
-
-    100% {
-      transform: translateY(100%);
-    }
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes grid-pulse {
-
-    0%,
-    100% {
-      opacity: 0.1;
-    }
-
-    50% {
-      opacity: 0.3;
-    }
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-    opacity: 0;
-  }
-
-  .delay-100 {
-    animation-delay: 0.1s;
-  }
-
-  .delay-200 {
-    animation-delay: 0.2s;
-  }
-
-  .delay-300 {
-    animation-delay: 0.3s;
-  }
-
-  .delay-400 {
-    animation-delay: 0.4s;
-  }
-
-  .delay-500 {
-    animation-delay: 0.5s;
-  }
-
+  /* ... (STYLE LAMA ANDA TETAP SAMA) ... */
+  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+  @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.05); } }
+  @keyframes scan-line { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+  @keyframes fade-in-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes grid-pulse { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.3; } }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+  .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; opacity: 0; }
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
   .grid-pattern {
-    background-image:
-      linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: grid-pulse 4s ease-in-out infinite;
   }
-
   .scan-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), transparent);
     animation: scan-line 3s linear infinite;
   }
@@ -116,10 +30,8 @@
 <body class="bg-slate-900 text-slate-300">
 
   <section class="relative bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-800 px-6 pt-20 pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
-    <!-- Animated Grid Background -->
     <div class="absolute inset-0 grid-pattern opacity-50"></div>
 
-    <!-- Floating Orbs -->
     <div class="absolute top-20 left-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-glow"></div>
     <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-glow" style="animation-delay: 1.5s;"></div>
 
@@ -168,10 +80,7 @@
     </div>
   </section>
 
-  <!-- dokumentasi kegiatan -->
   <section class="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-900 border-t border-slate-700 overflow-hidden">
-
-    <!-- Animated background elements -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse-glow"></div>
 
     <div class="relative z-10 text-center mb-12 animate-fade-in-up">
@@ -182,38 +91,33 @@
     </div>
 
     <div class="relative w-full max-w-4xl mx-auto group animate-fade-in-up delay-200" data-carousel="slide">
-
       <div class="relative overflow-hidden rounded-2xl shadow-2xl border border-slate-700 aspect-video hover:border-cyan-500/50 transition-all duration-500">
         <div class="scan-line"></div>
         <div class="flex transition-transform duration-700 ease-in-out h-full" data-carousel-body>
-
+          
           <div class="w-full flex-shrink-0 h-full relative">
-            <img src="gallery/photo-1.webp"
-              class="w-full h-full object-cover" alt="Dokumentasi 2">
+            <img src="gallery/photo-1.webp" class="w-full h-full object-cover" alt="Dokumentasi 2">
             <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-6 pt-20">
               <p class="text-white font-semibold text-lg">Workshop Pengolahan Citra Dan Vision</p>
             </div>
           </div>
-
+          
           <div class="w-full flex-shrink-0 h-full relative">
-            <img src="gallery/photo-2.webp"
-              class="w-full h-full object-cover" alt="Dokumentasi 1">
+            <img src="gallery/photo-2.webp" class="w-full h-full object-cover" alt="Dokumentasi 1">
             <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-6 pt-20">
               <p class="text-white font-semibold text-lg">Fasilitas Lab IVSS</p>
             </div>
           </div>
 
           <div class="w-full flex-shrink-0 h-full relative">
-            <img src="gallery/photo-3.webp"
-              class="w-full h-full object-cover" alt="Dokumentasi 3">
+            <img src="gallery/photo-3.webp" class="w-full h-full object-cover" alt="Dokumentasi 3">
             <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-6 pt-20">
               <p class="text-white font-semibold text-lg">Perangkat komputer untuk pemrosesan data, pengujian, dan riset.</p>
             </div>
           </div>
-
+          
           <div class="w-full flex-shrink-0 h-full relative">
-            <img src="gallery/photo-4.webp"
-              class="w-full h-full object-cover" alt="Dokumentasi 3">
+            <img src="gallery/photo-4.webp" class="w-full h-full object-cover" alt="Dokumentasi 4">
             <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-6 pt-20">
               <p class="text-white font-semibold text-lg">Fasilitas Musholla</p>
             </div>
@@ -222,20 +126,147 @@
         </div>
       </div>
 
-      <button type="button" data-carousel-prev
-        class="absolute top-1/2 left-4 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white hover:bg-cyan-500 hover:text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
+      <button type="button" data-carousel-prev class="absolute top-1/2 left-4 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white hover:bg-cyan-500 hover:text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
         <i class="fas fa-chevron-left"></i>
       </button>
-
-      <button type="button" data-carousel-next
-        class="absolute top-1/2 right-4 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white hover:bg-cyan-500 hover:text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
+      <button type="button" data-carousel-next class="absolute top-1/2 right-4 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white hover:bg-cyan-500 hover:text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
         <i class="fas fa-chevron-right"></i>
       </button>
-
     </div>
   </section>
+
+
+  <section id="produk" class="py-20 bg-slate-800 border-t border-slate-700 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        
+        <div class="text-center mb-16 animate-fade-in-up">
+            <span class="text-cyan-400 font-bold tracking-wider uppercase text-sm">Hilirisasi Riset</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Produk & <span class="text-blue-500">Inovasi</span></h2>
+            <p class="text-slate-400 max-w-2xl mx-auto mt-2">Solusi teknologi tepat guna hasil pengembangan riset laboratorium IVSS.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            
+            <div class="group bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10 animate-fade-in-up delay-100">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=800" alt="Smart Aqua" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">IoT Product</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Sistem Monitoring Kualitas Air Kolam Lele</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">
+                        Solusi berbasis IoT untuk memantau pH, suhu, dan kekeruhan air secara <i>real-time</i> guna meningkatkan produktivitas panen lele.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-cyan-500"></i> Real-time Monitoring via Android</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-cyan-500"></i> Notifikasi Kualitas Air</li>
+                    </ul>
+                    <button class="w-full py-3 border border-slate-600 text-slate-300 rounded-xl hover:bg-cyan-600 hover:text-white hover:border-cyan-600 transition-all text-sm font-bold">
+                        Lihat Detail Produk
+                    </button>
+                </div>
+            </div>
+
+            <div class="group bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10 animate-fade-in-up delay-200">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1555952494-efd681c7e3f9?q=80&w=800" alt="Face Guard" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">AI Vision</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">FaceGuard Access</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">
+                        Perangkat kontrol akses pintu pintar menggunakan pengenalan wajah (Face Recognition) dengan fitur keamanan anti-spoofing.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> Liveness Detection</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> Log Kehadiran Otomatis</li>
+                    </ul>
+                    <button class="w-full py-3 border border-slate-600 text-slate-300 rounded-xl hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all text-sm font-bold">
+                        Lihat Detail Produk
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+  </section>
+
+  <section id="pelatihan" class="py-20 bg-slate-900 border-t border-slate-700 relative overflow-hidden">
+    
+    <div class="absolute left-0 top-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4 animate-fade-in-up">
+            <div class="text-center md:text-left">
+                <span class="text-cyan-400 font-bold tracking-wider uppercase text-sm">Edukasi</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Program <span class="text-cyan-400">Pelatihan</span></h2>
+                <p class="text-slate-400 mt-2">Tingkatkan skill Anda bersama para ahli dari Laboratorium IVSS.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            
+            <?php if (!empty($courses)): ?>
+                <?php 
+                $delay = 100; // Untuk animasi delay bertingkat
+                foreach ($courses as $index => $course): 
+                    // Logika Variasi Warna (Ganjil: Cyan, Genap: Blue/Purple) biar tidak monoton
+                    $isEven = $index % 2 == 0;
+                    $themeColor = $isEven ? 'cyan' : 'blue'; 
+                    
+                    // Bersihkan nama icon dari database (misal: 'brain-icon' jadi 'brain')
+                    $iconName = str_replace('-icon', '', $course['icon_name'] ?? 'layer-group');
+                ?>
+                
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-<?= $themeColor ?>-500 transition-all group relative flex flex-col animate-fade-in-up delay-<?= $delay ?>">
+                    
+                    <div class="w-14 h-14 bg-<?= $themeColor ?>-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-<?= $themeColor ?>-500/20 transition-colors">
+                        <i class="fas fa-<?= $iconName ?> text-<?= $themeColor ?>-400 text-2xl"></i>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-3"><?= htmlspecialchars($course['title']) ?></h3>
+
+                    <p class="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
+                        <?= htmlspecialchars($course['description']) ?>
+                    </p>
+
+                    <div class="flex items-center justify-between pt-6 border-t border-slate-700">
+                        <div class="flex gap-4 text-xs text-slate-500 font-mono">
+                            <span>
+                                <i class="fas fa-layer-group mr-1"></i> 
+                                <?= htmlspecialchars($course['level']) ?>
+                            </span>
+                            <span>
+                                <i class="far fa-clock mr-1"></i> 
+                                <?= htmlspecialchars($course['total_sessions']) ?> Pertemuan
+                            </span>
+                        </div>
+                        <a href="<?= htmlspecialchars($course['action_url']) ?>" class="text-<?= $themeColor ?>-400 text-sm font-bold hover:underline">
+                            Daftar Sekarang <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+                <?php 
+                    // Increment delay agar animasi muncul satu per satu
+                    $delay += 100; 
+                endforeach; 
+                ?>
+
+            <?php else: ?>
+                <div class="col-span-2 text-center py-12 border border-dashed border-slate-700 rounded-2xl">
+                    <i class="fas fa-folder-open text-slate-600 text-4xl mb-4"></i>
+                    <p class="text-slate-400">Belum ada program pelatihan yang tersedia saat ini.</p>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+  </section>
+
+
   <section id="riset-penelitian" class="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-800 border-y border-slate-700 overflow-hidden">
-    <!-- Animated grid background -->
     <div class="absolute inset-0 grid-pattern opacity-30"></div>
 
     <div class="relative z-10 text-center mb-12 animate-fade-in-up">
@@ -277,8 +308,6 @@
         </div>
       <?php endforeach; ?>
 
-
-
     </div>
 
     <div class="relative z-10 text-center mt-12 animate-fade-in-up delay-500">
@@ -291,7 +320,6 @@
 
   <section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-slate-900 overflow-hidden">
 
-    <!-- Animated background elements -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px] -z-0 pointer-events-none animate-pulse-glow"></div>
     <div class="absolute inset-0 grid-pattern opacity-20"></div>
 
@@ -308,10 +336,8 @@
       </div>
 
       <?php
-      // Ambil Kepala Lab (user dengan role 'admin_lab')
       $headOfLab = null;
       $researchers = [];
-
       foreach ($members as $member) {
         if ($member['user_role'] === 'admin_lab') {
           $headOfLab = $member;
@@ -357,7 +383,6 @@
       <?php endif; ?>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
         <?php
         $delay = 300;
         foreach ($researchers as $member):
@@ -393,41 +418,28 @@
           if ($delay > 500) $delay = 300;
         endforeach;
         ?>
-
       </div>
     </div>
   </section>
 
   <script>
-    // Intersection Observer for scroll-triggered animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
+    // Intersection Observer for animations
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); }
       });
     }, observerOptions);
-
-    // Observe all elements with animate-on-scroll class
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      observer.observe(el);
-    });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
 
     // Carousel functionality
     document.addEventListener('DOMContentLoaded', function() {
       const carousel = document.querySelector('[data-carousel="slide"]');
       if (!carousel) return;
-
       const carouselBody = carousel.querySelector('[data-carousel-body]');
       const prevButton = carousel.querySelector('[data-carousel-prev]');
       const nextButton = carousel.querySelector('[data-carousel-next]');
       const slides = carouselBody.querySelectorAll('.w-full');
-
       let currentIndex = 0;
       let autoplayInterval;
 
@@ -435,49 +447,20 @@
         const offset = -currentIndex * 100;
         carouselBody.style.transform = `translateX(${offset}%)`;
       }
+      function nextSlide() { currentIndex = (currentIndex + 1) % slides.length; updateCarousel(); }
+      function prevSlide() { currentIndex = (currentIndex - 1 + slides.length) % slides.length; updateCarousel(); }
+      function startAutoplay() { autoplayInterval = setInterval(nextSlide, 5000); }
+      function stopAutoplay() { clearInterval(autoplayInterval); }
 
-      function nextSlide() {
-        currentIndex = (currentIndex + 1) % slides.length;
-        updateCarousel();
-      }
-
-      function prevSlide() {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        updateCarousel();
-      }
-
-      function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 5000); // Ganti slide setiap 5 detik
-      }
-
-      function stopAutoplay() {
-        clearInterval(autoplayInterval);
-      }
-
-      // Event listeners untuk tombol
-      nextButton.addEventListener('click', () => {
-        nextSlide();
-        stopAutoplay();
-        startAutoplay(); // Restart autoplay setelah klik manual
-      });
-
-      prevButton.addEventListener('click', () => {
-        prevSlide();
-        stopAutoplay();
-        startAutoplay(); // Restart autoplay setelah klik manual
-      });
-
-      // Pause saat hover
+      nextButton.addEventListener('click', () => { nextSlide(); stopAutoplay(); startAutoplay(); });
+      prevButton.addEventListener('click', () => { prevSlide(); stopAutoplay(); startAutoplay(); });
       carousel.addEventListener('mouseenter', stopAutoplay);
       carousel.addEventListener('mouseleave', startAutoplay);
-
-      // Mulai autoplay
       startAutoplay();
     });
   </script>
 
 </body>
-
 </html>
 
-</div> <?php require BASE_PATH . '/resources/views/layouts/footer.php'; ?>
+<?php require BASE_PATH . '/resources/views/layouts/footer.php'; ?>
