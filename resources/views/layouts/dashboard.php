@@ -104,13 +104,54 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
             <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
 
-                <?php if ($userRole === 'admin_lab'): ?>
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/anggota"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-user-check w-5 text-center"></i>
+                    <span class="font-medium">Pendaftaran Anggota</span>
+                </a>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/dashboard"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-th-large w-5 text-center"></i>
-                        <span class="font-medium">Dashboard</span>
-                    </a>
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/publikasi"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-file-alt w-5 text-center"></i>
+                    <span class="font-medium">Publikasi Penelitian</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/peminjaman"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-hand-holding w-5 text-center"></i>
+                    <span class="font-medium">Peminjaman Barang</span>
+                </a>
+
+            <!-- MENU UNTUK ADMIN NEWS -->
+            <?php elseif ($userRole === 'admin_berita'): ?>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-berita/dashboard"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-th-large w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'news') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-newspaper w-5 text-center"></i>
+                    <span class="font-medium">News</span>
+                </a>
+
+            <!-- MENU UNTUK ANGGOTA LAB -->
+            <?php else: ?>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dashboard"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-home w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+
+                <div class="my-4 border-t border-slate-700"></div>
+
+                <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
+                <div class="px-4 py-2">
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Publikasi</span>
+                </div>
 
                     <a href="<?= BASE_URL ?? '.' ?>/admin-lab/equipment"
                         class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
@@ -118,36 +159,42 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                         <span class="font-medium">Equipment</span>
                     </a>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/course"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'course') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-graduation-cap w-5 text-center"></i>
-                        <span class="font-medium">Course & Workshop</span>
-                    </a>
+                <div class="my-4 border-t border-slate-700"></div>
+                <?php else: ?>
+                
+                <div class="px-4 py-2">
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Riset</span>
+                </div>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-book-open w-5 text-center"></i>
-                        <span class="font-medium">Publikasi Saya</span>
-                    </a>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-flask w-5 text-center"></i>
+                    <span class="font-medium">Riset Saya</span>
+                </a>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder-open w-5 text-center"></i>
-                        <span class="font-medium">Direktori Riset Lab</span>
-                    </a>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/create"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-plus-circle w-5 text-center"></i>
+                    <span class="font-medium">Ajukan Riset Baru</span>
+                </a>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'members') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-users w-5 text-center"></i>
-                        <span class="font-medium">Anggota</span>
-                    </a>
+                <div class="my-4 border-t border-slate-700"></div>
+                <?php endif; ?>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder w-5 text-center"></i>
-                        <span class="font-medium">Direktori Dataset</span>
-                    </a>
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Riset Lab</span>
+                </a>
 
+                <!-- TAMBAHAN: DATASET (VIEW ONLY) -->
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder w-5 text-center"></i>
+                    <span class="font-medium">Direktori Dataset</span>
+                </a>
+
+                <?php if ($userRole === 'anggota_lab'): ?>
                     <div class="my-4 border-t border-slate-700"></div>
 
                     <div class="px-4 py-2">

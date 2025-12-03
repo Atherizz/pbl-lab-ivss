@@ -152,38 +152,52 @@ class PublicationModel extends Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create(array $data)
+    public function create(array $data): ?int
     {
         $sql = "INSERT INTO {$this->table}
-                    (user_id, title, authors, publication_venue, year, 
-                     citation_id, scholar_link, cited_by_count, cited_by_link)
-                VALUES
-                    (:user_id, :title, :authors, :publication_venue, :year,
-                     :citation_id, :scholar_link, :cited_by_count, :cited_by_link)";
+                (user_id, title, authors, publication_venue, year, 
+                 citation_id, scholar_link, cited_by_count, cited_by_link)
+            VALUES
+                (:user_id, :title, :authors, :publication_venue, :year,
+                 :citation_id, :scholar_link, :cited_by_count, :cited_by_link)
+            RETURNING id";
 
-        $query = $this->db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
 
-        return $query->execute([
-            'user_id' => $data['user_id'],
-            'title' => $data['title'],
-            'authors' => $data['authors'],
+        $stmt->execute([
+            'user_id'           => $data['user_id'],
+            'title'             => $data['title'],
+            'authors'           => $data['authors'],
             'publication_venue' => $data['publication_venue'] ?? null,
-            'year' => $data['year'] ?? null,
-            'citation_id' => $data['citation_id'] ?? null,
-            'scholar_link' => $data['scholar_link'] ?? null,
-            'cited_by_count' => $data['cited_by_count'] ?? 0,
-            'cited_by_link' => $data['cited_by_link'] ?? null
+            'year'              => $data['year'] ?? null,
+            'citation_id'       => $data['citation_id'] ?? null,
+            'scholar_link'      => $data['scholar_link'] ?? null,
+            'cited_by_count'    => $data['cited_by_count'] ?? 0,
+            'cited_by_link'     => $data['cited_by_link'] ?? null
         ]);
+
+        $newId = $stmt->fetchColumn();
+
+        return $newId ? (int)$newId : null;
     }
 
-    public function bulkInsert(int $userId, array $articles)
+
+    public function bulkInsert(int $userId, string $nidn, array $articles)
     {
         if (empty($articles)) {
-            return ['inserted' => 0, 'skipped' => 0];
+            return [
+                'inserted' => 0,
+                'skipped' => 0,
+                'total' => 0,
+                'inserted_ids' => [],
+                'inserted_publications' => [],
+            ];
         }
 
         $inserted = 0;
         $skipped = 0;
+        $insertedIds = [];
+        $insertedPublications = [];
 
         foreach ($articles as $article) {
             $citationId = $article['citation_id'] ?? null;
@@ -205,8 +219,21 @@ class PublicationModel extends Model
                 'cited_by_link' => $article['cited_by']['link'] ?? null
             ];
 
-            if ($this->create($publicationData)) {
+            $newId = $this->create($publicationData);
+
+            if ($newId) {
                 $inserted++;
+                $insertedIds[] = $newId;
+
+                $insertedPublications[] = [
+                    'citation_id' => $citationId,
+                    'nidn' => $nidn,
+                    'title' => $publicationData['title'],
+                    'publication_venue' => $publicationData['publication_venue'],
+                    'year' => $publicationData['year'],
+                    'cited_by_count' => $publicationData['cited_by_count'],
+                    'scholar_link' => $publicationData['scholar_link']
+                ];
             } else {
                 $skipped++;
             }
@@ -215,7 +242,9 @@ class PublicationModel extends Model
         return [
             'inserted' => $inserted,
             'skipped' => $skipped,
-            'total' => count($articles)
+            'total' => count($articles),
+            'inserted_ids' => $insertedIds,
+            'inserted_publications' => $insertedPublications
         ];
     }
 

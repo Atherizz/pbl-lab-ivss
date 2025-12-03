@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ResearchModel;
 use App\Models\UserModel;
+use App\Http\Services\AIService;
 
 class ResearchController extends Controller
 {
     private $model;
     private $userModel;
     private $itemsPerPage = 6;
+    private $aiService;
+
 
     public function __construct()
     {
         parent::__construct();
         $this->model = $this->model('ResearchModel');
         $this->userModel = $this->model('UserModel');
+        $this->aiService = new AIService();
     }
 
     public function index()
@@ -39,17 +43,17 @@ class ResearchController extends Controller
         if (!$userId) {
             $this->redirect('/login');
         }
-        
+
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $statusFilter = $_GET['status'] ?? 'all';
         $searchQuery = $_GET['search'] ?? '';
-        
+
         $allResearch = $this->model->getAll($statusFilter, $searchQuery);
         $paginationData = pagination($this->itemsPerPage, $currentPage, $allResearch, 'research');
-        
+
         $paginationData['currentStatus'] = $statusFilter;
         $paginationData['currentSearch'] = $searchQuery;
-        
+
         view('anggota_lab.research.direktori', $paginationData);
     }
 
@@ -76,12 +80,24 @@ class ResearchController extends Controller
         view('anggota_lab.research.create', $data);
     }
 
+    public function getRecommendation()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = $_POST['title'] ?? '';
+
+            $result = $this->aiService->getRecommendation($title);
+
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        }
+    }
+
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $userId = $_SESSION['user']['id'] ?? null;
-            $userRole = $_SESSION['user']['role'] ?? null;
             $errors = $this->validateProposal($data);
 
             if (!empty($errors)) {
@@ -96,13 +112,10 @@ class ResearchController extends Controller
                 return;
             }
 
-            if ($userRole === 'mahasiswa') {
-                $initialStatus = 'pending_approval';
-            } elseif ($userRole === 'anggota_lab') {
-                $initialStatus = 'approved_by_dospem';
-            } elseif ($userRole === 'admin_lab') {
-                $initialStatus = 'approved_by_head';
-            }
+            $dospem = $this->userModel->getById($data['dospem_id']);
+
+            $initialStatus = ($dospem['role'] == 'admin_lab') ? 'approved_by_dospem' : 'pending_approval';
+
 
             $researchData = [
                 'title' => $data['title'],
@@ -114,9 +127,9 @@ class ResearchController extends Controller
             ];
 
             $this->model->create($researchData);
-            
+
             set_flash('success', 'Proposal Riset berhasil diajukan!');
-            
+
             $this->redirect('/anggota-lab/research');
         } else {
             $this->redirect('/anggota-lab/research/create');
@@ -182,7 +195,7 @@ class ResearchController extends Controller
             $this->model->update($id, $updateData);
 
             set_flash('success', 'Proyek Riset berhasil diperbarui!');
-            
+
             $this->redirect('/anggota-lab/research');
         } else {
             $this->redirect('/anggota-lab/research');
@@ -205,9 +218,9 @@ class ResearchController extends Controller
             }
 
             $this->model->delete($id);
-            
+
             set_flash('success', 'Proyek Riset berhasil dihapus!');
-            
+
             if ($userRole === 'admin_lab') {
                 $this->redirect('/anggota-lab/research/direktori');
             } else {
