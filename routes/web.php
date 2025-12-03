@@ -66,6 +66,7 @@ return [
         '/admin-berita/news/{id}' => ['controller' => NewsController::class, 'action' => 'update', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'store', 'middleware' => 'admin_berita'],
         '/anggota-lab/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
+        '/anggota-lab/research/get-recommendation' => ['controller' => ResearchController::class, 'action' => 'getRecommendation', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}' => ['controller' => ResearchController::class, 'action' => 'update', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}/delete' => ['controller' => ResearchController::class, 'action' => 'destroy', 'middleware' => 'auth'],
         '/anggota-lab/equipment/bookings/return/{id}' => ['controller' => EquipmentBookingController::class, 'action' => 'returnEquipment', 'middleware' => 'mahasiswa'],
