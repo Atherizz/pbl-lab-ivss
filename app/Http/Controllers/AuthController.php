@@ -69,16 +69,19 @@ class AuthController extends Controller
                     exit;
                 }
 
-                // Hash password
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-                // Insert ke registration_requests menggunakan model
+                $dospem = $this->userModel->getById($dospem_id);
+
+                $status = ($dospem['role'] == 'admin_lab') ? 'approved_by_dospem' : 'pending_approval';
+
                 $data = [
                     'nim' => $nim,
                     'name' => $name,
                     'password' => $hashedPassword,
                     'dospem_id' => $dospem_id,
-                    'registration_purpose' => $registration_purpose
+                    'registration_purpose' => $registration_purpose,
+                    'status' => $status
                 ];
 
                 $this->registrationRequestModel->createRequest($data);
