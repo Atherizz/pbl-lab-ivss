@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DatasetController; 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CourseController;
 
 return [
@@ -55,6 +56,9 @@ return [
         '/berita/{slug}' => ['controller' => HomeController::class, 'action' => 'newsDetail'],
         '/berita' => ['controller' => HomeController::class, 'action' => 'news'],
         '/profile/{slug}' => ['controller' => HomeController::class, 'action' => 'profile'],
+        '/admin-lab/products/{id}/edit' => ['controller' => ProductController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
+        '/admin-lab/products/create' => ['controller' => ProductController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
+        '/admin-lab/products' => ['controller' => ProductController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
         '/' => ['controller' => HomeController::class, 'action' => 'index'],
     ],
     'POST' => [
@@ -92,6 +96,9 @@ return [
         '/anggota-lab/profile/photo/delete' => ['controller' => ProfileController::class, 'action' => 'deletePhoto', 'middleware' => 'anggota_lab'],
         '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/members/{id}/delete' => ['controller' => MemberController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
+        '/admin-lab/products' => ['controller' => ProductController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
+        '/admin-lab/products/{id}' => ['controller' => ProductController::class, 'action' => 'update', 'middleware' => 'admin_lab'], // Untuk PUT/PATCH
+        '/admin-lab/products/{id}/delete' => ['controller' => ProductController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
     ],
 ];
 ?>
