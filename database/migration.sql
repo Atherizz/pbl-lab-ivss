@@ -344,3 +344,26 @@ CREATE TABLE publications (
         REFERENCES users(id) 
         ON DELETE CASCADE
 );
+
+
+CREATE TABLE products (
+    id BIGSERIAL PRIMARY KEY,
+    
+    judul VARCHAR(255) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    produk_url TEXT NULL,
+    image_url TEXT NULL,
+    
+    -- Menggantikan 'tags'
+    -- array of strings: ["IoT", "Monitoring", "Perikanan"]
+    produk_type JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- array of objects (hanya judul):
+    -- [ { "judul":"Real-time Monitoring" }, 
+    --   { "judul":"Notifikasi Kualitas Air" } ]
+    features JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- Sanity checks untuk tipe JSON
+    CONSTRAINT chk_produk_type_array    CHECK (jsonb_typeof(produk_type) = 'array'), -- Constraint yang diperbarui
+    CONSTRAINT chk_features_array       CHECK (jsonb_typeof(features) = 'array')
+);
