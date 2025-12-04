@@ -371,14 +371,13 @@ CREATE TABLE products (
 query dari menu edukasi 
 
 CREATE TABLE courses (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     icon_name VARCHAR(100), 
     level VARCHAR(50),      
-    total_sessions INT,     
+    total_sessions INTEGER,     
     action_url VARCHAR(255), 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-); 
-
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
