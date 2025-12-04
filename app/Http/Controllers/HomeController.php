@@ -35,11 +35,16 @@ class HomeController extends Controller
         $courseModel = $this->model('CourseModel');
         $courses = $courseModel->getAll(); 
 
+        $productModel = $this->model('ProductModel');
+        $products = $productModel->getAllProducts();
+
         // 4. Kirim SEMUA data ke view 'home'
         view('home', [
             'members'      => $allMembers,
             'publications' => $publications,
-            'courses'      => $courses // <-- Data course dikirim ke sini agar bisa di-looping di view
+            'courses'      => $courses,
+            'products'     => $products
+            
         ]);
     }
 
@@ -125,6 +130,44 @@ class HomeController extends Controller
             'startItem' => $startItem,
             'endItem' => $endItem,
             'sortBy' => $sortBy
+        ]);
+    }
+
+    public function products()
+    {
+        $itemsPerPage = 6;
+        $currentPage  = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $sortBy       = $_GET['sort'] ?? 'id';
+        $sortOrder    = $_GET['order'] ?? 'DESC';
+        $searchQuery  = $_GET['q'] ?? null; 
+
+        $totalItems = $this->productModel->countAll($searchQuery);
+        $totalPages = max(1, ceil($totalItems / $itemsPerPage));
+        $currentPage = min($currentPage, $totalPages);
+
+        $offset = ($currentPage - 1) * $itemsPerPage;
+
+        $products = $this->productModel->getAllPaginated(
+            $itemsPerPage,
+            $offset,
+            $sortBy,
+            $sortOrder,
+            $searchQuery
+        );
+
+        $startItem = $totalItems > 0 ? $offset + 1 : 0;
+        $endItem   = min($offset + $itemsPerPage, $totalItems);
+
+        view('products', [
+            'products'    => $products,
+            'totalProducts' => $totalItems,
+            'currentPage' => $currentPage,
+            'totalPages'  => $totalPages,
+            'startItem'   => $startItem,
+            'endItem'     => $endItem,
+            'sortBy'      => $sortBy,
+            'sortOrder'   => $sortOrder,
+            'searchQuery' => $searchQuery,
         ]);
     }
 
