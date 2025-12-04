@@ -17,8 +17,13 @@ class UserModel extends Model
 
     public function getAllAnggotaLab()
     {
-        $query = $this->db->prepare("SELECT * FROM users where role = :role");
-        $query->execute(['role' => 'anggota_lab']);
+        $query = $this->db->prepare("SELECT * FROM users WHERE role IN (:role1, :role2)");
+
+        $query->execute([
+            'role1' => 'anggota_lab',
+            'role2' => 'admin_lab'
+        ]);
+
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getByRegNumber($regNumber)
@@ -82,19 +87,19 @@ class UserModel extends Model
             ]);
 
             if ($data['role'] == 'anggota_lab') {
-            $result = $query->fetch(PDO::FETCH_ASSOC);
-            $userId = $result['id'];
+                $result = $query->fetch(PDO::FETCH_ASSOC);
+                $userId = $result['id'];
 
-            // Insert lab_user_profiles
-            $profileQuery = $this->db->prepare("
+                // Insert lab_user_profiles
+                $profileQuery = $this->db->prepare("
             INSERT INTO lab_user_profiles (user_id, slug) 
             VALUES (:user_id, :slug)
         ");
 
-            $profileQuery->execute([
-                'user_id' => $userId,
-                'slug' => $data['slug']
-            ]);
+                $profileQuery->execute([
+                    'user_id' => $userId,
+                    'slug' => $data['slug']
+                ]);
             }
 
             $this->db->commit();
@@ -102,7 +107,7 @@ class UserModel extends Model
             return $userId;
         } catch (Exception $e) {
             $this->db->rollBack();
-            throw $e; 
+            throw $e;
         }
     }
 

@@ -65,7 +65,7 @@ class RegistrationRequestModel extends Model
             'password' => $data['password'],
             'dospem_id' => $data['dospem_id'],
             'registration_purpose' => $data['registration_purpose'],
-            'status' => 'pending_approval'
+            'status' => $data['status']
         ]);
     }
 

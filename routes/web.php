@@ -13,6 +13,7 @@ use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CourseController;
 
 return [
     'GET' => [
@@ -21,6 +22,9 @@ return [
         '/admin-lab/equipment/{id}/edit' => ['controller' => EquipmentController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/create' => ['controller' => EquipmentController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
+        '/admin-lab/course' => ['controller' => CourseController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
+        '/admin-lab/course/create' => ['controller' => CourseController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
+        '/admin-lab/course/{id}/edit' => ['controller' => CourseController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
         '/admin-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalAdminView', 'middleware' => 'admin_lab'],
         '/admin-lab/publication' => ['controller' => ResearchController::class, 'action' => 'direktori', 'middleware' => 'admin_lab'],
@@ -66,10 +70,14 @@ return [
         '/admin-lab/equipment/{id}/delete' => ['controller' => EquipmentController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/{id}' => ['controller' => EquipmentController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
+        '/admin-lab/course/{id}/delete' => ['controller' => CourseController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
+        '/admin-lab/course/{id}' => ['controller' => CourseController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
+        '/admin-lab/course' => ['controller' => CourseController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-berita/news/{id}/delete' => ['controller' => NewsController::class, 'action' => 'destroy', 'middleware' => 'admin_berita'],
         '/admin-berita/news/{id}' => ['controller' => NewsController::class, 'action' => 'update', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'store', 'middleware' => 'admin_berita'],
         '/anggota-lab/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
+        '/anggota-lab/research/get-recommendation' => ['controller' => ResearchController::class, 'action' => 'getRecommendation', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}' => ['controller' => ResearchController::class, 'action' => 'update', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}/delete' => ['controller' => ResearchController::class, 'action' => 'destroy', 'middleware' => 'auth'],
         '/anggota-lab/equipment/bookings/return/{id}' => ['controller' => EquipmentBookingController::class, 'action' => 'returnEquipment', 'middleware' => 'mahasiswa'],

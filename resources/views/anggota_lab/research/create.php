@@ -2,7 +2,6 @@
 $pageTitle = 'Ajukan Riset';
 $activeMenu = 'ajukan-riset';
 
-// Diasumsikan BASE_PATH sudah didefinisikan di file index.php utama
 require BASE_PATH . '/resources/views/layouts/dashboard.php';
 
 ?>
@@ -39,6 +38,59 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                         </div>
                         
                         <?php if ($_SESSION['user']['role'] === 'mahasiswa'): ?>
+                        <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 border border-slate-700 rounded-lg p-6 shadow-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 bg-cyan-500/20 rounded-lg backdrop-blur-sm">
+                                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-white">Rekomendasi Dosen Pembimbing dengan AI</h3>
+                                </div>
+                                <form action="<?= BASE_URL ?? '.' ?>/anggota-lab/research/get-recommendation" method="POST">
+                                <button type="button" id="analyzeBtn" 
+                                        class="px-5 py-2.5 bg-cyan-600 text-white font-semibold rounded-lg hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/20">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                    <span>Analisis dengan AI</span>
+                                </button>
+                                </form>
+                            </div>
+
+                            <p class="text-sm text-slate-300 mb-4">
+                                Dapatkan rekomendasi dosen pembimbing terbaik berdasarkan topik riset Anda menggunakan analisis AI.
+                            </p>
+
+                            <div id="loadingState" class="hidden">
+                                <div class="flex items-center space-x-3 py-8 bg-slate-800/50 backdrop-blur-sm rounded-lg px-4 border border-slate-700">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>
+                                    <div>
+                                        <p class="text-sm font-medium text-white">Menganalisis topik riset Anda...</p>
+                                        <p class="text-xs text-slate-400">Proses ini mungkin memakan waktu beberapa detik</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="aiResults" class="hidden space-y-4">
+                                <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl p-5">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div>
+                                            <h4 class="font-bold text-white text-lg" id="topicTitle"></h4>
+                                            <p class="text-xs text-slate-400 mt-1">Berdasarkan analisis judul riset Anda</p>
+                                        </div>
+                                        <span class="px-3 py-1 bg-cyan-500 text-white text-xs font-semibold rounded-full shadow-sm">
+                                            ✓ Dianalisis AI
+                                        </span>
+                                    </div>
+
+                                    <div id="recommendationsList" class="space-y-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <label for="dospem_id" class="block text-sm font-medium text-gray-700">
                                 Supervisor (Dosen Pembimbing) <span class="text-red-500">*</span>
@@ -97,3 +149,191 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const loadingState = document.getElementById('loadingState');
+    const aiResults = document.getElementById('aiResults');
+    const topicTitle = document.getElementById('topicTitle');
+    const recommendationsList = document.getElementById('recommendationsList');
+    const titleInput = document.getElementById('title');
+    const dospemSelect = document.getElementById('dospem_id');
+
+    function showErrorNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 max-w-md bg-red-600 text-white px-6 py-4 rounded-lg shadow-2xl z-50 border-l-4 border-red-800';
+        notification.innerHTML = `
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <h3 class="text-sm font-bold">Kesalahan AI Service</h3>
+                    <p class="mt-1 text-sm whitespace-pre-line">${message}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-4 flex-shrink-0 text-white hover:text-red-200">
+                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.transition = 'opacity 0.5s';
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 500);
+        }, 7000);
+    }
+
+    analyzeBtn.addEventListener('click', function() {
+        const title = titleInput.value.trim();
+
+        if (!title) {
+            alert('Mohon isi judul riset terlebih dahulu!');
+            titleInput.focus();
+            return;
+        }
+
+        analyzeBtn.disabled = true;
+        
+        loadingState.classList.remove('hidden');
+        aiResults.classList.add('hidden');
+
+        const formData = new FormData();
+        formData.append('title', title);
+
+        fetch('<?= BASE_URL ?>/anggota-lab/research/get-recommendation', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(result => {
+            loadingState.classList.add('hidden');
+            
+            if (result.success && result.data && result.data.length > 0) {
+                displayResults(title, result.data);
+                aiResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                const errorMsg = result.error || 'Tidak ada rekomendasi dosen ditemukan.';
+                showErrorNotification(errorMsg);
+            }
+            
+            analyzeBtn.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loadingState.classList.add('hidden');
+            
+            let errorMessage = 'Terjadi kesalahan saat menganalisis.';
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                errorMessage = '❌ Layanan AI tidak dapat dijangkau.\n\nPastikan service AI sudah berjalan di port 8000.';
+            } else if (error.message.includes('Server error')) {
+                errorMessage = '❌ Server mengalami kesalahan. Silakan coba lagi.';
+            }
+            
+            showErrorNotification(errorMessage);
+            analyzeBtn.disabled = false;
+        });
+    });
+
+    function displayResults(title, lecturers) {
+        topicTitle.textContent = title;
+        recommendationsList.innerHTML = '';
+
+        lecturers.forEach((lecturer, index) => {
+            const scorePercentage = lecturer.percentage.toFixed(0);
+            const scoreColor = lecturer.avg_score >= 0.5 ? 'cyan' : lecturer.avg_score >= 0.3 ? 'blue' : 'slate';
+            
+            const topPubs = lecturer.top_publications.slice(0, 2);
+            const pubTitles = topPubs.map(p => `"${p.title}" (${p.year > 0 ? p.year : 'N/A'})`).join(' dan ');
+            const explanation = `${lecturer.lecturer_name} direkomendasikan dengan ${lecturer.total_publications} publikasi (kesesuaian rata-rata ${(lecturer.avg_score * 100).toFixed(1)}%), termasuk ${pubTitles}.`;
+            
+            const recElement = document.createElement('div');
+            recElement.className = 'border-l-4 border-' + scoreColor + '-500 bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 p-5 rounded-r-lg hover:shadow-lg hover:shadow-' + scoreColor + '-500/20 transition-all duration-200 cursor-pointer border border-slate-600';
+            recElement.setAttribute('data-lecturer-nidn', lecturer.nidn);
+            
+            recElement.innerHTML = `
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-shrink-0">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-${scoreColor}-400 to-${scoreColor}-600 flex items-center justify-center shadow-md">
+                                <span class="text-white font-bold text-lg">#${index + 1}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-white text-base">${lecturer.lecturer_name}</h5>
+                            <div class="flex items-center space-x-2 mt-1.5">
+                                <span class="text-xs px-3 py-1 bg-${scoreColor}-500 text-white rounded-full font-semibold shadow-sm">
+                                    Kesesuaian: ${scorePercentage}%
+                                </span>
+                                <span class="text-xs text-slate-400">${lecturer.total_publications} publikasi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-slate-300 mb-3 leading-relaxed bg-gradient-to-r from-slate-800 to-slate-900 p-4 rounded-lg border-l-4 border-cyan-500 shadow-sm">${explanation}</p>
+                
+                <div class="space-y-2.5 bg-slate-900/50 p-3 rounded-lg border border-slate-700">
+                    <p class="text-xs font-bold text-slate-300 uppercase tracking-wide flex items-center">
+                        <svg class="w-4 h-4 mr-1.5 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                        </svg>
+                        Publikasi Relevan:
+                    </p>
+                    ${lecturer.top_publications.map(pub => `
+                        <div class="flex items-start space-x-2 text-xs bg-slate-800 p-2.5 rounded-md border border-slate-600 hover:border-cyan-500 transition-colors">
+                            <svg class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="flex-1">
+                                <span class="text-white font-semibold">${pub.title}</span>
+                                <span class="text-cyan-400 font-medium"> (${pub.year > 0 ? pub.year : 'N/A'})</span>
+                                ${pub.publication_venue ? `<br><span class="text-slate-400 italic text-xs">📍 ${pub.publication_venue}</span>` : ''}
+                                <br><span class="text-slate-500 text-xs">🔖 Dikutip: ${pub.cited_by_count || 0}x | Match: ${(pub.score * 100).toFixed(1)}%</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            recommendationsList.appendChild(recElement);
+        });
+
+        document.querySelectorAll('[data-lecturer-nidn]').forEach(card => {
+            card.addEventListener('click', function() {
+                const lecturerNidn = this.getAttribute('data-lecturer-nidn');
+                
+                const options = Array.from(dospemSelect.options);
+                const matchingOption = options.find(opt => {
+                    return opt.text.includes(lecturerNidn) || opt.dataset.nidn === lecturerNidn;
+                });
+                
+                if (matchingOption) {
+                    dospemSelect.value = matchingOption.value;
+                }
+                
+                document.querySelectorAll('[data-lecturer-nidn]').forEach(c => {
+                    c.classList.remove('ring-4', 'ring-cyan-500', 'shadow-2xl', 'scale-105');
+                });
+                this.classList.add('ring-4', 'ring-cyan-500', 'shadow-2xl', 'scale-105');
+                
+                dospemSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                dospemSelect.focus();
+            });
+        });
+
+        aiResults.classList.remove('hidden');
+    }
+});
+</script>

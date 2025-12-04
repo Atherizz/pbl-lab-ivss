@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\AIService;
 use App\Http\Services\ScholarService;
+use App\Models\UserModel;
 
 class PublicationController extends Controller
 {
@@ -12,6 +14,7 @@ class PublicationController extends Controller
     private $model;
 
     private $scholarService;
+    private $aiService;
 
     public function __construct()
     {
@@ -20,6 +23,7 @@ class PublicationController extends Controller
         $this->userProfileModel = $this->model('LabUserProfileModel');
         $this->userId = $_SESSION['user']['id'] ?? 0;
         $this->scholarService = new ScholarService();
+        $this->aiService = new AIService();
     }
 
     public function index()
@@ -125,12 +129,32 @@ class PublicationController extends Controller
             }
 
             $authorArticle = $this->scholarService->getAuthorPublications($scholarId, $isGetAllPages);
+            $userModel = new UserModel();
+            $lecturerData = $userModel->getById($this->userId);
 
-            $this->model->bulkInsert($this->userId, $authorArticle['articles']);
+            $result = $this->model->bulkInsert($this->userId, $lecturerData['reg_number'], $authorArticle['articles']);
 
             set_flash('success', 'Berhasil sinkronisasi Google Scholar!');
-
-            $this->redirect('/anggota-lab/publikasi');
+            
+            if (function_exists('fastcgi_finish_request')) {
+                session_write_close(); 
+                header("Location: /anggota-lab/publikasi");
+                fastcgi_finish_request(); 
+                
+                if (!empty($result['inserted_publications'])) {
+                    try {
+                        $this->aiService->upsertVector($result['inserted_publications']);
+                        error_log("AI Vector upsert completed for " . count($result['inserted_publications']) . " publications");
+                    } catch (\Exception $e) {
+                        error_log("Background AI upsert failed: " . $e->getMessage());
+                    }
+                }
+            } else {
+                if (!empty($result['inserted_publications'])) {
+                    $this->aiService->upsertVector($result['inserted_publications']);
+                }
+                $this->redirect('/anggota-lab/publikasi');
+            }
         }
     }
 

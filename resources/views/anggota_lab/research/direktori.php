@@ -116,7 +116,7 @@ $statuses = [
                                                 View Link
                                             </a>
                                         <?php else : ?>
-                                            <span class="text-sm text-gray-400">N/A</span>
+                                            <span class="text-sm text-gray-400">Belum ada link publikasi</span>
                                         <?php endif; ?>
                                     </div>
                                     

@@ -233,6 +233,7 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
                 <div class="my-4 border-t border-slate-700"></div>
 
+                <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
                 <div class="px-4 py-2">
                     <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Publikasi</span>
                 </div>
@@ -244,7 +245,8 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 </a>
 
                 <div class="my-4 border-t border-slate-700"></div>
-
+                <?php else: ?>
+                
                 <div class="px-4 py-2">
                     <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Riset</span>
                 </div>
@@ -260,6 +262,9 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <i class="fas fa-plus-circle w-5 text-center"></i>
                     <span class="font-medium">Ajukan Riset Baru</span>
                 </a>
+
+                <div class="my-4 border-t border-slate-700"></div>
+                <?php endif; ?>
 
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">

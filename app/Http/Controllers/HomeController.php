@@ -11,15 +11,17 @@ class HomeController extends Controller
     public function __construct()
     {
         parent::__construct();
-        // Memuat Model
+        // Memuat Model Utama
         $this->userProfileModel = $this->model('LabUserProfileModel');
     }
 
     public function index()
     {
+        // 1. Ambil Data Anggota (Existing)
         $allMembers = $this->userProfileModel->getAllMembers();
-        $publicationModel = $this->model('PublicationModel');
 
+        // 2. Ambil Data Publikasi (Existing)
+        $publicationModel = $this->model('PublicationModel');
         $publications = $publicationModel->getAllPaginated(
             3,
             0,
@@ -28,69 +30,80 @@ class HomeController extends Controller
             null
         );
 
-        view('home', [
-            'members' => $allMembers,
-            'publications' => $publications
-        ]);
+        // 3. Ambil Data COURSE / PELATIHAN (Baru)
+        // Kita load modelnya dan ambil datanya disini
+        $courseModel = $this->model('CourseModel');
+        $courses = $courseModel->getAll(); 
 
+        // 4. Kirim SEMUA data ke view 'home'
+        view('home', [
+            'members'      => $allMembers,
+            'publications' => $publications,
+            'courses'      => $courses // <-- Data course dikirim ke sini agar bisa di-looping di view
+        ]);
     }
 
-public function publications() 
-{
-    $itemsPerPage = 6;
-    $currentPage  = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-    $sortBy       = $_GET['sort'] ?? 'citations';
-    $searchQuery  = $_GET['q'] ?? null; 
+    public function publications() 
+    {
+        $itemsPerPage = 6;
+        $currentPage  = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $sortBy       = $_GET['sort'] ?? 'citations';
+        $searchQuery  = $_GET['q'] ?? null; 
 
-    $publicationModel = $this->model('PublicationModel');
+        $publicationModel = $this->model('PublicationModel');
 
-    $totalItems  = $publicationModel->countAll($searchQuery);
-    $totalPages  = max(1, ceil($totalItems / $itemsPerPage));
-    $currentPage = min($currentPage, $totalPages);
+        $totalItems  = $publicationModel->countAll($searchQuery);
+        $totalPages  = max(1, ceil($totalItems / $itemsPerPage));
+        $currentPage = min($currentPage, $totalPages);
 
-    $offset = ($currentPage - 1) * $itemsPerPage;
+        $offset = ($currentPage - 1) * $itemsPerPage;
 
-    $publications = $publicationModel->getAllPaginated(
-        $itemsPerPage,
-        $offset,
-        $sortBy,
-        null,
-        $searchQuery
-    );
+        $publications = $publicationModel->getAllPaginated(
+            $itemsPerPage,
+            $offset,
+            $sortBy,
+            null,
+            $searchQuery
+        );
 
-    $startItem = $totalItems > 0 ? $offset + 1 : 0;
-    $endItem   = min($offset + $itemsPerPage, $totalItems);
+        $startItem = $totalItems > 0 ? $offset + 1 : 0;
+        $endItem   = min($offset + $itemsPerPage, $totalItems);
 
-    view('publications', [
-        'publications'       => $publications,
-        'totalPublications'  => $totalItems,
-        'currentPage'        => $currentPage,
-        'totalPages'         => $totalPages,
-        'startItem'          => $startItem,
-        'endItem'            => $endItem,
-        'sortBy'             => $sortBy,
-        'searchQuery'        => $searchQuery,
-    ]);
-}
-
+        view('publications', [
+            'publications'      => $publications,
+            'totalPublications' => $totalItems,
+            'currentPage'       => $currentPage,
+            'totalPages'        => $totalPages,
+            'startItem'         => $startItem,
+            'endItem'           => $endItem,
+            'sortBy'            => $sortBy,
+            'searchQuery'       => $searchQuery,
+        ]);
+    }
 
     public function profile($slug)
     {
         $profile = $this->userProfileModel->getProfileBySlug($slug);
+        
+        // Error handling jika profile tidak ditemukan
+        if (!$profile) {
+            header('Location: ' . BASE_URL); // Atau tampilkan 404
+            exit;
+        }
+
         $user = $this->model('UserModel')->getById($profile['user_id']);
 
         $itemsPerPage = 6;
         $currentPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $sortBy = $_GET['sort'] ?? 'citations';
 
-        
-        $totalItems = $this->model('PublicationModel')->countByUserId($profile['user_id']);
+        $publicationModel = $this->model('PublicationModel');
+        $totalItems = $publicationModel->countByUserId($profile['user_id']);
         $totalPages = max(1, ceil($totalItems / $itemsPerPage));
         $currentPage = min($currentPage, $totalPages);
         
         $offset = ($currentPage - 1) * $itemsPerPage;
 
-        $publicationModel = $this->model('PublicationModel');
         $publications = $publicationModel->getAllPaginated(
             $itemsPerPage,
             $offset,
@@ -114,6 +127,7 @@ public function publications()
             'sortBy' => $sortBy
         ]);
     }
+
     public function news()
     {
         $news = $this->model('NewsModel')->getAllNews();
@@ -125,7 +139,6 @@ public function publications()
     public function newsDetail($slug)
     {
         $newsModel = $this->model('NewsModel');
-
         $news = $newsModel->getBySlug($slug);
 
         if (!$news) {
@@ -140,6 +153,7 @@ public function publications()
             'recentNews' => $recentNews
         ]);
     }
+
     public function fasilitas()
     {
         $peralatan = $this->model('EquipmentModel')->getAllEquipments();

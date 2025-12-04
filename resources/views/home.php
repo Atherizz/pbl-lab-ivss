@@ -206,39 +206,60 @@
 
         <div class="grid md:grid-cols-2 gap-6">
             
-            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-cyan-500 transition-all group relative flex flex-col animate-fade-in-up delay-100">
-                <div class="w-14 h-14 bg-cyan-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500/20 transition-colors">
-                    <i class="fas fa-brain text-cyan-400 text-2xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Machine Learning & Data Science</h3>
-                <p class="text-slate-400 text-sm mb-6 flex-grow">
-                    Pelatihan komprehensif mengenai analisis data, preprocessing, hingga pembuatan model prediksi menggunakan Python, Pandas, dan Scikit-Learn.
-                </p>
-                <div class="flex items-center justify-between pt-6 border-t border-slate-700">
-                    <div class="flex gap-4 text-xs text-slate-500 font-mono">
-                        <span><i class="fas fa-layer-group mr-1"></i> Beginner</span>
-                        <span><i class="far fa-clock mr-1"></i> 12 Pertemuan</span>
+            <?php if (!empty($courses)): ?>
+                <?php 
+                $delay = 100; // Untuk animasi delay bertingkat
+                foreach ($courses as $index => $course): 
+                    // Logika Variasi Warna (Ganjil: Cyan, Genap: Blue/Purple) biar tidak monoton
+                    $isEven = $index % 2 == 0;
+                    $themeColor = $isEven ? 'cyan' : 'blue'; 
+                    
+                    // Bersihkan nama icon dari database (misal: 'brain-icon' jadi 'brain')
+                    $iconName = str_replace('-icon', '', $course['icon_name'] ?? 'layer-group');
+                ?>
+                
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-<?= $themeColor ?>-500 transition-all group relative flex flex-col animate-fade-in-up delay-<?= $delay ?>">
+                    
+                    <div class="w-14 h-14 bg-<?= $themeColor ?>-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-<?= $themeColor ?>-500/20 transition-colors">
+                        <i class="fas fa-<?= $iconName ?> text-<?= $themeColor ?>-400 text-2xl"></i>
                     </div>
-                    <a href="#" class="text-cyan-400 text-sm font-bold hover:underline">Daftar Sekarang <i class="fas fa-arrow-right ml-1"></i></a>
-                </div>
-            </div>
 
-            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500 transition-all group relative flex flex-col animate-fade-in-up delay-200">
-                <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
-                    <i class="fas fa-eye text-blue-400 text-2xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Workshop Computer Vision (YOLO)</h3>
-                <p class="text-slate-400 text-sm mb-6 flex-grow">
-                    Workshop intensif mendalami deteksi objek (Object Detection) menggunakan algoritma YOLOv8. Studi kasus: Deteksi Plat Nomor & APD Proyek.
-                </p>
-                <div class="flex items-center justify-between pt-6 border-t border-slate-700">
-                    <div class="flex gap-4 text-xs text-slate-500 font-mono">
-                        <span><i class="fas fa-layer-group mr-1"></i> Intermediate</span>
-                        <span><i class="far fa-clock mr-1"></i> 4 Pertemuan</span>
+                    <h3 class="text-2xl font-bold text-white mb-3"><?= htmlspecialchars($course['title']) ?></h3>
+
+                    <p class="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
+                        <?= htmlspecialchars($course['description']) ?>
+                    </p>
+
+                    <div class="flex items-center justify-between pt-6 border-t border-slate-700">
+                        <div class="flex gap-4 text-xs text-slate-500 font-mono">
+                            <span>
+                                <i class="fas fa-layer-group mr-1"></i> 
+                                <?= htmlspecialchars($course['level']) ?>
+                            </span>
+                            <span>
+                                <i class="far fa-clock mr-1"></i> 
+                                <?= htmlspecialchars($course['total_sessions']) ?> Pertemuan
+                            </span>
+                        </div>
+                        <a href="<?= htmlspecialchars($course['action_url']) ?>" class="text-<?= $themeColor ?>-400 text-sm font-bold hover:underline">
+                            Daftar Sekarang <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
-                    <a href="#" class="text-blue-400 text-sm font-bold hover:underline">Daftar Sekarang <i class="fas fa-arrow-right ml-1"></i></a>
+
                 </div>
-            </div>
+
+                <?php 
+                    // Increment delay agar animasi muncul satu per satu
+                    $delay += 100; 
+                endforeach; 
+                ?>
+
+            <?php else: ?>
+                <div class="col-span-2 text-center py-12 border border-dashed border-slate-700 rounded-2xl">
+                    <i class="fas fa-folder-open text-slate-600 text-4xl mb-4"></i>
+                    <p class="text-slate-400">Belum ada program pelatihan yang tersedia saat ini.</p>
+                </div>
+            <?php endif; ?>
 
         </div>
     </div>

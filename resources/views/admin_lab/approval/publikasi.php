@@ -46,6 +46,7 @@ $userRole = $_SESSION['user']['role'];
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diajukan Oleh</th>
+                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dosen Pembimbing</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publikasi</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                             </tr>
@@ -60,6 +61,12 @@ $userRole = $_SESSION['user']['role'];
                                     <p class="text-xs text-gray-500 mt-1"><?= htmlspecialchars($row['description']) ?></p>
                                 </td>
                                 <td class="px-5 py-4 text-sm text-gray-700"><?= htmlspecialchars($row['user_name']) ?></td>
+                                <td class="px-5 py-4 text-sm text-gray-700">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <i class="fas fa-user-tie mr-1"></i>
+                                        <?= htmlspecialchars($row['dospem_name'] ?? 'N/A') ?>
+                                    </span>
+                                </td>
                                 <td class="px-5 py-4 text-sm text-blue-600">
                                     <a href="<?= htmlspecialchars($row['publication_url']) ?>" target="_blank" class="hover:underline">Lihat Publikasi</a>
                                 </td>
@@ -90,7 +97,7 @@ $userRole = $_SESSION['user']['role'];
                             <?php endforeach; ?>
                             <?php else: ?>
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
+                                <td colspan="6" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center text-gray-400">
                                         <i class="fas fa-inbox text-5xl mb-3"></i>
                                         <p class="text-sm font-medium">Tidak ada persetujuan tertunda</p>

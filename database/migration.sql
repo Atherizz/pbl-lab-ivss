@@ -367,3 +367,18 @@ CREATE TABLE products (
     CONSTRAINT chk_produk_type_array    CHECK (jsonb_typeof(produk_type) = 'array'), -- Constraint yang diperbarui
     CONSTRAINT chk_features_array       CHECK (jsonb_typeof(features) = 'array')
 );
+-- migration baru course di atmin :
+query dari menu edukasi 
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    icon_name VARCHAR(100), 
+    level VARCHAR(50),      
+    total_sessions INT,     
+    action_url VARCHAR(255), 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+); 
+
