@@ -1,21 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register - IVSS Lab</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, .brand-font { font-family: 'Poppins', sans-serif; }
-  </style>
-</head>
-
 <body class="min-h-screen bg-slate-900 flex flex-col">
 
   <?php include __DIR__ . '/layouts/navbar.php'; ?>
@@ -72,6 +54,13 @@
                 <input type="text" name="nim" required placeholder="Nomor Induk"
                        class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
               </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">Email</label>
+            <div class="relative">
+              <input type="email" name="email" required placeholder="email@example.com"
+                     class="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
             </div>
           </div>
           <div>

@@ -367,8 +367,8 @@ CREATE TABLE products (
     CONSTRAINT chk_produk_type_array    CHECK (jsonb_typeof(produk_type) = 'array'), -- Constraint yang diperbarui
     CONSTRAINT chk_features_array       CHECK (jsonb_typeof(features) = 'array')
 );
--- migration baru course di atmin :
-query dari menu edukasi 
+-- -- migration baru course di atmin :
+-- query dari menu edukasi 
 
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
@@ -381,3 +381,9 @@ CREATE TABLE courses (
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- MIGRATION 8 
+truncate registration_requests;
+
+ALTER TABLE registration_requests 
+ADD COLUMN email VARCHAR(255) NOT NULL UNIQUE;

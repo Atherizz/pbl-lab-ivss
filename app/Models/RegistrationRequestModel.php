@@ -51,17 +51,25 @@ class RegistrationRequestModel extends Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getByEmail($email)
+    {
+        $query = $this->db->prepare("SELECT * FROM {$this->table} WHERE email = :email");
+        $query->execute(['email' => $email]);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function createRequest($data)
     {
         $query = $this->db->prepare("
             INSERT INTO {$this->table} 
-            (nim, name, password, dospem_id, registration_purpose, status) 
-            VALUES (:nim, :name, :password, :dospem_id, :registration_purpose, :status)
+            (nim, name, email, password, dospem_id, registration_purpose, status) 
+            VALUES (:nim, :name, :email, :password, :dospem_id, :registration_purpose, :status)
         ");
 
         return $query->execute([
             'nim' => $data['nim'],
             'name' => $data['name'],
+            'email' => $data['email'],
             'password' => $data['password'],
             'dospem_id' => $data['dospem_id'],
             'registration_purpose' => $data['registration_purpose'],

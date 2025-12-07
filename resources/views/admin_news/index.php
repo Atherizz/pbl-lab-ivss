@@ -157,11 +157,6 @@ $totalViews = $stats['total_views'] ?? 'N/A'; // N/A jika data views tidak ada/t
                         <i class="fas fa-edit"></i>
                         <span class="font-medium text-sm">View Drafts</span>
                     </a>
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-berita/news/analytics" 
-                        class="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors">
-                        <i class="fas fa-chart-line"></i>
-                        <span class="font-medium text-sm">View Analytics</span>
-                    </a>
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\ApprovalService;
+use App\Http\Services\EmailService;
 
 class ApprovalController extends Controller
 {
@@ -12,6 +13,7 @@ class ApprovalController extends Controller
     private $researchModel;
     private $approvalService;
     private $itemsPerPage = 5;
+    private $mailer;
 
     public function __construct()
     {
@@ -20,6 +22,7 @@ class ApprovalController extends Controller
         $this->equipmentBookingModel = $this->model('EquipmentBookingModel');
         $this->researchModel = $this->model('ResearchModel');
         $this->approvalService = new ApprovalService();
+        $this->mailer = new EmailService();
     }
 
     public function approvalAdminView($type)
@@ -60,9 +63,50 @@ class ApprovalController extends Controller
         view('admin_lab.approval.' . $type, $paginationData);
     }
     
-    // Fungsi Aksi Persetujuan (Approval)
+    private function buildApprovalEmailBody($userName, $approvalType, $rejectionReason = null)
+    {
+        $body = "<p>Halo {$userName},</p>";
+
+        switch ($approvalType) {
+            case 'approved_by_admin':
+                $body .= "
+                    <p>Selamat! Pengajuan pendaftaran Anda sebagai anggota Lab IVSS telah <strong>disetujui oleh Admin Lab</strong>.</p>
+                    <p>Anda sekarang dapat login ke sistem menggunakan NIM dan password yang telah Anda daftarkan.</p>
+                    <p><strong>Langkah selanjutnya:</strong></p>
+                    <ul>
+                        <li>Login ke sistem Lab IVSS</li>
+                        <li>Lengkapi profil Anda</li>
+                        <li>Mulai berkontribusi di laboratorium</li>
+                    </ul>
+                ";
+                break;
+
+            case 'approved_by_dospem':
+                $body .= "
+                    <p>Pengajuan pendaftaran Anda sebagai anggota Lab IVSS telah <strong>disetujui oleh Dosen Pembimbing</strong>.</p>
+                    <p>Saat ini permohonan Anda sedang menunggu persetujuan dari Admin Lab.</p>
+                    <p>Anda akan menerima email notifikasi lebih lanjut setelah Admin Lab melakukan review.</p>
+                ";
+                break;
+
+            case 'rejected':
+                $body .= "
+                    <p>Mohon maaf, pengajuan pendaftaran Anda sebagai anggota Lab IVSS telah <strong>ditolak</strong>.</p>
+                ";
+                if ($rejectionReason) {
+                    $body .= "<p><strong>Alasan penolakan:</strong><br>{$rejectionReason}</p>";
+                }
+                $body .= "
+                    <p>Jika Anda merasa ada kesalahan atau ingin mengajukan kembali, silakan hubungi admin atau dosen pembimbing Anda.</p>
+                ";
+                break;
+        }
+
+        $body .= "<p>Salam,<br><strong>IVSS Lab</strong></p>";
+
+        return $body;
+    }
     
-    // PERSETUJUAN OLEH ADMIN LAB
     public function approveRequestAdminLab($type, $id) {
         $action = ($type === 'peminjaman') ? 'approve' : 'approve_admin';
         $result = $this->approvalService->validateApproval($type, $id, $action);
@@ -72,8 +116,18 @@ class ApprovalController extends Controller
             $this->redirect('/admin-lab/approval/' . $type);
             return;
         }
-
+        
         $this->approvalService->approveByAdminLab($type, $id);
+        
+        if ($type === 'anggota') {
+            $registeredUser = $this->registrationRequestModel->getById($id);
+            $subject = 'Pendaftaran Lab IVSS - Disetujui';
+            $to = $registeredUser['email'];
+            $body = $this->buildApprovalEmailBody($registeredUser['name'], 'approved_by_admin');
+            
+            $this->mailer->send($to, $subject, $body);
+        }
+        
         set_flash('success', ' Berhasil disetujui oleh Admin Lab.');
         $this->redirect('/admin-lab/approval/' . $type);
     }
@@ -89,11 +143,20 @@ class ApprovalController extends Controller
         }
         
         $this->approvalService->rejectByAdminLab($type, $id, $reason);
+        
+        if ($type === 'anggota') {
+            $registeredUser = $this->registrationRequestModel->getById($id);
+            $subject = 'Pendaftaran Lab IVSS - Ditolak';
+            $to = $registeredUser['email'];
+            $body = $this->buildApprovalEmailBody($registeredUser['name'], 'rejected', $reason);
+            
+            $this->mailer->send($to, $subject, $body);
+        }
+        
         set_flash('success', ' Berhasil ditolak oleh Admin Lab.');
         $this->redirect('/admin-lab/approval/' . $type);
     }
 
-    // PERSETUJUAN OLEH DOSEN PEMBIMBING (DOSPEM)
     public function approveRequestDospem($type, $id) {
         $result = $this->approvalService->validateApproval($type, $id, 'approve_dospem');
         
@@ -104,6 +167,16 @@ class ApprovalController extends Controller
         }
         
         $this->approvalService->approveByDospem($type, $id);
+        
+        if ($type === 'anggota') {
+            $registeredUser = $this->registrationRequestModel->getById($id);
+            $subject = 'Pendaftaran Lab IVSS - Disetujui Dosen Pembimbing';
+            $to = $registeredUser['email'];
+            $body = $this->buildApprovalEmailBody($registeredUser['name'], 'approved_by_dospem');
+            
+            $this->mailer->send($to, $subject, $body);
+        }
+        
         set_flash('success', ' Berhasil disetujui oleh Dosen Pembimbing.');
         $this->redirect('/anggota-lab/approval/' . $type);
     }
@@ -119,6 +192,16 @@ class ApprovalController extends Controller
         }
         
         $this->approvalService->rejectByDospem($type, $id, $reason);
+        
+        if ($type === 'anggota') {
+            $registeredUser = $this->registrationRequestModel->getById($id);
+            $subject = 'Pendaftaran Lab IVSS - Ditolak';
+            $to = $registeredUser['email'];
+            $body = $this->buildApprovalEmailBody($registeredUser['name'], 'rejected', $reason);
+            
+            $this->mailer->send($to, $subject, $body);
+        }
+        
         set_flash('success', ' Berhasil ditolak oleh Dosen Pembimbing.');
         $this->redirect('/anggota-lab/approval/' . $type);
     }
