@@ -139,6 +139,30 @@
   <section id="produk" class="py-20 bg-slate-800 border-t border-slate-700 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         
+        <?php 
+        // --- DEFINISI MAP WARNA TAG (Disesuaikan LIGHT MODE) ---
+        // Kelas background disesuaikan untuk mode gelap (bg-X00)
+        $tagColorMap = [
+            // [Badge BG/Dark, Text, Hover Border, Hover Shadow, Hover Title Color, Button Hover BG, Button Hover Border, Feature Icon Color]
+            'iot'          => ['bg-cyan-600 dark:bg-cyan-700', 'text-white', 'hover:border-cyan-500/50', 'hover:shadow-cyan-500/10', 'group-hover:text-cyan-400', 'hover:bg-cyan-600', 'hover:border-cyan-600', 'text-cyan-500'],
+            'monitoring'   => ['bg-cyan-600 dark:bg-cyan-700', 'text-white', 'hover:border-cyan-500/50', 'hover:shadow-cyan-500/10', 'group-hover:text-cyan-400', 'hover:bg-cyan-600', 'hover:border-cyan-600', 'text-cyan-500'],
+            'ai'           => ['bg-purple-600 dark:bg-purple-700', 'text-white', 'hover:border-purple-500/50', 'hover:shadow-purple-500/10', 'group-hover:text-purple-400', 'hover:bg-purple-600', 'hover:border-purple-600', 'text-purple-500'],
+            'vision'       => ['bg-purple-600 dark:bg-purple-700', 'text-white', 'hover:border-purple-500/50', 'hover:shadow-purple-500/10', 'group-hover:text-purple-400', 'hover:bg-purple-600', 'hover:border-purple-600', 'text-purple-500'],
+            'smart'        => ['bg-purple-600 dark:bg-purple-700', 'text-white', 'hover:border-purple-500/50', 'hover:shadow-purple-500/10', 'group-hover:text-purple-400', 'hover:bg-purple-600', 'hover:border-purple-600', 'text-purple-500'],
+            'riset'        => ['bg-green-600 dark:bg-green-700', 'text-white', 'hover:border-green-500/50', 'hover:shadow-green-500/10', 'group-hover:text-green-400', 'hover:bg-green-600', 'hover:border-green-600', 'text-green-500'],
+            'inovasi'      => ['bg-green-600 dark:bg-green-700', 'text-white', 'hover:border-green-500/50', 'hover:shadow-green-500/10', 'group-hover:text-green-400', 'hover:bg-green-600', 'hover:border-green-600', 'text-green-500'],
+            
+            // Default warna
+            'default'      => ['bg-gray-600 dark:bg-gray-700', 'text-white', 'hover:border-gray-500/50', 'hover:shadow-gray-500/10', 'group-hover:text-gray-400', 'hover:bg-gray-600', 'hover:border-gray-600', 'text-gray-500'],
+        ];
+        // --- AKHIR DEFINISI MAP ---
+
+
+        // Ambil hanya dua produk pertama untuk ditampilkan di home page
+        $displayedProducts = $products ?? []; 
+        $delay = 100;
+        ?>
+        
         <div class="text-center mb-16 animate-fade-in-up">
             <span class="text-cyan-400 font-bold tracking-wider uppercase text-sm">Hilirisasi Riset</span>
             <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Produk & <span class="text-blue-500">Inovasi</span></h2>
@@ -147,49 +171,89 @@
 
         <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             
-            <div class="group bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10 animate-fade-in-up delay-100">
+            <?php 
+            if (!empty($displayedProducts)) :
+                foreach ($displayedProducts as $product) : 
+                    // Logika untuk menafsirkan data JSON (produk_type & features)
+                    $tags = is_string($product['produk_type'] ?? '[]') ? json_decode($product['produk_type'], true) : ($product['produk_type'] ?? []);
+                    $features = is_string($product['features'] ?? '[]') ? json_decode($product['features'], true) : ($product['features'] ?? []);
+                    if (!is_array($tags)) $tags = [];
+                    if (!is_array($features)) $features = [];
+
+                    $firstTag = $tags[0] ?? 'Inovasi';
+                    $tagLower = strtolower($firstTag);
+
+                    // --- MENGAMBIL WARNA DARI MAP ---
+                    $colorKey = $tagColorMap[$tagLower] ?? $tagColorMap['default'];
+                    list($bgColor, $textColor, $hoverBorder, $hoverShadow, $hoverTitleColor, $hoverButtonBg, $hoverButtonBorder, $featureColor) = $colorKey;
+                    // --- AKHIR PENGAMBILAN WARNA ---
+            ?>
+
+            <div class="group bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden 
+                <?= $hoverBorder ?> transition-all duration-300 hover:shadow-xl <?= $hoverShadow ?> 
+                animate-fade-in-up delay-<?= $delay ?>00">
                 <div class="relative h-56 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=800" alt="Smart Aqua" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">IoT Product</div>
+                    <?php if (!empty($product['image_url'])) : ?>
+                        <img src="<?= BASE_URL . '/' . htmlspecialchars($product['image_url'] ?? '') ?>" alt="<?= htmlspecialchars($product['judul'] ?? 'Produk') ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($tags)) : ?>
+                        <div class="absolute top-3 right-3 
+                            <?= $bgColor ?> 
+                            <?= $textColor ?> 
+                            text-xs font-bold px-3 py-1 rounded-full shadow-lg
+                            ring-2 ring-white/50 dark:ring-gray-900/50"> <?= htmlspecialchars($firstTag) ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="p-8">
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Sistem Monitoring Kualitas Air Kolam Lele</h3>
+                    <h3 class="text-2xl font-bold text-white mb-2 <?= $hoverTitleColor ?> transition-colors"><?= htmlspecialchars($product['judul'] ?? 'Judul Produk') ?></h3>
                     <p class="text-slate-400 text-sm mb-4 leading-relaxed">
-                        Solusi berbasis IoT untuk memantau pH, suhu, dan kekeruhan air secara <i>real-time</i> guna meningkatkan produktivitas panen lele.
+                        <?= htmlspecialchars($product['deskripsi'] ?? 'Deskripsi produk belum tersedia.') ?>
                     </p>
                     <ul class="text-sm text-slate-500 space-y-2 mb-6">
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-cyan-500"></i> Real-time Monitoring via Android</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-cyan-500"></i> Notifikasi Kualitas Air</li>
+                        <?php foreach (array_slice($features, 0, 3) as $feature) : ?>
+                            <?php $featureTitle = htmlspecialchars($feature['judul'] ?? 'Fitur'); ?>
+                            <li class="flex items-center gap-2"><i class="fas fa-check <?= $featureColor ?>"></i> <?= $featureTitle ?></li>
+                        <?php endforeach; ?>
+                        <?php if (count($features) > 3) : ?>
+                            <li class="flex items-center gap-2 text-xs text-slate-500">+<?= count($features) - 3 ?> fitur lainnya</li>
+                        <?php endif; ?>
                     </ul>
-                    <button class="w-full py-3 border border-slate-600 text-slate-300 rounded-xl hover:bg-cyan-600 hover:text-white hover:border-cyan-600 transition-all text-sm font-bold">
+                    <a href="<?= htmlspecialchars($product['produk_url'] ?? '#') ?>"
+                        target="_blank" 
+                        class="w-full py-3 border border-slate-600 text-slate-300 rounded-xl <?= $hoverButtonBg ?> hover:text-white <?= $hoverButtonBorder ?> transition-all text-sm font-bold block text-center">
                         Lihat Detail Produk
-                    </button>
+                    </a>
                 </div>
             </div>
 
-            <div class="group bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10 animate-fade-in-up delay-200">
-                <div class="relative h-56 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1555952494-efd681c7e3f9?q=80&w=800" alt="Face Guard" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">AI Vision</div>
-                </div>
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">FaceGuard Access</h3>
-                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">
-                        Perangkat kontrol akses pintu pintar menggunakan pengenalan wajah (Face Recognition) dengan fitur keamanan anti-spoofing.
-                    </p>
-                    <ul class="text-sm text-slate-500 space-y-2 mb-6">
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> Liveness Detection</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> Log Kehadiran Otomatis</li>
-                    </ul>
-                    <button class="w-full py-3 border border-slate-600 text-slate-300 rounded-xl hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all text-sm font-bold">
-                        Lihat Detail Produk
-                    </button>
-                </div>
+            <?php 
+                $delay++; 
+                endforeach; 
+            else : 
+            ?>
+            
+            <div class="md:col-span-2 text-center py-10 text-slate-400">
+                <i class="fas fa-box text-5xl mb-3 text-slate-700"></i>
+                <p>Belum ada produk inovasi yang terdaftar saat ini.</p>
             </div>
+
+            <?php endif; ?>
 
         </div>
+        
+        <?php if (!empty($products) && count($products) > 2) : ?>
+        <div class="text-center mt-12">
+            <a href="<?= BASE_URL . '/produk' ?>" class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition duration-150">
+                Lihat Semua Inovasi <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        <?php endif; ?>
     </div>
   </section>
+
+
 
   <section id="pelatihan" class="py-20 bg-slate-900 border-t border-slate-700 relative overflow-hidden">
     

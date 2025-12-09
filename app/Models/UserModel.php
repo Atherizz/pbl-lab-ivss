@@ -7,7 +7,34 @@ use PDO;
 use Exception;
 
 class UserModel extends Model
-{
+{   
+
+    public function updateUserName($id, $newName)
+    {
+        if (empty($newName)) {
+            return false;
+        }
+
+        $query = $this->db->prepare("UPDATE users SET name = :name WHERE id = :id");
+        return $query->execute([
+            'name' => $newName,
+            'id' => $id
+        ]);
+    }
+
+    public function updateUserPassword($id, $hashedPassword)
+    {
+        if (empty($hashedPassword)) {
+            return false;
+        }
+        
+        $query = $this->db->prepare("UPDATE users SET password = :password WHERE id = :id");
+        return $query->execute([
+            'password' => $hashedPassword,
+            'id' => $id
+        ]);
+    }
+
     public function getAllUsers()
     {
         $query = $this->db->prepare("SELECT * FROM users");
