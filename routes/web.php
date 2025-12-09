@@ -38,7 +38,7 @@ return [
         '/anggota-lab/research/direktori' => ['controller' => ResearchController::class, 'action' => 'direktori', 'middleware' => 'auth'],
         '/anggota-lab/research/{id}/edit' => ['controller' => ResearchController::class, 'action' => 'edit', 'middleware' => 'auth'],
         '/anggota-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalDospemView', 'middleware' => 'anggota_lab'],
-        '/anggota-lab/equipment/bookings/create' => ['controller' => EquipmentBookingController::class, 'action' => 'create', 'middleware' => 'mahasiswa'],
+        '/anggota-lab/equipment/bookings/create/{id}' => ['controller' => EquipmentBookingController::class, 'action' => 'create', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/bookings' => ['controller' => EquipmentBookingController::class, 'action' => 'index', 'middleware' => 'mahasiswa'],
         '/anggota-lab/equipment/katalog' => ['controller' => EquipmentBookingController::class, 'action' => 'katalog', 'middleware' => 'mahasiswa'],
         '/anggota-lab/profile' => ['controller' => ProfileController::class, 'action' => 'index', 'middleware' => 'anggota_lab'],
