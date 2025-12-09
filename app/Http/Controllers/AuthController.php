@@ -40,14 +40,22 @@ class AuthController extends Controller
             // Validasi input
             $nim = trim($_POST['nim'] ?? '');
             $name = trim($_POST['name'] ?? '');
+            $email = trim($_POST['email'] ?? '');
             $password = trim($_POST['password'] ?? '');
             $password_confirmation = trim($_POST['password_confirmation'] ?? '');
             $dospem_id = trim($_POST['dospem_id'] ?? '');
             $registration_purpose = trim($_POST['registration_purpose'] ?? '');
 
             // Validasi sederhana
-            if (empty($nim) || empty($name) || empty($dospem_id) || empty($registration_purpose)) {
+            if (empty($nim) || empty($name) || empty($email) || empty($dospem_id) || empty($registration_purpose)) {
                 $_SESSION['error'] = 'Semua field harus diisi';
+                $this->redirect('/register');
+                exit;
+            }
+
+            // Validasi format email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['error'] = 'Format email tidak valid';
                 $this->redirect('/register');
                 exit;
             }
@@ -59,12 +67,11 @@ class AuthController extends Controller
                 exit;
             }
 
-            // Cek apakah email atau NIM sudah terdaftar
             try {
-                $existingNim = $this->registrationRequestModel->getByNim($nim);
+                $existingNim = $this->userModel->getByRegNumber($nim);
 
                 if ($existingNim) {
-                    $_SESSION['error'] = 'NIM atau Email sudah terdaftar';
+                    $_SESSION['error'] = 'NIM sudah terdaftar';
                     $this->redirect('/register');
                     exit;
                 }
@@ -78,6 +85,7 @@ class AuthController extends Controller
                 $data = [
                     'nim' => $nim,
                     'name' => $name,
+                    'email' => $email,
                     'password' => $hashedPassword,
                     'dospem_id' => $dospem_id,
                     'registration_purpose' => $registration_purpose,

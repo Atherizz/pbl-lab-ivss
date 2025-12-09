@@ -126,7 +126,7 @@ $totalApproval = $stats['total_approval'] ?? 0;
                         <i class="fas fa-book"></i>
                         <span class="font-medium text-sm">Propose Research</span>
                     </a>
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/anggota"
+                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
                         class="w-full flex items-center gap-3 px-4 py-3 bg-orange-500/10 text-orange-700 rounded-lg hover:bg-orange-500/20 transition-colors">
                         <i class="fas fa-users"></i>
                         <span class="font-medium text-sm">Manage Members</span>
