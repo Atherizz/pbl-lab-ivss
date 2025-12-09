@@ -158,6 +158,89 @@ class AuthController extends Controller
         }
     }
 
+    public function showUpdateProfileForm()
+    {
+        $userId = $_SESSION['user']['id'];
+        $user = $this->userModel->getById($userId);
+        $regNumber = $user['reg_number'] ?? '';
+        
+        $isMahasiswa = is_numeric($regNumber) && strlen($regNumber) >= 8;
+
+        view('update_profile', [
+            'current_name' => $user['name'] ?? '',
+            'is_mahasiswa' => $isMahasiswa
+        ]);
+    }
+    
+    public function updateProfile()
+    {
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['submit'])) {
+        $this->redirect('/update-profile'); 
+        exit;
+    }
+    
+    $userId = $_SESSION['user']['id'];
+    $user = $this->userModel->getById($userId);
+    
+    if (!$user) {
+        $this->set_flash('error', 'Akun pengguna tidak ditemukan.');
+        $this->redirect('/update-profile');
+        exit;
+    }
+    
+    $regNumber = $user['reg_number'] ?? '';
+    $isMahasiswa = is_numeric($regNumber) && strlen($regNumber) >= 8;
+
+    // Data dari form
+    $newName = trim($_POST['new_name'] ?? '');
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newPassword = $_POST['new_password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    if (!empty($newName)) {
+        if (strlen($newName) < 3) {
+            $errors[] = 'Nama baru minimal 3 karakter.';
+        } else {
+            try {
+                $this->userModel->updateUserName($userId, $newName); 
+                $_SESSION['user']['name'] = $newName; 
+                set_flash('success', 'Nama berhasil diganti menjadi **' . htmlspecialchars($newName) . '**.');
+            } catch (Exception $e) {
+                set_flash('error', 'Kesalahan saat mengganti nama. Silakan coba lagi.');
+            }
+        }
+    }
+
+    if (!empty($currentPassword) || !empty($newPassword) || !empty($confirmPassword)) {
+        
+        // Validasi Pembatasan Mahasiswa
+        if ($isMahasiswa) { 
+            set_flash('error', 'Ganti password tidak diizinkan untuk akun Mahasiswa.');
+        } else {
+            if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+                set_flash('error', 'Semua field password (lama, baru, konfirmasi) harus diisi.');
+            } else if ($newPassword !== $confirmPassword) {
+                set_flash('error', 'Password baru dan konfirmasi password tidak cocok.');
+            } else if (strlen($newPassword) < 6) {
+                set_flash('error', 'Password baru minimal 6 karakter.');
+            } else if (!isset($user['password']) || !password_verify($currentPassword, $user['password'])) {
+                set_flash('error', 'Password lama salah.');
+            } else {
+                try {
+                    $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+                    $this->userModel->updateUserPassword($userId, $hashedPassword); 
+                    set_flash('success', 'Password berhasil diganti!');
+                } catch (Exception $e) {
+                    set_flash('error', 'Kesalahan saat mengganti password. Silakan coba lagi.');
+                }
+            }
+        }
+    }
+    $this->redirect('/update-profile');
+    exit;
+}
+
     public function logout()
     {
         if (session_status() === PHP_SESSION_NONE) {

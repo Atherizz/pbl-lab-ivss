@@ -19,6 +19,7 @@ return [
     'GET' => [
         '/login' => ['controller' => AuthController::class, 'action' => 'showLoginForm', 'middleware' => 'guest'],
         '/register' => ['controller' => AuthController::class, 'action' => 'showRegistrationForm', 'middleware' => 'guest'],
+        '/update-profile' => ['controller' => AuthController::class, 'action' => 'showUpdateProfileForm', 'middleware' => 'auth'],
         '/admin-lab/equipment/{id}/edit' => ['controller' => EquipmentController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/create' => ['controller' => EquipmentController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment' => ['controller' => EquipmentController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
@@ -65,6 +66,7 @@ return [
         '/login' => ['controller' => AuthController::class, 'action' => 'login', 'middleware' => 'guest'],
         '/register' => ['controller' => AuthController::class, 'action' => 'register', 'middleware' => 'guest'],
         '/logout' => ['controller' => AuthController::class, 'action' => 'logout', 'middleware' => 'auth'],
+        '/update-profile' => ['controller' => AuthController::class, 'action' => 'updateProfile', 'middleware' => 'auth'],
         '/admin-lab/approval/{type}/approve/{id}' => ['controller' => ApprovalController::class, 'action' => 'approveRequestAdminLab', 'middleware' => 'admin_lab'],
         '/admin-lab/approval/{type}/reject/{id}' => ['controller' => ApprovalController::class, 'action' => 'rejectRequestAdminLab', 'middleware' => 'admin_lab'],
         '/admin-lab/equipment/{id}/delete' => ['controller' => EquipmentController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
