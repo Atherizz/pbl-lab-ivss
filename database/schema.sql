@@ -13,8 +13,6 @@ CREATE TABLE users (
     account_status VARCHAR(50) NOT NULL DEFAULT 'active' 
         CHECK (account_status IN ('active', 'graduated', 'inactive')),
     dospem_id BIGINT NULL,
-    profile_image_url TEXT NULL,
-    research_focus TEXT NULL,
     CONSTRAINT fk_users_dospem
         FOREIGN KEY (dospem_id) 
         REFERENCES users(id) 
@@ -72,11 +70,11 @@ CREATE TABLE research_projects (
     CONSTRAINT fk_research_projects_user
         FOREIGN KEY (user_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_research_projects_dospem
         FOREIGN KEY (dospem_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL
+        ON DELETE CASCADE
 );
 
 -- TABLE: news
@@ -90,7 +88,7 @@ CREATE TABLE news (
     CONSTRAINT fk_news_author
         FOREIGN KEY (author_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL
+        ON DELETE CASCADE 
 );
 
 -- TABLE: datasets
@@ -107,6 +105,7 @@ CREATE TABLE registration_requests (
     id BIGSERIAL PRIMARY KEY,
     nim VARCHAR(20) NOT NULL,
     name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     registration_purpose TEXT,
     dospem_id BIGINT NULL,
@@ -184,4 +183,38 @@ CREATE TABLE publications (
         FOREIGN KEY (user_id) 
         REFERENCES users(id) 
         ON DELETE CASCADE
+);
+
+CREATE TABLE products (
+    id BIGSERIAL PRIMARY KEY,
+    
+    judul VARCHAR(255) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    produk_url TEXT NULL,
+    image_url TEXT NULL,
+    
+    -- Menggantikan 'tags'
+    -- array of strings: ["IoT", "Monitoring", "Perikanan"]
+    produk_type JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- array of objects (hanya judul):
+    -- [ { "judul":"Real-time Monitoring" }, 
+    --   { "judul":"Notifikasi Kualitas Air" } ]
+    features JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- Sanity checks untuk tipe JSON
+    CONSTRAINT chk_produk_type_array    CHECK (jsonb_typeof(produk_type) = 'array'), -- Constraint yang diperbarui
+    CONSTRAINT chk_features_array       CHECK (jsonb_typeof(features) = 'array')
+);
+
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    icon_name VARCHAR(100), 
+    level VARCHAR(50),      
+    total_sessions INTEGER,     
+    action_url VARCHAR(255), 
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

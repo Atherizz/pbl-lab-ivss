@@ -1,0 +1,81 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$command = $argv[1] ?? 'help';
+
+switch ($command) {
+    case 'db:seed':
+        require_once __DIR__ . '/app/Core/DatabaseSeeder.php';
+        $seeder = new App\Core\DatabaseSeeder();
+        $seeder->run();
+        break;
+    
+    case 'db:migrate':
+        $migrationFile = __DIR__ . '/database/migration.sql';
+        
+        if (!file_exists($migrationFile)) {
+            echo "Migration file not found\n";
+            exit(1);
+        }
+        
+        try {
+            $db = new App\Core\Database();
+            $pdo = $db->getConnection();
+            $sql = file_get_contents($migrationFile);
+            $pdo->exec($sql);
+            echo "Migration completed\n";
+        } catch (Exception $e) {
+            echo "Migration failed: " . $e->getMessage() . "\n";
+            exit(1);
+        }
+        break;
+    
+    case 'db:reset':
+        $force = in_array('--force', $argv);
+        
+        if (!$force) {
+            echo "⚠️  WARNING: This will DROP ALL TABLES and DATA!\n";
+            echo "Use: php artisan db:reset --force\n";
+            exit(0);
+        }
+        
+        try {
+            echo "Dropping all tables...\n";
+            $db = new App\Core\Database();
+            $pdo = $db->getConnection();
+            
+            $pdo->exec("DROP SCHEMA public CASCADE;");
+            $pdo->exec("CREATE SCHEMA public;");
+            echo "✓ Schema dropped\n";
+            
+            echo "Running migrations...\n";
+            $migrationFile = __DIR__ . '/database/migration.sql';
+            $sql = file_get_contents($migrationFile);
+            $pdo->exec($sql);
+            echo "✓ Migration completed\n";
+            
+            echo "Seeding database...\n";
+            require_once __DIR__ . '/app/Core/DatabaseSeeder.php';
+            $seeder = new App\Core\DatabaseSeeder();
+            $seeder->run();
+            echo "✓ Seeding completed\n";
+            
+            echo "\n✅ Database reset successfully!\n";
+        } catch (Exception $e) {
+            echo "❌ Reset failed: " . $e->getMessage() . "\n";
+            exit(1);
+        }
+        break;
+    
+    default:
+        echo "\nAvailable commands:\n";
+        echo "  db:seed              Seed database\n";
+        echo "  db:migrate           Run migrations\n";
+        echo "  db:reset --force     Drop & rebuild database\n\n";
+        break;
+}

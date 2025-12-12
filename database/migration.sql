@@ -7,7 +7,7 @@ CREATE TABLE users (
         CHECK (role IN ('admin_lab', 'admin_berita', 'mahasiswa')),
     account_status VARCHAR(50) NOT NULL DEFAULT 'active' 
         CHECK (account_status IN ('active', 'graduated', 'inactive')),
-    supervisor_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL, 
+    supervisor_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE INDEX idx_users_email ON users(email);

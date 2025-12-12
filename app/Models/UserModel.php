@@ -84,6 +84,12 @@ class UserModel extends Model
         return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'role' => 'mahasiswa', 'dospem_id' => $data['dospem_id']]);
     }
 
+    public function createUser($data)
+    {
+        $query = $this->db->prepare("INSERT INTO users (name, password, reg_number, role, dospem_id) VALUES (:name, :password, :reg_number, :role, :dospem_id)");
+        return $query->execute(['name' => $data['name'], 'password' => $data['password'], 'reg_number' => $data['reg_number'], 'role' => $data['role'], 'dospem_id' => $data['dospem_id']]);
+    }
+
     public function updateRegisteredUserPassword($password, $id)
     {
         $query = $this->db->prepare("UPDATE users SET password = :password WHERE id = :id");
