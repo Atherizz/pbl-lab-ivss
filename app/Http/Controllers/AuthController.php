@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\SiakadService;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -96,7 +97,7 @@ class AuthController extends Controller
 
                 $_SESSION['success'] = 'Pendaftaran berhasil! Silakan tunggu persetujuan dari Dosen Pembimbing.';
                 $this->redirect('/login');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $_SESSION['error'] = 'Terjadi kesalahan saat pendaftaran: ' . $e->getMessage();
                 $this->redirect('/register');
                 exit;
@@ -184,7 +185,7 @@ class AuthController extends Controller
     $user = $this->userModel->getById($userId);
     
     if (!$user) {
-        $this->set_flash('error', 'Akun pengguna tidak ditemukan.');
+        set_flash('error', 'Akun pengguna tidak ditemukan.');
         $this->redirect('/update-profile');
         exit;
     }
