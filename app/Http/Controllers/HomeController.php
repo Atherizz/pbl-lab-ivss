@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     private $userProfileModel; 
+    private $productModel;
 
     public function __construct()
     {
         parent::__construct();
         // Memuat Model Utama
         $this->userProfileModel = $this->model('LabUserProfileModel');
+        $this->productModel = $this->model('ProductModel');
     }
 
     public function index()
@@ -35,8 +37,7 @@ class HomeController extends Controller
         $courseModel = $this->model('CourseModel');
         $courses = $courseModel->getAll(); 
 
-        $productModel = $this->model('ProductModel');
-        $products = $productModel->getAllProducts();
+        $products = $this->productModel->getAllProducts();
 
         // 4. Kirim SEMUA data ke view 'home'
         view('home', [
