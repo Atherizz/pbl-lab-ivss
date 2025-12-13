@@ -131,6 +131,11 @@ $totalApproval = $stats['total_approval'] ?? 0;
                         <i class="fas fa-users"></i>
                         <span class="font-medium text-sm">Manage Members</span>
                     </a>
+                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/galery"
+                        class="w-full flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-700 rounded-lg hover:bg-indigo-500/20 transition-colors">
+                        <i class="fas fa-camera-retro"></i>
+                        <span class="font-medium text-sm">Manage Galery (CRUD)</span>
+                    </a>
                 </div>
             </div>
 

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GaleryModel;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    private $userProfileModel; 
+    private $userProfileModel;
 
     public function __construct()
     {
@@ -31,18 +32,24 @@ class HomeController extends Controller
         );
 
         // 3. Ambil Data COURSE / PELATIHAN (Baru)
-        // Kita load modelnya dan ambil datanya disini
         $courseModel = $this->model('CourseModel');
-        $courses = $courseModel->getAll(); 
+        $courses = $courseModel->getAll();
 
-        // 4. Kirim SEMUA data ke view 'home'
+        // 4. Ambil Data GALERI (Perbaikan)
+        $galeryModel = $this->model('GaleryModel');
+        // Pastikan nama method di model Anda benar (misal: getAllGalery atau getAll)
+        $galeryItems = $galeryModel->getAllGalery(); 
+
+        // 5. Kirim SEMUA data ke view 'home'
         view('home', [
             'members'      => $allMembers,
             'publications' => $publications,
-            'courses'      => $courses // <-- Data course dikirim ke sini agar bisa di-looping di view
+            'courses'      => $courses,
+            'galeryItems'  => $galeryItems // <--- INI YANG SEBELUMNYA KURANG
         ]);
     }
 
+    // ... (Fungsi publications, profile, news, dll biarkan tetap sama) ...
     public function publications() 
     {
         $itemsPerPage = 6;
@@ -85,9 +92,8 @@ class HomeController extends Controller
     {
         $profile = $this->userProfileModel->getProfileBySlug($slug);
         
-        // Error handling jika profile tidak ditemukan
         if (!$profile) {
-            header('Location: ' . BASE_URL); // Atau tampilkan 404
+            header('Location: ' . BASE_URL); 
             exit;
         }
 

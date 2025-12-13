@@ -159,6 +159,12 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <span class="font-medium">Publikasi Saya</span>
                 </a>
 
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/course"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'course') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-box w-5 text-center"></i>
+                    <span class="font-medium">course</span>
+                </a>
+
                 <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder-open w-5 text-center"></i>
@@ -181,6 +187,12 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
                     <i class="fas fa-folder w-5 text-center"></i>
                     <span class="font-medium">Direktori Dataset</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/galery"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'galery') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-images w-5 text-center"></i>
+                    <span class="font-medium">Dokumentasi Kegiatan</span>
                 </a>
 
                 <div class="my-4 border-t border-slate-700"></div>

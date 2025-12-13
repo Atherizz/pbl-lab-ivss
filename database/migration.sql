@@ -381,3 +381,23 @@ CREATE TABLE courses (
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS galeries (
+    id SERIAL PRIMARY KEY,
+    author_id INTEGER NULL,
+    caption TEXT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL,
+
+    -- Constraint Unique untuk Slug
+    CONSTRAINT galeries_slug_unique UNIQUE (slug),
+
+    -- Foreign Key ke tabel users
+    CONSTRAINT fk_galery_author 
+        FOREIGN KEY (author_id) 
+        REFERENCES users(id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
+);
