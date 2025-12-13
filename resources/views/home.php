@@ -564,9 +564,8 @@
             class="group bg-slate-800 border border-slate-700/50 rounded-2xl p-6 hover:-translate-y-2 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/20 animate-fade-in-up delay-<?= $delay ?>">
             <div class="flex items-center gap-4 mb-4">
               <div class="relative w-16 h-16 shrink-0">
-                <img
-                  class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors group-hover:scale-110 duration-300"
-                  src="<?= !empty($member['profile_photo']) ? BASE_URL . '/' . $member['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['user_name']) ?>"
+                <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors group-hover:scale-110 duration-300"
+                  src="<?= !empty($member['profile_photo']) ? BASE_URL . $member['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['user_name']) ?>"
                   alt="<?= htmlspecialchars($member['user_name']) ?>" />
               </div>
               <div>

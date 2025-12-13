@@ -7,14 +7,12 @@ CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     reg_number VARCHAR(20) UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     role VARCHAR(50) NOT NULL DEFAULT 'mahasiswa' 
         CHECK (role IN ('admin_lab', 'admin_berita', 'anggota_lab', 'mahasiswa')),
     account_status VARCHAR(50) NOT NULL DEFAULT 'active' 
         CHECK (account_status IN ('active', 'graduated', 'inactive')),
     dospem_id BIGINT NULL,
-    profile_image_url TEXT NULL,
-    research_focus TEXT NULL,
     CONSTRAINT fk_users_dospem
         FOREIGN KEY (dospem_id) 
         REFERENCES users(id) 
@@ -72,11 +70,11 @@ CREATE TABLE research_projects (
     CONSTRAINT fk_research_projects_user
         FOREIGN KEY (user_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_research_projects_dospem
         FOREIGN KEY (dospem_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL
+        ON DELETE CASCADE
 );
 
 -- TABLE: news
@@ -86,11 +84,12 @@ CREATE TABLE news (
     content TEXT NOT NULL,
     image_url TEXT NULL,
     author_id BIGINT NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
     published_at TIMESTAMPTZ NULL,
     CONSTRAINT fk_news_author
         FOREIGN KEY (author_id) 
         REFERENCES users(id) 
-        ON DELETE SET NULL
+        ON DELETE CASCADE 
 );
 
 -- TABLE: datasets
@@ -107,7 +106,8 @@ CREATE TABLE registration_requests (
     id BIGSERIAL PRIMARY KEY,
     nim VARCHAR(20) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255),
     registration_purpose TEXT,
     dospem_id BIGINT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
@@ -155,6 +155,8 @@ CREATE TABLE lab_user_profiles (
   -- [ { "name":"IT Specialist - AI", "issuer":"Pearson VUE", "issued_on":"2025-02-01", "expires_on":null, "credential_url":"..." }, ... ]
   certifications     JSONB NOT NULL DEFAULT '[]'::jsonb,
 
+  slug               VARCHAR(255) UNIQUE NOT NULL,
+
   -- sanity checks tipe JSON
   CONSTRAINT chk_social_object       CHECK (jsonb_typeof(social_links)   = 'object'),
   CONSTRAINT chk_focus_array         CHECK (jsonb_typeof(research_focus) = 'array'),
@@ -185,3 +187,99 @@ CREATE TABLE publications (
         REFERENCES users(id) 
         ON DELETE CASCADE
 );
+
+CREATE TABLE products (
+    id BIGSERIAL PRIMARY KEY,
+    
+    judul VARCHAR(255) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    produk_url TEXT NULL,
+    image_url TEXT NULL,
+    
+    -- Menggantikan 'tags'
+    -- array of strings: ["IoT", "Monitoring", "Perikanan"]
+    produk_type JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- array of objects (hanya judul):
+    -- [ { "judul":"Real-time Monitoring" }, 
+    --   { "judul":"Notifikasi Kualitas Air" } ]
+    features JSONB NOT NULL DEFAULT '[]'::jsonb, 
+
+    -- Sanity checks untuk tipe JSON
+    CONSTRAINT chk_produk_type_array    CHECK (jsonb_typeof(produk_type) = 'array'), -- Constraint yang diperbarui
+    CONSTRAINT chk_features_array       CHECK (jsonb_typeof(features) = 'array')
+);
+
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    icon_name VARCHAR(100), 
+    level VARCHAR(50),      
+    total_sessions INTEGER,     
+    action_url VARCHAR(255), 
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS galeries (
+    id SERIAL PRIMARY KEY,
+    author_id INTEGER NULL,
+    caption TEXT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL,
+
+    -- Constraint Unique untuk Slug
+    CONSTRAINT galeries_slug_unique UNIQUE (slug),
+
+    -- Foreign Key ke tabel users
+    CONSTRAINT fk_galery_author 
+        FOREIGN KEY (author_id) 
+        REFERENCES users(id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
+);
+
+
+CREATE OR REPLACE FUNCTION generate_slug(p_string TEXT)
+RETURNS VARCHAR AS $$
+DECLARE
+    v_slug VARCHAR;
+BEGIN
+    v_slug := lower(p_string);
+    v_slug := regexp_replace(v_slug, '[^a-z0-9\s-]', '', 'g');
+    v_slug := regexp_replace(v_slug, '[\s-]+', '-', 'g');
+    v_slug := trim(BOTH '-' FROM v_slug);
+
+    RETURN v_slug;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+
+CREATE OR REPLACE FUNCTION create_lab_profile_on_user_insert()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_slug VARCHAR(255);
+BEGIN
+    IF NEW.role IN ('anggota_lab', 'admin_lab') THEN
+        
+        v_slug := generate_slug(NEW.name);
+        IF EXISTS (SELECT 1 FROM lab_user_profiles WHERE slug = v_slug) THEN
+            v_slug := v_slug || '-' || NEW.id;
+        END IF;
+
+        INSERT INTO lab_user_profiles (user_id, slug)
+        VALUES (NEW.id, v_slug);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_create_lab_profile
+AFTER INSERT ON users
+FOR EACH ROW
+EXECUTE FUNCTION create_lab_profile_on_user_insert();

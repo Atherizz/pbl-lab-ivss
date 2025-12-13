@@ -1,52 +1,48 @@
 <?php
+
 namespace App\Core;
 
-use PDO; 
+use PDO;
 use PDOException;
+use Exception;
 
-class Database {
-    private $host;
-    private $port;
-    private $db_name;
-    private $username;
-    private $password;
+class Database
+{
+    private string $host;
+    private string $port;
+    private string $dbName;
+    private string $username;
+    private string $password;
+    private ?PDO $conn = null;
 
-    private static $conn = null; 
-
-    public function __construct() {
-        $this->host     = $_ENV['DB_HOST'];
-        $this->port     = $_ENV['DB_PORT'];
-        $this->db_name  = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USERNAME'];
+    public function __construct()
+    {
+        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
+        $this->port = $_ENV['DB_PORT'] ?? '5432';
+        $this->dbName = $_ENV['DB_NAME'] ?? 'db_ivss';
+        $this->username = $_ENV['DB_USERNAME'] ?? 'postgres';
         $this->password = $_ENV['DB_PASSWORD'];
     }
 
-    public function getConnection() {
-        self::$conn = null; 
-        
-        $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
-        
-        try {
-            self::$conn = new PDO(
-                $dsn,
-                $this->username,
-                $this->password,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_PERSISTENT => false, 
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
-            
-            $test = self::$conn->query("SELECT version()");
-            $version = $test->fetchColumn();
-            error_log("✅ Connected to PostgreSQL: " . $version);
-            
-        } catch (PDOException $exception) {
-            error_log("❌ Connection error: " . $exception->getMessage()); 
-            throw new \Exception("Database connection failed: " . $exception->getMessage());
+    public function getConnection(): PDO
+    {
+        if ($this->conn !== null) {
+            return $this->conn;
         }
-        
-        return self::$conn;
+
+        $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->dbName}";
+
+        try {
+            $this->conn = new PDO($dsn, $this->username, $this->password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]);
+            
+            return $this->conn;
+        } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+            throw new Exception("Database connection failed: " . $e->getMessage());
+        }
     }
 }

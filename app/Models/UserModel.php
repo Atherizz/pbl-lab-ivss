@@ -84,6 +84,12 @@ class UserModel extends Model
         return $query->execute(['name' => $data['name'], 'reg_number' => $data['reg_number'], 'role' => 'mahasiswa', 'dospem_id' => $data['dospem_id']]);
     }
 
+    public function createUser($data)
+    {
+        $query = $this->db->prepare("INSERT INTO users (name, password, reg_number, role, dospem_id) VALUES (:name, :password, :reg_number, :role, :dospem_id)");
+        return $query->execute(['name' => $data['name'], 'password' => $data['password'], 'reg_number' => $data['reg_number'], 'role' => $data['role'], 'dospem_id' => $data['dospem_id']]);
+    }
+
     public function updateRegisteredUserPassword($password, $id)
     {
         $query = $this->db->prepare("UPDATE users SET password = :password WHERE id = :id");
@@ -101,10 +107,10 @@ class UserModel extends Model
 
             // Insert user
             $query = $this->db->prepare("
-            INSERT INTO users (name, reg_number, password, role) 
-            VALUES (:name, :reg_number, :password, :role)
-            RETURNING id
-        ");
+                INSERT INTO users (name, reg_number, password, role) 
+                VALUES (:name, :reg_number, :password, :role)
+                RETURNING id
+            ");
 
             $query->execute([
                 'name' => $data['name'],
@@ -113,15 +119,16 @@ class UserModel extends Model
                 'role' => $data['role']
             ]);
 
-            if ($data['role'] == 'anggota_lab') {
-                $result = $query->fetch(PDO::FETCH_ASSOC);
-                $userId = $result['id'];
+            // Ambil user ID yang baru dibuat
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            $userId = $result['id'] ?? null;
 
-                // Insert lab_user_profiles
+            // Jika role anggota_lab, buat profile
+            if ($data['role'] == 'anggota_lab' && $userId) {
                 $profileQuery = $this->db->prepare("
-            INSERT INTO lab_user_profiles (user_id, slug) 
-            VALUES (:user_id, :slug)
-        ");
+                    INSERT INTO lab_user_profiles (user_id, slug) 
+                    VALUES (:user_id, :slug)
+                ");
 
                 $profileQuery->execute([
                     'user_id' => $userId,
