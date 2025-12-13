@@ -17,21 +17,18 @@ RUN apk add --no-cache \
     unzip \
     # Install postgre driver php
     && docker-php-ext-install pdo pdo_pgsql zip \
-    # Bersihkan cache APK setelah instalasi
     && rm -rf /var/cache/apk/*
 
-# Tentukan workdir di container final (harus sama dengan path mounting)
+# Define workdir
 WORKDIR /var/www/html
 
-# 1. Salin dependencies (folder vendor) yang sudah selesai dari Stage 1
+# 1. copy dependencies
 COPY --from=composer_builder /var/www/html/vendor /var/www/html/vendor
 
-# 2. Salin seluruh kode sumber PHP-mu (kecuali yang ada di .dockerignore)
+# 2. copy source code
 COPY . /var/www/html
 
-# Ekspos port PHP-FPM (Port INTERNAL yang akan dihubungkan oleh Nginx)
+# expose port php fpm
 EXPOSE 9000
 
-# Perintah utama container saat dijalankan
-# FPM akan otomatis berjalan dan listening di port 9000
 CMD ["php-fpm"]
