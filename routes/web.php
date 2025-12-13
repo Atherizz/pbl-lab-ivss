@@ -14,6 +14,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\GaleryController; 
 
 return [
     'GET' => [
@@ -29,6 +30,9 @@ return [
         '/admin-lab/dashboard' => ['controller' => DashboardController::class, 'action' => 'admin_lab', 'middleware' => 'auth'],
         '/admin-lab/approval/{type}' => ['controller' => ApprovalController::class, 'action' => 'approvalAdminView', 'middleware' => 'admin_lab'],
         '/admin-lab/publication' => ['controller' => ResearchController::class, 'action' => 'direktori', 'middleware' => 'admin_lab'],
+        '/admin-lab/galery' => ['controller' => GaleryController::class, 'action' => 'index', 'middleware' => 'admin_lab'],
+        '/admin-lab/galery/create' => ['controller' => GaleryController::class, 'action' => 'create', 'middleware' => 'admin_lab'],
+        '/admin-lab/galery/{id}/edit' => ['controller' => GaleryController::class, 'action' => 'edit', 'middleware' => 'admin_lab'],
         '/admin-berita/news/{id}/edit' => ['controller' => NewsController::class, 'action' => 'edit', 'middleware' => 'admin_berita'],
         '/admin-berita/news/create' => ['controller' => NewsController::class, 'action' => 'create', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'index', 'middleware' => 'admin_berita'],
@@ -75,8 +79,11 @@ return [
         '/admin-lab/course/{id}/delete' => ['controller' => CourseController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
         '/admin-lab/course/{id}' => ['controller' => CourseController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/course' => ['controller' => CourseController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
-        '/admin-berita/news/{id}/delete' => ['controller' => NewsController::class, 'action' => 'destroy', 'middleware' => 'admin_berita'],
-        '/admin-berita/news/{id}' => ['controller' => NewsController::class, 'action' => 'update', 'middleware' => 'admin_berita'],
+        '/admin-lab/galery/store' => ['controller' => GaleryController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
+        '/admin-lab/galery/{id}/update' => ['controller' => GaleryController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
+        '/admin-lab/galery/{id}/destroy' => ['controller' => GaleryController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
+        '/admin-lab/berita/news/{id}/delete' => ['controller' => NewsController::class, 'action' => 'destroy', 'middleware' => 'admin_berita'],
+        '/admin-lab/berita/news/{id}' => ['controller' => NewsController::class, 'action' => 'update', 'middleware' => 'admin_berita'],
         '/admin-berita/news' => ['controller' => NewsController::class, 'action' => 'store', 'middleware' => 'admin_berita'],
         '/anggota-lab/research' => ['controller' => ResearchController::class, 'action' => 'store', 'middleware' => 'auth'],
         '/anggota-lab/research/get-recommendation' => ['controller' => ResearchController::class, 'action' => 'getRecommendation', 'middleware' => 'auth'],
@@ -99,7 +106,7 @@ return [
         '/admin-lab/members' => ['controller' => MemberController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
         '/admin-lab/members/{id}/delete' => ['controller' => MemberController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
         '/admin-lab/products' => ['controller' => ProductController::class, 'action' => 'store', 'middleware' => 'admin_lab'],
-        '/admin-lab/products/{id}' => ['controller' => ProductController::class, 'action' => 'update', 'middleware' => 'admin_lab'], // Untuk PUT/PATCH
+        '/admin-lab/products/{id}' => ['controller' => ProductController::class, 'action' => 'update', 'middleware' => 'admin_lab'],
         '/admin-lab/products/{id}/delete' => ['controller' => ProductController::class, 'action' => 'destroy', 'middleware' => 'admin_lab'],
     ],
 ];

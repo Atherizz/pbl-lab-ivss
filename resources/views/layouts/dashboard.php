@@ -267,6 +267,71 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                 </div>
             </div>
 
+        <!-- Navigation Menu -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+
+            <!-- MENU UNTUK ADMIN LAB -->
+            <?php if ($userRole === 'admin_lab'): ?>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/dashboard"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'dashboard') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-th-large w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/equipment"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-desktop w-5 text-center"></i>
+                    <span class="font-medium">Equipment</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-book-open w-5 text-center"></i>
+                    <span class="font-medium">Publikasi Saya</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/course"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'course') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-box w-5 text-center"></i>
+                    <span class="font-medium">course</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Direktori Riset Lab</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'members') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-users w-5 text-center"></i>
+                    <span class="font-medium">Anggota</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/products"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'products') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-box w-5 text-center"></i>
+                    <span class="font-medium">Produk</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-folder w-5 text-center"></i>
+                    <span class="font-medium">Direktori Dataset</span>
+                </a>
+
+                <a href="<?= BASE_URL ?? '.' ?>/admin-lab/galery"
+                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'galery') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                    <i class="fas fa-images w-5 text-center"></i>
+                    <span class="font-medium">Dokumentasi Kegiatan</span>
+                </a>
+
+                <div class="my-4 border-t border-slate-700"></div>
+
+                <div class="px-4 py-2">
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
+                </div>
             <!-- Navigation Menu -->
             <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
 
