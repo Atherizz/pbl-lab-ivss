@@ -16,7 +16,7 @@ switch ($command) {
         break;
     
     case 'db:migrate':
-        $migrationFile = __DIR__ . '/database/migration.sql';
+        $migrationFile = __DIR__ . '/database/schema.sql';
         
         if (!file_exists($migrationFile)) {
             echo "Migration file not found\n";
@@ -54,7 +54,7 @@ switch ($command) {
             echo "✓ Schema dropped\n";
             
             echo "Running migrations...\n";
-            $migrationFile = __DIR__ . '/database/migration.sql';
+            $migrationFile = __DIR__ . '/database/schema.sql';
             $sql = file_get_contents($migrationFile);
             $pdo->exec($sql);
             echo "✓ Migration completed\n";

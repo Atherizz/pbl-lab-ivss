@@ -7,7 +7,7 @@ CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     reg_number VARCHAR(20) UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     role VARCHAR(50) NOT NULL DEFAULT 'mahasiswa' 
         CHECK (role IN ('admin_lab', 'admin_berita', 'anggota_lab', 'mahasiswa')),
     account_status VARCHAR(50) NOT NULL DEFAULT 'active' 
@@ -84,6 +84,7 @@ CREATE TABLE news (
     content TEXT NOT NULL,
     image_url TEXT NULL,
     author_id BIGINT NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
     published_at TIMESTAMPTZ NULL,
     CONSTRAINT fk_news_author
         FOREIGN KEY (author_id) 
@@ -106,7 +107,7 @@ CREATE TABLE registration_requests (
     nim VARCHAR(20) NOT NULL,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     registration_purpose TEXT,
     dospem_id BIGINT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending_approval'
@@ -153,6 +154,8 @@ CREATE TABLE lab_user_profiles (
   -- array of objects:
   -- [ { "name":"IT Specialist - AI", "issuer":"Pearson VUE", "issued_on":"2025-02-01", "expires_on":null, "credential_url":"..." }, ... ]
   certifications     JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  slug               VARCHAR(255) UNIQUE NOT NULL,
 
   -- sanity checks tipe JSON
   CONSTRAINT chk_social_object       CHECK (jsonb_typeof(social_links)   = 'object'),
@@ -218,3 +221,46 @@ CREATE TABLE courses (
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+
+
+CREATE OR REPLACE FUNCTION generate_slug(p_string TEXT)
+RETURNS VARCHAR AS $$
+DECLARE
+    v_slug VARCHAR;
+BEGIN
+    v_slug := lower(p_string);
+    v_slug := regexp_replace(v_slug, '[^a-z0-9\s-]', '', 'g');
+    v_slug := regexp_replace(v_slug, '[\s-]+', '-', 'g');
+    v_slug := trim(BOTH '-' FROM v_slug);
+
+    RETURN v_slug;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+
+CREATE OR REPLACE FUNCTION create_lab_profile_on_user_insert()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_slug VARCHAR(255);
+BEGIN
+    IF NEW.role IN ('anggota_lab', 'admin_lab') THEN
+        
+        v_slug := generate_slug(NEW.name);
+        IF EXISTS (SELECT 1 FROM lab_user_profiles WHERE slug = v_slug) THEN
+            v_slug := v_slug || '-' || NEW.id;
+        END IF;
+
+        INSERT INTO lab_user_profiles (user_id, slug)
+        VALUES (NEW.id, v_slug);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_create_lab_profile
+AFTER INSERT ON users
+FOR EACH ROW
+EXECUTE FUNCTION create_lab_profile_on_user_insert();

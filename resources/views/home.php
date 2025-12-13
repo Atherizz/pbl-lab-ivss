@@ -455,7 +455,7 @@
             <div class="flex items-center gap-4 mb-4">
               <div class="relative w-16 h-16 shrink-0">
                 <img class="w-full h-full rounded-full object-cover border-2 border-slate-600 group-hover:border-cyan-400 transition-colors group-hover:scale-110 duration-300"
-                  src="<?= !empty($member['profile_photo']) ? BASE_URL . '/' . $member['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['user_name']) ?>"
+                  src="<?= !empty($member['profile_photo']) ? BASE_URL . $member['profile_photo'] : 'https://ui-avatars.com/api/?name=' . urlencode($member['user_name']) ?>"
                   alt="<?= htmlspecialchars($member['user_name']) ?>" />
               </div>
               <div>

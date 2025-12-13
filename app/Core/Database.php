@@ -17,11 +17,11 @@ class Database
 
     public function __construct()
     {
-        $this->host = $_ENV['DB_HOST'] ?? 'postgres-db';
+        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
         $this->port = $_ENV['DB_PORT'] ?? '5432';
-        $this->dbName = $_ENV['DB_DATABASE'] ?? 'db_ivss';
-        $this->username = $_ENV['DB_USERNAME'] ?? 'ivss_user';
-        $this->password = $_ENV['DB_PASSWORD'] ?? 'hB&4ySg9^rT*JzX%';
+        $this->dbName = $_ENV['DB_NAME'] ?? 'db_ivss';
+        $this->username = $_ENV['DB_USERNAME'] ?? 'postgres';
+        $this->password = $_ENV['DB_PASSWORD'];
     }
 
     public function getConnection(): PDO
