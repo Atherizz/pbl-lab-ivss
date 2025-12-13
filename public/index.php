@@ -17,7 +17,7 @@ $routes = require BASE_PATH . '/routes/web.php';
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
 
-$base_path = $_ENV['BASE_PATH'] ?? '';
+$base_path = $_ENV['BASE_PATH'] ?? '/pbl-lab-ivss';
 
 if (!empty($base_path) && strpos($request_uri, $base_path) === 0) {
     $request_uri = substr($request_uri, strlen($base_path));
