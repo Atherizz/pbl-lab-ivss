@@ -48,7 +48,6 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                                     </div>
                                     <h3 class="text-lg font-semibold text-white">Rekomendasi Dosen Pembimbing dengan AI</h3>
                                 </div>
-                                <form action="<?= BASE_URL ?? '.' ?>/anggota-lab/research/get-recommendation" method="POST">
                                 <button type="button" id="analyzeBtn" 
                                         class="px-5 py-2.5 bg-cyan-600 text-white font-semibold rounded-lg hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/20">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +55,6 @@ require BASE_PATH . '/resources/views/layouts/dashboard.php';
                                     </svg>
                                     <span>Analisis dengan AI</span>
                                 </button>
-                                </form>
                             </div>
 
                             <p class="text-sm text-slate-300 mb-4">

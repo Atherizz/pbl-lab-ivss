@@ -112,8 +112,12 @@ class ProductController extends Controller
             return;
         }
         
+        if (is_string($product['produk_type'])) {
         $product['produk_type'] = json_decode($product['produk_type'] ?? '[]', true);
-        $product['features'] = json_decode($product['features'] ?? '[]', true);
+        }
+        if (is_string($product['features'])) {
+            $product['features'] = json_decode($product['features'] ?? '[]', true);
+        }   
 
         view('admin_lab.products.edit', ['product' => $product]);
     }
