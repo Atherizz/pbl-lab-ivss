@@ -11,7 +11,7 @@ class AIService
 
     public function __construct()
     {
-        $this->endpoint = $_ENV['IVSS_AI_BASE_URL'];
+        $this->endpoint = $_ENV['IVSS_AI_BASE_URL'] ?? 'http://localhost:8000/api';
         $this->userModel = new UserModel();
     }
 

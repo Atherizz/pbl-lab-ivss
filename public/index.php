@@ -9,8 +9,9 @@ require BASE_PATH . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
 $dotenv->load();
 
-define('BASE_URL', 'http://localhost');
+$base_url = $_ENV['BASE_URL'] ?? '/pbl-lab-ivss';
 
+define('BASE_URL', $base_url);
 
 $routes = require BASE_PATH . '/routes/web.php';
 
