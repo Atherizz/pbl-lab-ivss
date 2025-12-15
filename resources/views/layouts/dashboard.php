@@ -268,7 +268,17 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto" x-data="{ 
+                openSections: {
+                    manajemenLab: true,
+                    publikasiDirektori: false,
+                    approval: false,
+                    publikasi: true,
+                    riset: true,
+                    direktori: true,
+                    peralatan: false
+                }
+            }">
 
                 <!-- MENU UNTUK ADMIN LAB -->
                 <?php if ($userRole === 'admin_lab'): ?>
@@ -281,83 +291,120 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
 
                     <div class="my-4 border-t border-slate-700"></div>
 
-                    <div class="px-4 py-2">
-                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Manajemen Lab</span>
+                    <!-- Section: Manajemen Lab -->
+                    <div class="mb-2">
+                        <button @click="openSections.manajemenLab = !openSections.manajemenLab"
+                            class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                            <span class="text-xs font-semibold uppercase tracking-wider">Manajemen Lab</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200"
+                                :class="{ 'rotate-180': openSections.manajemenLab }"></i>
+                        </button>
+                        <div x-show="openSections.manajemenLab" 
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            class="space-y-1 mt-1">
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'members') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-users w-5 text-center"></i>
+                                <span class="font-medium">Anggota</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/products"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'products') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-box w-5 text-center"></i>
+                                <span class="font-medium">Produk</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/equipment"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-desktop w-5 text-center"></i>
+                                <span class="font-medium">Equipment</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/course"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'course') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-graduation-cap w-5 text-center"></i>
+                                <span class="font-medium">Pelatihan</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/galery"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'galery') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-images w-5 text-center"></i>
+                                <span class="font-medium">Dokumentasi Kegiatan</span>
+                            </a>
+                        </div>
                     </div>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/members"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'members') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-users w-5 text-center"></i>
-                        <span class="font-medium">Anggota</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/products"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'products') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-box w-5 text-center"></i>
-                        <span class="font-medium">Produk</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/equipment"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-desktop w-5 text-center"></i>
-                        <span class="font-medium">Equipment</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/course"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'course') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-graduation-cap w-5 text-center"></i>
-                        <span class="font-medium">Pelatihan</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/galery"
-                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'galery') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                    <i class="fas fa-images w-5 text-center"></i>
-                    <span class="font-medium">Dokumentasi Kegiatan</span>
-                </a>
-
-                    <div class="my-4 border-t border-slate-700"></div>
-                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Publikasi & Direktori Lab</span>
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-book-open w-5 text-center"></i>
-                        <span class="font-medium">Publikasi Saya</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder-open w-5 text-center"></i>
-                        <span class="font-medium">Direktori Riset Lab</span>
-                    </a>
-
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder w-5 text-center"></i>
-                        <span class="font-medium">Direktori Dataset</span>
-                    </a>
 
                     <div class="my-4 border-t border-slate-700"></div>
 
-                    <div class="px-4 py-2">
-                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
+                    <!-- Section: Publikasi & Direktori Lab -->
+                    <div class="mb-2">
+                        <button @click="openSections.publikasiDirektori = !openSections.publikasiDirektori"
+                            class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                            <span class="text-xs font-semibold uppercase tracking-wider">Publikasi & Direktori</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200"
+                                :class="{ 'rotate-180': openSections.publikasiDirektori }"></i>
+                        </button>
+                        <div x-show="openSections.publikasiDirektori" 
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            class="space-y-1 mt-1">
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-book-open w-5 text-center"></i>
+                                <span class="font-medium">Publikasi Saya</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-folder-open w-5 text-center"></i>
+                                <span class="font-medium">Direktori Riset Lab</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-folder w-5 text-center"></i>
+                                <span class="font-medium">Direktori Dataset</span>
+                            </a>
+                        </div>
                     </div>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/anggota"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-user-check w-5 text-center"></i>
-                        <span class="font-medium">Pendaftaran Anggota</span>
-                    </a>
+                    <div class="my-4 border-t border-slate-700"></div>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/publikasi"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-file-alt w-5 text-center"></i>
-                        <span class="font-medium">Publikasi Penelitian</span>
-                    </a>
+                    <!-- Section: Approval -->
+                    <div class="mb-2">
+                        <button @click="openSections.approval = !openSections.approval"
+                            class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                            <span class="text-xs font-semibold uppercase tracking-wider">Approval</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200"
+                                :class="{ 'rotate-180': openSections.approval }"></i>
+                        </button>
+                        <div x-show="openSections.approval" 
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            class="space-y-1 mt-1">
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/anggota"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-anggota') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-user-check w-5 text-center"></i>
+                                <span class="font-medium">Pendaftaran Anggota</span>
+                            </a>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/peminjaman"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-hand-holding w-5 text-center"></i>
-                        <span class="font-medium">Peminjaman Barang</span>
-                    </a>
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/publikasi"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-file-alt w-5 text-center"></i>
+                                <span class="font-medium">Publikasi Penelitian</span>
+                            </a>
+
+                            <a href="<?= BASE_URL ?? '.' ?>/admin-lab/approval/peminjaman"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-hand-holding w-5 text-center"></i>
+                                <span class="font-medium">Peminjaman Barang</span>
+                            </a>
+                        </div>
+                    </div>
 
                     <!-- MENU UNTUK ADMIN NEWS -->
                 <?php elseif ($userRole === 'admin_berita'): ?>
@@ -386,95 +433,154 @@ $userRole = $_SESSION['user']['role'] ?? 'anggota_lab';
                     <div class="my-4 border-t border-slate-700"></div>
 
                     <?php if ($userRole === 'anggota_lab' || $userRole === 'admin_lab'): ?>
-                        <div class="px-4 py-2">
-                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Publikasi</span>
+                        <!-- Section: Publikasi -->
+                        <div class="mb-2">
+                            <button @click="openSections.publikasi = !openSections.publikasi"
+                                class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                                <span class="text-xs font-semibold uppercase tracking-wider">Publikasi</span>
+                                <i class="fas fa-chevron-down transition-transform duration-200"
+                                    :class="{ 'rotate-180': openSections.publikasi }"></i>
+                            </button>
+                            <div x-show="openSections.publikasi" 
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="space-y-1 mt-1">
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-book-open w-5 text-center"></i>
+                                    <span class="font-medium">Publikasi Saya</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/publikasi"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'publikasi-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-book-open w-5 text-center"></i>
-                            <span class="font-medium">Publikasi Saya</span>
-                        </a>
 
                         <div class="my-4 border-t border-slate-700"></div>
                     <?php else: ?>
 
-                        <div class="px-4 py-2">
-                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Riset</span>
+                        <!-- Section: Riset -->
+                        <div class="mb-2">
+                            <button @click="openSections.riset = !openSections.riset"
+                                class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                                <span class="text-xs font-semibold uppercase tracking-wider">Riset</span>
+                                <i class="fas fa-chevron-down transition-transform duration-200"
+                                    :class="{ 'rotate-180': openSections.riset }"></i>
+                            </button>
+                            <div x-show="openSections.riset" 
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="space-y-1 mt-1">
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-flask w-5 text-center"></i>
+                                    <span class="font-medium">Riset Saya</span>
+                                </a>
+
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/create"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-plus-circle w-5 text-center"></i>
+                                    <span class="font-medium">Ajukan Riset Baru</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'riset-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-flask w-5 text-center"></i>
-                            <span class="font-medium">Riset Saya</span>
-                        </a>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/create"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'ajukan-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-plus-circle w-5 text-center"></i>
-                            <span class="font-medium">Ajukan Riset Baru</span>
-                        </a>
 
                         <div class="my-4 border-t border-slate-700"></div>
                     <?php endif; ?>
 
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder-open w-5 text-center"></i>
-                        <span class="font-medium">Direktori Riset Lab</span>
-                    </a>
+                    <!-- Section: Direktori -->
+                    <div class="mb-2">
+                        <button @click="openSections.direktori = !openSections.direktori"
+                            class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                            <span class="text-xs font-semibold uppercase tracking-wider">Direktori</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200"
+                                :class="{ 'rotate-180': openSections.direktori }"></i>
+                        </button>
+                        <div x-show="openSections.direktori" 
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            class="space-y-1 mt-1">
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/research/direktori"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-riset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-folder-open w-5 text-center"></i>
+                                <span class="font-medium">Direktori Riset Lab</span>
+                            </a>
 
-                    <!-- TAMBAHAN: DATASET (VIEW ONLY) -->
-                    <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
-                        class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                        <i class="fas fa-folder w-5 text-center"></i>
-                        <span class="font-medium">Direktori Dataset</span>
-                    </a>
+                            <!-- TAMBAHAN: DATASET (VIEW ONLY) -->
+                            <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/dataset"
+                                class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'direktori-dataset') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                <i class="fas fa-folder w-5 text-center"></i>
+                                <span class="font-medium">Direktori Dataset</span>
+                            </a>
+                        </div>
+                    </div>
 
                     <?php if ($userRole === 'anggota_lab'): ?>
                         <div class="my-4 border-t border-slate-700"></div>
 
-                        <div class="px-4 py-2">
-                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Approval</span>
+                        <!-- Section: Approval -->
+                        <div class="mb-2">
+                            <button @click="openSections.approval = !openSections.approval"
+                                class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                                <span class="text-xs font-semibold uppercase tracking-wider">Approval</span>
+                                <i class="fas fa-chevron-down transition-transform duration-200"
+                                    :class="{ 'rotate-180': openSections.approval }"></i>
+                            </button>
+                            <div x-show="openSections.approval" 
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="space-y-1 mt-1">
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/anggota"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-hand-holding w-5 text-center"></i>
+                                    <span class="font-medium">Pendaftaran Anggota</span>
+                                </a>
+
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/publikasi"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-file-alt w-5 text-center"></i>
+                                    <span class="font-medium">Publikasi Penelitian</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/anggota"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-peminjaman') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-hand-holding w-5 text-center"></i>
-                            <span class="font-medium">Pendaftaran Anggota</span>
-                        </a>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/approval/publikasi"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'approval-publikasi') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-file-alt w-5 text-center"></i>
-                            <span class="font-medium">Publikasi Penelitian</span>
-                        </a>
 
                     <?php else: ?>
 
                         <div class="my-4 border-t border-slate-700"></div>
 
-                        <div class="px-4 py-2">
-                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Peralatan</span>
+                        <!-- Section: Peralatan -->
+                        <div class="mb-2">
+                            <button @click="openSections.peralatan = !openSections.peralatan"
+                                class="flex items-center justify-between w-full px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200">
+                                <span class="text-xs font-semibold uppercase tracking-wider">Peralatan</span>
+                                <i class="fas fa-chevron-down transition-transform duration-200"
+                                    :class="{ 'rotate-180': openSections.peralatan }"></i>
+                            </button>
+                            <div x-show="openSections.peralatan" 
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="space-y-1 mt-1">
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'katalog-equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-th-list w-5 text-center"></i>
+                                    <span class="font-medium">Katalog Peralatan</span>
+                                </a>
+
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'peminjaman-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-history w-5 text-center"></i>
+                                    <span class="font-medium">Peminjaman Saya</span>
+                                </a>
+
+                                <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog"
+                                    class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'bookings') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
+                                    <i class="fas fa-hand-holding w-5 text-center"></i>
+                                    <span class="font-medium">Ajukan Peminjaman</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'katalog-equipment') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-th-list w-5 text-center"></i>
-                            <span class="font-medium">Katalog Peralatan</span>
-                        </a>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/bookings"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'peminjaman-saya') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-history w-5 text-center"></i>
-                            <span class="font-medium">Peminjaman Saya</span>
-                        </a>
-
-                        <a href="<?= BASE_URL ?? '.' ?>/anggota-lab/equipment/katalog"
-                            class="flex items-center gap-3 px-4 py-3 text-white rounded-lg transition-all duration-200 <?= (isset($activeMenu) && $activeMenu === 'bookings') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' ?>">
-                            <i class="fas fa-hand-holding w-5 text-center"></i>
-                            <span class="font-medium">Ajukan Peminjaman</span>
-                        </a>
                     <?php endif; ?>
 
                 <?php endif; ?>
