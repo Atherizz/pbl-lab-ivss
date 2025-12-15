@@ -1,8 +1,8 @@
 <footer class="bg-gradient-to-b from-slate-900 to-slate-950 text-slate-300 border-t border-slate-800">
     <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             
-            <!-- About Section -->
+            <!-- Tentang Section -->
             <div class="space-y-5">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
@@ -11,7 +11,7 @@
                     <h3 class="text-xl font-bold text-white">IVSS Lab</h3>
                 </div>
                 <p class="text-sm text-slate-400 leading-relaxed">
-                    The Intelligent Vision and Smart System Laboratory at Malang State Polytechnic, dedicated to innovation in computer vision, artificial intelligence, and smart system research.
+                    Laboratorium Visi Cerdas dan Sistem Cerdas Politeknik Negeri Malang, berdedikasi dalam inovasi computer vision, artificial intelligence, dan riset smart system.
                 </p>
                 <div class="flex items-center gap-3 pt-2">
                     <a href="https://instagram.com" target="_blank" rel="noopener" 
@@ -33,52 +33,52 @@
                 </div>
             </div>
 
-            <!-- Quick Links -->
+            <!-- Tautan Cepat -->
             <div class="space-y-5">
-                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Quick Links</h3>
+                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Tautan Cepat</h3>
                 <ul class="space-y-3">
                     <li>
                         <a href="<?= BASE_URL ?? '.' ?>/" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>Home</span>
+                            <span>Beranda</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?= BASE_URL ?? '.' ?>/news" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
+                        <a href="<?= BASE_URL ?? '.' ?>/#visi-misi" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>News & Events</span>
+                            <span>Visi & Misi</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?= BASE_URL ?? '.' ?>/research" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
+                        <a href="<?= BASE_URL ?? '.' ?>/#riset-penelitian" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>Research</span>
+                            <span>Riset & Penelitian</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?= BASE_URL ?? '.' ?>/dataset" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
+                        <a href="<?= BASE_URL ?? '.' ?>/#anggota-lab" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>Dataset Directory</span>
+                            <span>Anggota Laboratorium</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?= BASE_URL ?? '.' ?>/gallery" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
+                        <a href="<?= BASE_URL ?? '.' ?>/berita" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>Gallery</span>
+                            <span>Berita & Kegiatan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?= BASE_URL ?? '.' ?>/about" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
+                        <a href="<?= BASE_URL ?? '.' ?>/fasilitas" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group">
                             <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
-                            <span>About Us</span>
+                            <span>Fasilitas</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <!-- Contact Info -->
+            <!-- Kontak Informasi -->
             <div class="space-y-5">
-                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Contact Info</h3>
+                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Hubungi Kami</h3>
                 <ul class="space-y-4">
                     <li class="flex items-start gap-3">
                         <div class="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -113,32 +113,10 @@
                             <i class="fas fa-clock text-cyan-400 text-sm"></i>
                         </div>
                         <p class="text-sm text-slate-400">
-                            Mon - Fri: 08:00 - 16:00
+                            Senin - Jumat: 08:00 - 16:00
                         </p>
                     </li>
                 </ul>
-            </div>
-
-            <!-- Newsletter -->
-            <div class="space-y-5">
-                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Stay Updated</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">
-                    Subscribe to our newsletter for the latest research updates, news, and events.
-                </p>
-                <form action="#" method="POST" class="space-y-3">
-                    <div class="relative">
-                        <input type="email" 
-                               name="email" 
-                               placeholder="Enter your email" 
-                               required
-                               class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all">
-                    </div>
-                    <button type="submit" 
-                            class="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 flex items-center justify-center gap-2">
-                        <span>Subscribe</span>
-                        <i class="fas fa-paper-plane text-sm"></i>
-                    </button>
-                </form>
             </div>
 
         </div>
@@ -149,11 +127,11 @@
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-slate-500 text-center md:text-left">
-                    &copy; <?= date('Y') ?> Intelligent Vision & Smart System Laboratory - Politeknik Negeri Malang. All rights reserved.
+                    &copy; <?= date('Y') ?> Laboratorium Visi Cerdas dan Sistem Cerdas - Politeknik Negeri Malang. Hak Cipta Dilindungi.
                 </p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="text-sm text-slate-500 hover:text-cyan-400 transition-colors">Privacy Policy</a>
-                    <a href="#" class="text-sm text-slate-500 hover:text-cyan-400 transition-colors">Terms of Service</a>
+                    <a href="#" class="text-sm text-slate-500 hover:text-cyan-400 transition-colors">Kebijakan Privasi</a>
+                    <a href="#" class="text-sm text-slate-500 hover:text-cyan-400 transition-colors">Syarat & Ketentuan</a>
                 </div>
             </div>
         </div>

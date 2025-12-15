@@ -115,7 +115,7 @@
 <body class="bg-slate-900 text-slate-300">
 
   <section
-    class="relative bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-800 px-6 pt-20 pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
+    class="relative bg-slate-900 px-4 sm:px-6 pt-16 sm:pt-20 pb-20 sm:pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
     <div class="absolute inset-0 grid-pattern opacity-50"></div>
 
     <div class="absolute top-20 left-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-glow"></div>
@@ -123,32 +123,32 @@
       style="animation-delay: 1.5s;"></div>
 
     <div
-      class="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-16">
-      <div class="flex-1 flex flex-col gap-6">
-        <h1 class="font-extrabold leading-tight text-white animate-fade-in-up"
-          style="font-size: 42px; line-height: 1.2;">
+      class="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-8 sm:gap-12 lg:gap-16">
+      <div class="flex-1 flex flex-col gap-4 sm:gap-6 text-center lg:text-left">
+        <h1 class="font-extrabold leading-tight text-white animate-fade-in-up text-3xl sm:text-4xl lg:text-5xl xl:text-[42px]">
           Explore the Future <br>
           <span class="text-cyan-400">of Vision & Systems</span>
         </h1>
-        <p class="text-slate-300 text-left animate-fade-in-up delay-200"
-          style="font-size: 18px; font-weight: 500; line-height: 1.7;">
+        <p class="text-slate-300 animate-fade-in-up delay-200 text-base sm:text-lg leading-relaxed"
+          style="font-weight: 500;">
           <span class="text-cyan-400 font-semibold">Laboratorium Visi Cerdas dan Sistem Cerdas</span>
           merupakan pusat riset dan pengembangan di bawah Jurusan Teknologi Informasi Politeknik Negeri Malang yang
           berfokus pada bidang intelligent vision dan smart system.
-          <br><br>
+          <br><br class="hidden sm:block">
           Penelitian di laboratorium ini mengintegrasikan computer vision, AI, dan IoT untuk menciptakan solusi
           inovatif.
         </p>
       </div>
-      <div class="relative animate-fade-in-up delay-300">
-        <img src="<?= BASE_URL ?>/assets/logo.webp" alt="IVSS Lab Logo" class="relative w-full max-w-md animate-float"
+      <div class="relative animate-fade-in-up delay-300 w-full max-w-xs sm:max-w-sm lg:max-w-md">
+        <img src="<?= BASE_URL ?>/assets/logo.webp" alt="IVSS Lab Logo" class="relative w-full animate-float"
           style="filter: drop-shadow(0 0 30px rgba(6, 182, 212, 0.3));" />
       </div>
     </div>
   </section>
 
   <section id="visi-misi"
-    class="scroll-mt-[100px] max-w-7xl mx-auto px-6 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    class="scroll-mt-[100px] bg-slate-900 border-t border-slate-800 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
     <div
       class="bg-slate-800 border border-slate-700 rounded-3xl shadow-lg p-8 lg:p-10 animate-fade-in-up delay-100 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-cyan-500/20 hover:shadow-2xl group">
       <div class="relative overflow-hidden rounded-2xl mb-5">
@@ -180,10 +180,12 @@
           produk inovatif.</li>
       </ul>
     </div>
+    </div>
   </section>
 
   <section
-    class="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-900 border-t border-slate-700 overflow-hidden">
+    class="relative bg-slate-900 border-t border-slate-800 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
     <div class="relative z-10 text-center mb-12 animate-fade-in-up">
       <span class="text-cyan-400 font-semibold tracking-wider uppercase text-sm">Galeri</span>
       <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Dokumentasi Kegiatan</h2>
@@ -232,10 +234,10 @@
         <i class="fas fa-chevron-right"></i>
       </button>
     </div>
+    </div>
   </section>
 
-
-  <section id="produk" class="py-20 bg-slate-800 border-t border-slate-700 relative overflow-hidden">
+  <section id="produk" class="py-20 bg-gradient-to-b from-slate-900 to-slate-800 border-t border-slate-800 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         
         <?php 
@@ -354,7 +356,7 @@
 
 
 
-  <section id="pelatihan" class="py-20 bg-slate-900 border-t border-slate-700 relative overflow-hidden">
+  <section id="pelatihan" class="py-20 bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-800 relative overflow-hidden">
 
     <div class="absolute left-0 top-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl"></div>
 
@@ -434,7 +436,8 @@
 
 
   <section id="riset-penelitian"
-    class="relative max-w-7xl mx-auto px-6 py-16 lg:py-24 bg-slate-800 border-y border-slate-700 overflow-hidden">
+    class="relative bg-slate-900 border-t border-slate-800 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
     <div class="absolute inset-0 grid-pattern opacity-30"></div>
 
     <div class="relative z-10 text-center mb-12 animate-fade-in-up">
@@ -484,9 +487,10 @@
         <i class="fas fa-arrow-right"></i>
       </a>
     </div>
+    </div>
   </section>
 
-  <section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-slate-900 overflow-hidden">
+  <section id="anggota-lab" class="relative px-6 py-20 lg:py-28 bg-gradient-to-b from-slate-900 to-slate-800 border-t border-slate-800 overflow-hidden">
 
     <div
       class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px] -z-0 pointer-events-none animate-pulse-glow">
@@ -599,6 +603,77 @@
     </div>
   </section>
 
+  <!-- CTA Section: Join IVSS Lab -->
+  <?php if (!isset($_SESSION['user'])): ?>
+  <section class="relative bg-slate-800 border-t border-slate-700 py-20 overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-slate-900 to-transparent"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <!-- Icon -->
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl mb-6 shadow-lg shadow-cyan-500/50 animate-pulse-glow">
+        <i class="fas fa-user-plus text-white text-3xl"></i>
+      </div>
+      
+      <!-- Heading -->
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Tertarik Bergabung dengan IVSS Lab?
+      </h2>
+      
+      <!-- Description -->
+      <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+        Jadilah bagian dari komunitas peneliti dan inovator di bidang <span class="text-cyan-400 font-semibold">Computer Vision</span>, 
+        <span class="text-cyan-400 font-semibold">Artificial Intelligence</span>, dan 
+        <span class="text-cyan-400 font-semibold">Smart Systems</span>. Daftarkan diri Anda sekarang!
+      </p>
+      
+      <!-- Benefits -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300">
+          <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+            <i class="fas fa-flask text-cyan-400 text-xl"></i>
+          </div>
+          <h3 class="text-white font-semibold mb-2">Riset Berkualitas</h3>
+          <p class="text-sm text-slate-400">Akses ke proyek penelitian terdepan dan publikasi ilmiah</p>
+        </div>
+        
+        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300">
+          <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+            <i class="fas fa-users text-cyan-400 text-xl"></i>
+          </div>
+          <h3 class="text-white font-semibold mb-2">Komunitas Solid</h3>
+          <p class="text-sm text-slate-400">Kolaborasi dengan mahasiswa dan dosen berpengalaman</p>
+        </div>
+        
+        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300">
+          <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+            <i class="fas fa-certificate text-cyan-400 text-xl"></i>
+          </div>
+          <h3 class="text-white font-semibold mb-2">Pengalaman Berharga</h3>
+          <p class="text-sm text-slate-400">Sertifikat dan pengalaman praktis di bidang teknologi</p>
+        </div>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="flex items-center justify-center">
+        <a href="<?= BASE_URL ?>/register" 
+           class="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-cyan-500/50 hover:shadow-cyan-500/80 transition-all duration-300 transform hover:scale-105">
+          <span>Daftar Sekarang</span>
+          <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+      
+      <!-- Info Text -->
+      <p class="mt-8 text-sm text-slate-500">
+        Sudah memiliki akun? 
+        <a href="<?= BASE_URL ?>/login" class="text-cyan-400 hover:text-cyan-300 font-medium underline underline-offset-2 transition-colors">
+          Login di sini
+        </a>
+      </p>
+    </div>
+  </section>
+  <?php endif; ?>
+
   <script>
     // Intersection Observer for animations
     const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
@@ -616,7 +691,18 @@
       const carouselBody = carousel.querySelector('[data-carousel-body]');
       const prevButton = carousel.querySelector('[data-carousel-prev]');
       const nextButton = carousel.querySelector('[data-carousel-next]');
-      const slides = carouselBody.querySelectorAll('.w-full');
+      
+      // Hanya hitung slides yang berisi gambar (bukan empty state)
+      const slides = carouselBody.querySelectorAll('.w-full.flex-shrink-0');
+      const totalSlides = slides.length;
+      
+      // Jika tidak ada slide atau hanya 1 slide, sembunyikan navigasi
+      if (totalSlides <= 1) {
+        if (prevButton) prevButton.style.display = 'none';
+        if (nextButton) nextButton.style.display = 'none';
+        return;
+      }
+
       let currentIndex = 0;
       let autoplayInterval;
 
@@ -624,15 +710,31 @@
         const offset = -currentIndex * 100;
         carouselBody.style.transform = `translateX(${offset}%)`;
       }
-      function nextSlide() { currentIndex = (currentIndex + 1) % slides.length; updateCarousel(); }
-      function prevSlide() { currentIndex = (currentIndex - 1 + slides.length) % slides.length; updateCarousel(); }
-      function startAutoplay() { autoplayInterval = setInterval(nextSlide, 5000); }
-      function stopAutoplay() { clearInterval(autoplayInterval); }
+      
+      function nextSlide() { 
+        currentIndex = (currentIndex + 1) % totalSlides; 
+        updateCarousel(); 
+      }
+      
+      function prevSlide() { 
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; 
+        updateCarousel(); 
+      }
+      
+      function startAutoplay() { 
+        autoplayInterval = setInterval(nextSlide, 5000); 
+      }
+      
+      function stopAutoplay() { 
+        clearInterval(autoplayInterval); 
+      }
 
       nextButton.addEventListener('click', () => { nextSlide(); stopAutoplay(); startAutoplay(); });
       prevButton.addEventListener('click', () => { prevSlide(); stopAutoplay(); startAutoplay(); });
       carousel.addEventListener('mouseenter', stopAutoplay);
       carousel.addEventListener('mouseleave', startAutoplay);
+      
+      // Mulai autoplay hanya jika ada lebih dari 1 slide
       startAutoplay();
     });
   </script>

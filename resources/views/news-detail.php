@@ -158,7 +158,7 @@ if (!$news) {
             <h3 class="text-lg font-bold text-white mb-4">Berita Terbaru</h3>
             <div class="space-y-6">
                 <?php foreach ($recentNews as $recent): ?>
-                <a href="<?= BASE_URL ?>/news/<?= $recent['id'] ?>" class="group flex gap-4 items-start">
+                <a href="<?= BASE_URL ?>/berita/<?= $recent['slug'] ?>" class="group flex gap-4 items-start">
                     <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                         <?php if (!empty($recent['image_url'])): ?>
                             <img src="<?= BASE_URL . '/' . htmlspecialchars($recent['image_url']) ?>" 
