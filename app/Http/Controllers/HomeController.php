@@ -50,6 +50,7 @@ class HomeController extends Controller
             'members'      => $allMembers,
             'publications' => $publications,
             'courses'      => $courses,
+            'products'     => $products,
             'galeryItems'  => $galeryItems 
         ]);
     }
