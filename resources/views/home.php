@@ -641,4 +641,4 @@
 
 </html>
 
-<?php require BASE_PATH . '/resources/views/layouts/footer.php'; ?>
+<?php require BASE_PATH . '/resources/views/layouts/home-footer.php'; ?>
