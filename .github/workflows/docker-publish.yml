@@ -76,6 +76,10 @@ jobs:
             
             # 2. Recreate and start the 'php-app' container with the new image
             docker compose -f docker-compose.prod.yml up -d php-app
+
+            echo "Restarting Nginx proxy service to fix 502 Bad Gateway..."
+            docker compose -f docker-compose.prod.yml restart nginx 
+            
             
             echo "Deployment Complete. Service php-app successfully restarted."
             # --- END: Deployment Commands on Target Server ---
