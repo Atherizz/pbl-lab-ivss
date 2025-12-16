@@ -544,9 +544,6 @@
                 <h3 class="text-[20px] font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
                   <?= htmlspecialchars($headOfLab['user_name']) ?>
                 </h3>
-                <p class="text-slate-400 mb-6 text-lg leading-relaxed">
-                  NIDN: <?= htmlspecialchars($headOfLab['nidn'] ?? '-') ?>
-                </p>
 
                 <a href="<?= BASE_URL ?>/profile/<?= $headOfLab['slug'] ?>"
                   class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-700 text-white font-medium hover:bg-cyan-600 transition-all duration-300 group-hover:pl-8 transform hover:scale-105">
@@ -576,9 +573,6 @@
                 <h4 class="text-lg font-bold text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-1">
                   <?= htmlspecialchars($member['user_name']) ?>
                 </h4>
-                <p class="text-slate-400 mb-6 text-lg leading-relaxed">
-                  NIDN: <?= htmlspecialchars($member['nidn'] ?? '-') ?>
-                </p>
               </div>
             </div>
 

@@ -90,8 +90,8 @@ require BASE_PATH . '/resources/views/layouts/navbar.php';
                     <div class="space-y-4 w-full">
                         <?php 
                         $basicData = [
-                            'NIP' => $user['reg_number'] ?? '-',
-                            'NIDN' => $profile['nidn'] ?? '-',
+                            'NIP' => $profile['nip'] ?? '-',
+                            'NIDN' => $user['reg_number'] ?? '-',
                             'Program Studi' => $profile['major'] ?? '-',
                             'Kontak' => $email,
                         ];

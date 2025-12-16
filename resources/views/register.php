@@ -98,7 +98,7 @@
 
         <div class="mt-6 text-center text-sm text-slate-400">
           Sudah punya akun? 
-          <a href="login.php" class="font-medium text-cyan-400 hover:text-cyan-300 transition-colors underline">Log in</a>
+          <a href="<?= BASE_URL ?? '.' ?>/login" class="font-medium text-cyan-400 hover:text-cyan-300 transition-colors underline">Log in</a>
         </div>
       </div>
 

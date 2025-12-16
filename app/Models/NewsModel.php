@@ -77,7 +77,7 @@ class NewsModel extends Model
     {
         $excludeClause = $excludeId ? "AND n.id != :exclude_id" : "";
 
-        $sql = "SELECT n.id, n.title, n.image_url, n.published_at
+        $sql = "SELECT n.id, n.title, n.slug, n.image_url, n.published_at
             FROM news n
             WHERE n.published_at IS NOT NULL {$excludeClause}
             ORDER BY n.published_at DESC
