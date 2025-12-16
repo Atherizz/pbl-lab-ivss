@@ -227,53 +227,80 @@ document.addEventListener('DOMContentLoaded', function() {
     // PENDIDIKAN (EDUCATION) LOGIC
     // =========================================================================
 
-    function createEducationElement(data, index) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'grid grid-cols-1 md:grid-cols-5 gap-3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm education-item';
-        
-        const html = `
-            <div>
-                <label class="text-xs text-slate-600">Level</label>
-                <select name="educations[${index}][level]" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800">
-                    <option value="S1" ${data.level === 'S1' ? 'selected' : ''}>S1</option>
-                    <option value="S2" ${data.level === 'S2' ? 'selected' : ''}>S2</option>
-                    <option value="S3" ${data.level === 'S3' ? 'selected' : ''}>S3</option>
-                    <option value="D3" ${data.level === 'D3' ? 'selected' : ''}>D3</option>
-                    <option value="D4" ${data.level === 'D4' ? 'selected' : ''}>D4</option>
-                    <option value="Profesi" ${data.level === 'Profesi' ? 'selected' : ''}>Profesi</option>
-                </select>
-            </div>
-            <div class="md:col-span-2">
-                <label class="text-xs text-slate-600">Degree</label>
-                <input name="educations[${index}][degree]" value="${data.degree || ''}" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="Teknik Informatika"/>
-            </div>
-            <div>
-                <label class="text-xs text-slate-600">Mulai</label>
-                <input name="educations[${index}][start_year]" value="${data.start_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-start-year" placeholder="2014" data-index="${index}"/>
-            </div>
-            <div>
-                <label class="text-xs text-slate-600">Selesai</label>
-                <input name="educations[${index}][end_year]" value="${data.end_year || ''}" type="number" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-end-year" placeholder="2016" data-index="${index}"/>
-                <p class="text-xs text-red-500 mt-1 hidden education-year-error-${index}">Tahun selesai harus lebih besar dari tahun mulai</p>
-            </div>
-            <div class="md:col-span-5">
-                <label class="text-xs text-slate-600">Institusi</label>
-                <input name="educations[${index}][institution]" value="${data.institution || ''}" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="Institut Teknologi Sepuluh Nopember"/>
-            </div>
-            <div class="md:col-span-5 flex justify-end">
-                <button type="button" class="text-xs text-rose-500 hover:text-rose-700 delete-edu-btn"><i class="fa fa-trash mr-1"></i>Hapus</button>
-            </div>
-        `;
-        
-        wrapper.innerHTML = html;
-        
-        wrapper.querySelector('.delete-edu-btn').addEventListener('click', function() {
-            educations.splice(index, 1); 
-            renderEducations(); 
-        });
-
-        return wrapper;
+    function updateEducationData(index, field, value) {
+    if (educations[index]) {
+        educations[index][field] = value;
     }
+    }
+
+    function createEducationElement(data, index) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'grid grid-cols-1 md:grid-cols-5 gap-3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm education-item';
+    
+    const html = `
+        <div>
+            <label class="text-xs text-slate-600">Level</label>
+            <select name="educations[${index}][level]" 
+                    class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-input"
+                    data-field="level"> 
+                <option value="S1" ${data.level === 'S1' ? 'selected' : ''}>S1</option>
+                <option value="S2" ${data.level === 'S2' ? 'selected' : ''}>S2</option>
+                <option value="S3" ${data.level === 'S3' ? 'selected' : ''}>S3</option>
+                <option value="D3" ${data.level === 'D3' ? 'selected' : ''}>D3</option>
+                <option value="D4" ${data.level === 'D4' ? 'selected' : ''}>D4</option>
+                <option value="Profesi" ${data.level === 'Profesi' ? 'selected' : ''}>Profesi</option>
+            </select>
+        </div>
+        <div class="md:col-span-2">
+            <label class="text-xs text-slate-600">Degree</label>
+            <input name="educations[${index}][degree]" value="${data.degree || ''}" type="text" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-input" 
+                   placeholder="Teknik Informatika" data-field="degree"/> 
+        </div>
+        <div>
+            <label class="text-xs text-slate-600">Mulai</label>
+            <input name="educations[${index}][start_year]" value="${data.start_year || ''}" type="number" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-start-year education-input" 
+                   placeholder="2014" data-index="${index}" data-field="start_year"/> 
+        </div>
+        <div>
+            <label class="text-xs text-slate-600">Selesai</label>
+            <input name="educations[${index}][end_year]" value="${data.end_year || ''}" type="number" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-end-year education-input" 
+                   placeholder="2016" data-index="${index}" data-field="end_year"/> 
+            <p class="text-xs text-red-500 mt-1 hidden education-year-error-${index}">Tahun selesai harus lebih besar dari tahun mulai</p>
+        </div>
+        <div class="md:col-span-5">
+            <label class="text-xs text-slate-600">Institusi</label>
+            <input name="educations[${index}][institution]" value="${data.institution || ''}" type="text" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 education-input" 
+                   placeholder="Institut Teknologi Sepuluh Nopember" data-field="institution"/> 
+        </div>
+        <div class="md:col-span-5 flex justify-end">
+            <button type="button" class="text-xs text-rose-500 hover:text-rose-700 delete-edu-btn"><i class="fa fa-trash mr-1"></i>Hapus</button>
+        </div>
+    `;
+    
+    wrapper.innerHTML = html;
+    
+    wrapper.querySelector('.delete-edu-btn').addEventListener('click', function() {
+        educations.splice(index, 1); 
+        renderEducations(); 
+    });
+
+    const inputElements = wrapper.querySelectorAll('.education-input');
+    inputElements.forEach(input => {
+        const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+        
+        input.addEventListener(eventType, function() {
+            const field = this.getAttribute('data-field');
+            updateEducationData(index, field, this.value);
+        });
+    });
+
+    return wrapper;
+    }
+
 
     function renderEducations() {
         educationContainer.innerHTML = ''; 
@@ -348,40 +375,62 @@ document.addEventListener('DOMContentLoaded', function() {
     // SERTIFIKASI (CERTIFICATION) LOGIC
     // =========================================================================
 
+    function updateCertificationData(index, field, value) {
+    if (certifications[index]) {
+        certifications[index][field] = value;
+    }
+    }
+
     function createCertificationElement(data, index) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm certification-item';
-        
-        const html = `
-            <div class="md:col-span-2">
-                <label class="text-xs text-slate-600">Nama Sertifikasi</label>
-                <input name="certifications[${index}][name]" value="${data.name || ''}" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="Azure AI Fundamentals"/>
-            </div>
-            <div>
-                <label class="text-xs text-slate-600">Issuer</label>
-                <input name="certifications[${index}][issuer]" value="${data.issuer || ''}" type="text" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="Microsoft"/>
-            </div>
-            <div>
-                <label class="text-xs text-slate-600">Tanggal Terbit</label>
-                <input name="certifications[${index}][issued_on]" value="${data.issued_on || ''}" type="date" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800"/>
-            </div>
-            <div class="md:col-span-4">
-                <label class="text-xs text-slate-600">Credential URL</label>
-                <input name="certifications[${index}][credential_url]" value="${data.credential_url || ''}" type="url" class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800" placeholder="https://..."/>
-            </div>
-            <div class="md:col-span-4 flex justify-end">
-                <button type="button" class="text-xs text-rose-500 hover:text-rose-700 delete-cert-btn"><i class="fa fa-trash mr-1"></i>Hapus</button>
-            </div>
-        `;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm certification-item';
+    
+    const html = `
+        <div class="md:col-span-2">
+            <label class="text-xs text-slate-600">Nama Sertifikasi</label>
+            <input name="certifications[${index}][name]" value="${data.name || ''}" type="text" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 certification-input" 
+                   placeholder="Azure AI Fundamentals" data-field="name"/>
+        </div>
+        <div>
+            <label class="text-xs text-slate-600">Issuer</label>
+            <input name="certifications[${index}][issuer]" value="${data.issuer || ''}" type="text" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 certification-input" 
+                   placeholder="Microsoft" data-field="issuer"/>
+        </div>
+        <div>
+            <label class="text-xs text-slate-600">Tanggal Terbit</label>
+            <input name="certifications[${index}][issued_on]" value="${data.issued_on || ''}" type="date" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 certification-input"
+                   data-field="issued_on"/>
+        </div>
+        <div class="md:col-span-4">
+            <label class="text-xs text-slate-600">Credential URL</label>
+            <input name="certifications[${index}][credential_url]" value="${data.credential_url || ''}" type="url" 
+                   class="w-full rounded-md border border-gray-300 focus:ring-sky-500 focus:border-sky-500 bg-white text-gray-800 certification-input" 
+                   placeholder="https://..." data-field="credential_url"/>
+        </div>
+        <div class="md:col-span-4 flex justify-end">
+            <button type="button" class="text-xs text-rose-500 hover:text-rose-700 delete-cert-btn"><i class="fa fa-trash mr-1"></i>Hapus</button>
+        </div>
+    `;
 
-        wrapper.innerHTML = html;
+    wrapper.innerHTML = html;
 
-        wrapper.querySelector('.delete-cert-btn').addEventListener('click', function() {
-            certifications.splice(index, 1);
-            renderCertifications();
+    wrapper.querySelector('.delete-cert-btn').addEventListener('click', function() {
+        certifications.splice(index, 1);
+        renderCertifications();
+    });
+
+    const inputElements = wrapper.querySelectorAll('.certification-input');
+    inputElements.forEach(input => {
+        input.addEventListener('input', function() {
+            const field = this.getAttribute('data-field');
+            updateCertificationData(index, field, this.value);
         });
+    });
 
-        return wrapper;
+    return wrapper;
     }
 
     function renderCertifications() {
