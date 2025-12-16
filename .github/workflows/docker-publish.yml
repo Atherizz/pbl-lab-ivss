@@ -72,10 +72,10 @@ jobs:
             
             # 1. Pull the newest image for the 'php-app' service from ACR
             # (Note: The image name in docker-compose.yml MUST reference the ACR path)
-            docker compose pull php-app
+            docker compose -f docker-compose.prod.yml pull php-app
             
             # 2. Recreate and start the 'php-app' container with the new image
-            docker compose up -d php-app
+            docker compose -f docker-compose.prod.yml up -d php-app
             
             echo "Deployment Complete. Service php-app successfully restarted."
             # --- END: Deployment Commands on Target Server ---
