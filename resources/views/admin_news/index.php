@@ -39,7 +39,7 @@ $totalViews = $stats['total_views'] ?? 'N/A'; // N/A jika data views tidak ada/t
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         
         <!-- Total News (Total Draft + Published) -->
         <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
@@ -63,31 +63,6 @@ $totalViews = $stats['total_views'] ?? 'N/A'; // N/A jika data views tidak ada/t
             </div>
             <h3 class="text-gray-500 text-sm font-medium mb-1">Published</h3>
             <p id="news-published" class="text-3xl font-bold text-gray-900"><?= $totalPublished ?></p>
-        </div>
-
-        <!-- Draft -->
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-clock text-orange-600 text-xl"></i>
-                </div>
-                <span class="text-xs font-semibold text-gray-500">Pending</span>
-            </div>
-            <h3 class="text-gray-500 text-sm font-medium mb-1">Draft</h3>
-            <p id="news-draft" class="text-3xl font-bold text-gray-900"><?= $totalDraft ?></p>
-        </div>
-
-        <!-- Total Views -->
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-eye text-purple-600 text-xl"></i>
-                </div>
-                <!-- Karena data change tidak tersedia, kita pakai badge statis / N/A -->
-                <span class="text-xs font-semibold text-gray-500">N/A</span> 
-            </div>
-            <h3 class="text-gray-500 text-sm font-medium mb-1">Total Views</h3>
-            <p class="text-3xl font-bold text-gray-900"><?= $totalViews ?></p>
         </div>
     </div>
 
@@ -187,7 +162,6 @@ $totalViews = $stats['total_views'] ?? 'N/A'; // N/A jika data views tidak ada/t
                     
                     document.getElementById('news-total').textContent = totalNews;
                     document.getElementById('news-published').textContent = stats.total_published;
-                    document.getElementById('news-draft').textContent = stats.total_draft;
                     // Total views statis, tidak di-refresh
                 }
             })
