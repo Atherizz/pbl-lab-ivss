@@ -12,7 +12,6 @@ $statuses = [
     'approved_by_head' => 'Approved by Head',
     'active' => 'Active',
     'completed' => 'Completed',
-    'rejected' => 'Rejected',
 ];
 ?>
 

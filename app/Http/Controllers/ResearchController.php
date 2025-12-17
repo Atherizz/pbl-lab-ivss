@@ -49,6 +49,15 @@ class ResearchController extends Controller
         $searchQuery = $_GET['search'] ?? '';
 
         $allResearch = $this->model->getAll($statusFilter, $searchQuery);
+        
+        // Filter out rejected research from results
+        $allResearch = array_filter($allResearch, function($research) {
+            return ($research['status'] ?? '') !== 'rejected';
+        });
+        
+        // Re-index array after filtering
+        $allResearch = array_values($allResearch);
+        
         $paginationData = pagination($this->itemsPerPage, $currentPage, $allResearch, 'research');
 
         $paginationData['currentStatus'] = $statusFilter;

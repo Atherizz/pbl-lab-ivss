@@ -46,7 +46,6 @@ $userRole = $_SESSION['user']['role'];
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diajukan Oleh</th>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dosen Pembimbing</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publikasi</th>
                                 <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                             </tr>
@@ -58,19 +57,19 @@ $userRole = $_SESSION['user']['role'];
                                 <td class="px-5 py-4 text-sm font-medium text-gray-900"><?= $key + $startItem ?></td>
                                 <td class="px-5 py-4 text-sm text-gray-700">
                                     <?= htmlspecialchars($row['title']) ?>
-                                    <p class="text-xs text-gray-500 mt-1"><?= htmlspecialchars($row['description']) ?></p>
                                 </td>
                                 <td class="px-5 py-4 text-sm text-gray-700"><?= htmlspecialchars($row['user_name']) ?></td>
-                                <td class="px-5 py-4 text-sm text-gray-700">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        <i class="fas fa-user-tie mr-1"></i>
-                                        <?= htmlspecialchars($row['dospem_name'] ?? 'N/A') ?>
-                                    </span>
-                                </td>
                                 <td class="px-5 py-4 text-sm text-blue-600">
                                     <a href="<?= htmlspecialchars($row['publication_url']) ?>" target="_blank" class="hover:underline">Lihat Publikasi</a>
                                 </td>
                                 <td class="px-5 py-4 text-sm font-medium space-x-2">
+                                    
+                                    <button type="button" 
+                                        onclick="openModal('detail-modal-<?= $row['id'] ?>')"
+                                        class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                                        title="Lihat Detail">
+                                        <i class="fas fa-eye mr-1"></i> Detail
+                                    </button>
                                     
                                     <form method="POST" action="<?= BASE_URL . '/' . (match ($userRole) {
                                         'admin_lab'   => 'admin-lab',
@@ -97,7 +96,7 @@ $userRole = $_SESSION['user']['role'];
                             <?php endforeach; ?>
                             <?php else: ?>
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center">
+                                <td colspan="5" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center text-gray-400">
                                         <i class="fas fa-inbox text-5xl mb-3"></i>
                                         <p class="text-sm font-medium">Tidak ada persetujuan tertunda</p>
@@ -200,6 +199,64 @@ $userRole = $_SESSION['user']['role'];
 
 <?php if (!empty($publication)): ?>
   <?php foreach ($publication as $row): ?>
+    <!-- Detail Modal -->
+    <div id="detail-modal-<?= $row['id'] ?>" class="fixed inset-0 z-50 hidden overflow-y-auto">
+      <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('detail-modal-<?= $row['id'] ?>')"></div>
+      
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="relative bg-white rounded-xl shadow-xl max-w-2xl w-full" onclick="event.stopPropagation()">
+          
+          <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-900">Detail Penelitian</h3>
+            <button type="button" onclick="closeModal('detail-modal-<?= $row['id'] ?>')" class="text-gray-400 hover:text-gray-600 transition-colors">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+  
+          <div class="p-6 space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Judul Penelitian</label>
+              <p class="text-gray-900"><?= htmlspecialchars($row['title']) ?></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+              <p class="text-gray-700 text-sm leading-relaxed"><?= nl2br(htmlspecialchars($row['description'])) ?></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Diajukan Oleh</label>
+              <p class="text-gray-900"><?= htmlspecialchars($row['user_name']) ?></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Dosen Pembimbing</label>
+              <div class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <i class="fas fa-user-tie mr-2"></i>
+                <?= htmlspecialchars($row['dospem_name'] ?? 'N/A') ?>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Link Publikasi</label>
+              <a href="<?= htmlspecialchars($row['publication_url']) ?>" target="_blank" class="text-blue-600 hover:text-blue-800 hover:underline text-sm">
+                <i class="fas fa-external-link-alt mr-1"></i><?= htmlspecialchars($row['publication_url']) ?>
+              </a>
+            </div>
+          </div>
+  
+          <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+            <button type="button" onclick="closeModal('detail-modal-<?= $row['id'] ?>')"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              Tutup
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Reject Modal -->
     <div id="reject-modal-<?= $row['id'] ?>" class="fixed inset-0 z-50 hidden overflow-y-auto">
       <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('reject-modal-<?= $row['id'] ?>')"></div>
       
