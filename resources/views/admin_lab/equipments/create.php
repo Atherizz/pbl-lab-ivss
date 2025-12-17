@@ -31,6 +31,17 @@ $activeMenu = 'equipment';
                         </div>
 
                         <div>
+                            <label for="category" class="block text-sm font-medium text-gray-700">
+                                Kategori <span class="text-red-500">*</span>
+                            </label>
+                            <select id="category" name="category" required
+                                    class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="equipment">Peralatan</option>
+                                <option value="facility">Fasilitas</option>
+                            </select>
+                        </div>
+
+                        <div>
                             <label for="status" class="block text-sm font-medium text-gray-700">
                                 Status <span class="text-red-500">*</span>
                             </label>

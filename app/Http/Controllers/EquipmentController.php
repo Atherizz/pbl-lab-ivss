@@ -34,6 +34,7 @@ class EquipmentController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $name = trim($_POST['name'] ?? '');
             $status = trim($_POST['status'] ?? '');
+            $category = trim($_POST['category'] ?? '');
 
             $errors = [];
 
@@ -44,6 +45,11 @@ class EquipmentController extends Controller
             $validStatuses = ['available', 'in_use', 'maintenance', 'broken'];
             if (!in_array($status, $validStatuses)) {
                 $errors[] = 'Status yang dipilih tidak valid.';
+            }
+
+            $validCategories = ['equipment', 'facility'];
+            if (!in_array($category, $validCategories)) {
+                $errors[] = 'Kategori yang dipilih tidak valid.';
             }
 
             if (!empty($errors)) {
@@ -69,8 +75,8 @@ class EquipmentController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (empty($_POST['name']) || empty($_POST['status'])) {
-                $errors = ['Nama dan Status wajib diisi.'];
+            if (empty($_POST['name']) || empty($_POST['status']) || empty($_POST['category'])) {
+                $errors = ['Nama, Status, dan Kategori wajib diisi.'];
                 $equipment = $this->model->getById($id);
                 view('admin_lab.equipments.edit', ['errors' => $errors, 'equipment' => $equipment]);
                 return;

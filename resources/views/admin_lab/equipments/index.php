@@ -31,15 +31,14 @@ $errorMessage = flash('error');
                 <?php endif; ?>
 
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-700">Kelola Peralatan Lab</h2>
+                    <h2 class="text-2xl font-semibold text-gray-700">Kelola Sarana & Prasarana Lab</h2>
                     <div class="flex items-center gap-4">
                         <?php 
                         $equipmentCount = $totalItems ?? 0;
                         ?>
-                        <p class="text-sm text-gray-500 mt-1">Total: <?= $equipmentCount ?> peralatan</p>
                         <a href="<?= BASE_URL ?? '.' ?>/admin-lab/equipment/create"
                             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <i class="fas fa-plus mr-2"></i> Tambah Peralatan
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
                         </a>
                     </div>
                 </div>
@@ -53,6 +52,9 @@ $errorMessage = flash('error');
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Kategori
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
@@ -77,6 +79,18 @@ $errorMessage = flash('error');
                                         'returned'    => 'bg-blue-200 text-blue-800',
                                         default       => 'bg-yellow-200 text-yellow-800',
                                     };
+                                    
+                                    // Map category to Indonesian label
+                                    $categoryLabel = match ($row['category'] ?? 'equipment') {
+                                        'equipment' => 'Peralatan',
+                                        'facility'  => 'Fasilitas',
+                                        default     => 'Peralatan',
+                                    };
+                                    $categoryClass = match ($row['category'] ?? 'equipment') {
+                                        'equipment' => 'bg-blue-100 text-blue-800',
+                                        'facility'  => 'bg-purple-100 text-purple-800',
+                                        default     => 'bg-blue-100 text-blue-800',
+                                    };
                                     ?>
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -85,6 +99,11 @@ $errorMessage = flash('error');
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                         <div class="font-medium"><?= htmlspecialchars($row['name']) ?></div>
                                         <p class="text-xs text-gray-500"><?= htmlspecialchars($row['description']) ?></p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $categoryClass ?>">
+                                            <?= $categoryLabel ?>
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $statusClass ?>">
@@ -110,7 +129,7 @@ $errorMessage = flash('error');
                                 <?php endforeach ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="4" class="px-6 py-8 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="5" class="px-6 py-8 whitespace-nowrap text-sm text-gray-500 text-center">
                                         <i class="fas fa-toolbox text-gray-300 text-4xl mb-2"></i>
                                         <p class="text-gray-600 font-medium">Tidak ada peralatan ditemukan.</p>
                                         <p class="text-xs text-gray-400 mt-1">Klik "Tambah Peralatan" untuk menambahkan peralatan baru.</p>

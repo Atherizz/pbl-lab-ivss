@@ -283,3 +283,35 @@ CREATE TRIGGER trigger_create_lab_profile
 AFTER INSERT ON users
 FOR EACH ROW
 EXECUTE FUNCTION create_lab_profile_on_user_insert();
+
+CREATE OR REPLACE FUNCTION fn_sync_equipment_status()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- 1. Saat Booking disetujui (Approved) -> Alat jadi In Use
+    IF (NEW.status = 'approved' AND (OLD.status IS NULL OR OLD.status != 'approved')) THEN
+        UPDATE equipment 
+        SET status = 'in_use' 
+        WHERE id = NEW.equipment_id;
+
+    -- 2. Saat Barang dikembalikan (Returned) -> Alat jadi Available kembali
+    ELSIF (NEW.status = 'returned' AND (OLD.status IS NULL OR OLD.status != 'returned')) THEN
+        UPDATE equipment 
+        SET status = 'available' 
+        WHERE id = NEW.equipment_id;
+
+    -- 3. Jika Booking dibatalkan/ditolak setelah sempat approved (Opsional)
+    ELSIF (NEW.status IN ('rejected') AND OLD.status = 'approved') THEN
+        UPDATE equipment 
+        SET status = 'available' 
+        WHERE id = NEW.equipment_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Pasang Trigger ke tabel bookings
+CREATE TRIGGER trg_sync_equipment_status
+AFTER UPDATE ON equipment_bookings
+FOR EACH ROW
+EXECUTE FUNCTION fn_sync_equipment_status();

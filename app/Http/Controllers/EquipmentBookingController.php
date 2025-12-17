@@ -42,7 +42,7 @@ class EquipmentBookingController extends Controller
     public function katalog()
     {
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $allEquipments = $this->equipmentModel->getAllEquipments();
+        $allEquipments = $this->equipmentModel->getEquipmentsOnly();
         $paginationData = pagination($this->itemsPerPage, $currentPage, $allEquipments, 'equipments');
 
         view('anggota_lab.equipment.bookings.katalog', $paginationData);

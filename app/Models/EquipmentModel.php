@@ -11,7 +11,7 @@ class EquipmentModel extends Model
     
     public function getAllEquipmentNameId()
     {
-        $query = $this->db->prepare("SELECT id, name FROM {$this->table} ORDER BY name ASC");
+        $query = $this->db->prepare("SELECT id, name FROM {$this->table} WHERE category = 'equipment' ORDER BY name ASC");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -19,6 +19,13 @@ class EquipmentModel extends Model
     public function getAllEquipments()
     {
         $query = $this->db->prepare("SELECT * FROM equipment ORDER BY id DESC");
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getEquipmentsOnly()
+    {
+        $query = $this->db->prepare("SELECT * FROM equipment WHERE category = 'equipment' ORDER BY id DESC");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -33,21 +40,27 @@ class EquipmentModel extends Model
 
     public function createEquipment($data)
     {
-        $query = $this->db->prepare("INSERT INTO equipment (name, description, status) VALUES (:name, :description, :status)");
-        return $query->execute(['name' => $data['name'], 'description' => $data['description'], 'status' => $data['status']]);
+        $query = $this->db->prepare("INSERT INTO equipment (name, description, status, category) VALUES (:name, :description, :status, :category)");
+        return $query->execute([
+            'name' => $data['name'], 
+            'description' => $data['description'], 
+            'status' => $data['status'],
+            'category' => $data['category']
+        ]);
     }
 
     public function updateEquipment($id, $data)
     {
         $query = $this->db->prepare("
         UPDATE equipment 
-        SET name = :name, description = :description, status = :status
+        SET name = :name, description = :description, status = :status, category = :category
         WHERE id = :id
     ");
         return $query->execute([
             'name' => $data['name'],
             'description' => $data['description'],
             'status' => $data['status'],
+            'category' => $data['category'],
             'id' => $id
         ]);
     }

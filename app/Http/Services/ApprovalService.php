@@ -45,8 +45,8 @@ class ApprovalService
         } else if ($type === 'peminjaman') {
             $this->bookingModel->updateBookingStatus($id, 'approved');
             $this->equipmentModel->updateStatus($id, 'in_use');
-
             return true;
+            
         } else if ($type === 'publikasi') {
             $this->researchModel->updateStatus($id, 'approved_by_head');
             return true;
