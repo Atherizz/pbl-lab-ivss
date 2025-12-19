@@ -126,6 +126,15 @@ class AIService
 
         $recommendations = $result['data'] ?? [];
         
+        // Handle empty recommendations
+        if (empty($recommendations)) {
+            return [
+                'success' => false,
+                'error' => 'Tidak ditemukan dosen yang cocok dengan topik riset Anda. Sistem AI tidak menemukan kecocokan yang cukup tinggi antara topik riset dengan publikasi dosen yang ada.'
+            ];
+        }
+        
+        // Enrich with lecturer names from database
         if (!empty($recommendations)) {
             foreach ($recommendations as &$lecturer) {
                 $nidn = $lecturer['nidn'] ?? null;
